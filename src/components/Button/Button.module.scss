@@ -1,0 +1,41 @@
+@use "../../styles/mixins"as *;
+@use "../../styles/variables"as *;
+
+
+.button {
+  @include flex-center;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+
+  &.primary {
+    background: $primary-color;
+    color: #fff;
+
+    &:hover {
+      background: $primary-color-hov;
+    }
+  }
+
+  &.secondary {
+    background: $secondary-color;
+    color: #fff;
+
+    &:hover {
+      background: $secondary-color-hov;
+    }
+  }
+
+  &.small {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  &.large {
+    font-size: 20px;
+    padding: 15px 30px;
+  }
+}

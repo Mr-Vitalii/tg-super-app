@@ -1,0 +1,77 @@
+@use "../../styles/variables"as *;
+
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; // Скрываем панель
+    width: 250px;
+    height: 100vh;
+    background-color: #222;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 101;
+
+
+    & .sidebar__logo {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    & .sidebar__logo a {
+        display: block;
+        width: 40px;
+        height: 40px;
+    }
+
+
+    & .sidebar__nav {
+        padding: 20px;
+    }
+
+    & .sidebar__item {}
+
+    & .sidebar__link {
+        display: flex;
+        width: 100%;
+        padding: 10px 0;
+        font-size: 20px;
+        color: $text-color;
+        text-decoration: none;
+
+        &:hover {
+            color: $text-color-hov;
+        }
+    }
+
+    & .sidebar__actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+
+    & .close_btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: white;
+        width: 40px;
+        height: 40px;
+        z-index: 100;
+    }
+
+    & .close_btn svg {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.sidebar--open {
+    left: 0;
+}

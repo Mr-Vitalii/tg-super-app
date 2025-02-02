@@ -1,0 +1,88 @@
+@use "../../styles/variables"as *;
+
+.header {
+  position: relative;
+  width: 100%;
+  min-height: 75px;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  padding-right: 40px;
+  margin-bottom: 20px;
+}
+
+.header__logo {
+  width: 40px;
+  height: 40px;
+}
+
+.burger {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  transition: all .4s;
+  z-index: 101;
+}
+
+.burger svg {
+  width: 40px;
+  height: 40px;
+}
+
+.header__nav_menu {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+.header__link {}
+
+.header__link a {
+  font-size: 20px;
+  color: $primary-color;
+  padding: 20px 0;
+  transition: all .3s ease-out;
+
+  &:hover {
+    color: $primary-color-hov;
+    text-decoration: underline;
+    text-underline-offset: 7px;
+
+  }
+}
+
+
+.header__actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+
+
+
+@media (max-width: 768px) {
+
+  .burger {
+    display: inline-flex;
+  }
+
+  .header__nav_menu {
+    display: none;
+  }
+
+  .header__actions {
+    display: none;
+  }
+
+}
