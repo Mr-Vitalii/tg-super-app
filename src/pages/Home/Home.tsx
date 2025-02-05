@@ -61,17 +61,17 @@ export const Home = () => {
       <div>
       <div className="home">
         
-        <p className={styles.greetings}>
+        <p className={styles.home_greetings}>
         Приветсвуем Вас,{" "}
-        <span className={styles.user_name}>{user?.username}</span> . Мы
+        <span className={styles.home_user_name}>{user?.username}</span> . Мы
         рады что вы выбрали наш сервис.
         </p>
 
-         <div className={styles.img_container}>
+         <div className={styles.home_img_container}>
           <img src={home} alt="man in glasses" />
         </div>
       
-        <div>
+        <div className={styles.home_btn}>
             <Button onClick={onSend} variant="primary" size="large">Отправить данные</Button>
         </div>
 

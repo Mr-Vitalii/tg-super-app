@@ -11,31 +11,56 @@
   transition: all 0.3s ease-in-out;
   border-radius: 5px;
 
-  &.primary {
-    background: $primary-color;
-    color: #fff;
+}
 
-    &:hover {
-      background: $primary-color-hov;
-    }
+.button.primary {
+  background: $primary-color;
+  color: #fff;
+
+  &:hover,
+  &:active {
+    background: $primary-color-hov;
   }
+}
 
-  &.secondary {
-    background: $secondary-color;
-    color: #fff;
+.button.secondary {
+  background: $secondary-color;
+  color: #fff;
 
-    &:hover {
-      background: $secondary-color-hov;
-    }
+  &:hover,
+  &:active {
+    background: $secondary-color-hov;
   }
+}
 
-  &.small {
-    font-size: 12px;
-    padding: 5px 10px;
-  }
 
-  &.large {
-    font-size: 20px;
-    padding: 15px 30px;
+.button.small {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.button.large {
+  font-size: 20px;
+  padding: 15px 30px;
+}
+
+
+.button.reg_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1c9407;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  max-width: 200px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: #197209;
   }
 }

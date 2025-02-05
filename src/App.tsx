@@ -15,13 +15,13 @@ function App() {
         <Routes>
           <Route path="/" element={
             <Layout>
-              <Home/>
+                <Home/>
             </Layout>
           } />
-          <Route path="/register" element={
+            <Route path="/register" element={
             <Layout>
                 <FormPage/>
-          </Layout>} />
+              </Layout>} />
           <Route path="/product" element={
             <Layout>
                 <ProductsPage/>

@@ -1,7 +1,7 @@
 
 import { LinkProps } from "react-router-dom";
 
- type ButtonVariant = "primary" | "secondary" | "danger";
+ type ButtonVariant = "primary" | "secondary" | "danger" | "reg_btn";
  type ButtonSize = "small" | "medium" | "large";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
