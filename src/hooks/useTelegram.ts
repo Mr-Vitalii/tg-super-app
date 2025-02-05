@@ -25,7 +25,7 @@ export function useTelegram() {
   };
 } */
 
-  interface TelegramUser {
+/*   interface TelegramUser {
   id: number;
   first_name: string;
   last_name?: string;
@@ -44,17 +44,17 @@ interface TelegramWebApp {
     user: TelegramUser;
     query_id: string;
   };
-}
+} */
 
-declare global {
+/* declare global {
   interface Window {
     Telegram: {
-      WebApp: TelegramWebApp;
+      WebApp: unknown;
     };
   }
-}
+} */
 
- const tg = window.Telegram.WebApp;
+const tg = (window as any).Telegram.WebApp;
 
 export function useTelegram() {
  
