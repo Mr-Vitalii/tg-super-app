@@ -25,7 +25,7 @@ export function useTelegram() {
   };
 } */
 
-/*   interface TelegramUser {
+  interface TelegramUser {
   id: number;
   first_name: string;
   last_name?: string;
@@ -52,7 +52,7 @@ declare global {
       WebApp: TelegramWebApp;
     };
   }
-} */
+}
 
  const tg = window.Telegram.WebApp;
 

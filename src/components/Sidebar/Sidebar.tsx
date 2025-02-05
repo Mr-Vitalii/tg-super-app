@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import styles from "./Sidebar.module.scss";
 
-import { FiMenu, FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import { SidebarProps } from "@/common/types/sidebar";
 import logo from '/assets/logo.svg';
 import { LinkButton } from "../LinkButton/LinkButton";

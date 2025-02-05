@@ -15,13 +15,13 @@ const data = {
 };
 
 export const Home = () => {
-  const { user, onToggleButton, tg } = useTelegram();
+  const { user} = useTelegram();
   
 
   //* Для пробной отправки запроса
     const [response, setResponse] = useState(null);
     const [email, setEmail] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
 
   const onSend = async () => {
@@ -50,8 +50,12 @@ export const Home = () => {
        console.log("Email:", email);
       
       console.log(response);
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
       setError(err.message);
+        } else {
+        setError("An unknown error occurred");
+        }
     }
   };
 

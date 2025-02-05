@@ -1,7 +1,3 @@
-import { Link } from "react-router-dom";
-
-import { useTelegram } from "@/hooks/useTelegram"
-
 import logo from '/assets/logo.svg';
 
 import styles from "./Header.module.scss";
@@ -15,7 +11,6 @@ import { LinkButton } from "../LinkButton/LinkButton";
 
 
 export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
-  const { onClose } = useTelegram();
 
   return (
     <header className={styles.header}>
