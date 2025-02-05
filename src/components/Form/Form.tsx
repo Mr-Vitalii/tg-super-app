@@ -2,20 +2,23 @@ import { useEffect, useState } from "react";
 import styles from "./Form.module.scss";
 import { useTelegram } from "../../hooks/useTelegram";
 
+import * as apiClient from "../../api-clients";
+import { useMutation } from "react-query";
+
 export const Form = () => {
   const { tg, user } = useTelegram();
 
   const [userData, setUserData] = useState({});
 
-  /*   const mutation = useMutation(apiClient.authWithTelegram, {
+    const mutation = useMutation(apiClient.register, {
     onSuccess: (data) => {
       console.log("Auth success:", data);
-      localStorage.setItem("token", data.token);
+     /*  localStorage.setItem("token", data.token); */
     },
     onError: (error: Error) => {
       console.error("Auth error:", error.message);
     },
-  }); */
+  });
 
   useEffect(() => {
     tg.ready();
@@ -26,7 +29,16 @@ export const Form = () => {
         setUserData({ username: user.username, id: user.id });
 
         console.log({ username: user.username, id: user.id });
-        console.log(userData);
+          console.log(userData);
+          
+            mutation.mutate({
+            id: user.id,
+            username: user.username,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            auth_date: tg.initDataUnsafe.auth_date,
+            hash: tg.initDataUnsafe.hash,
+            });
       }
     });
 
