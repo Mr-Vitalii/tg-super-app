@@ -1,83 +1,80 @@
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import styles from "./Form.module.scss";
 import { useTelegram } from "../../hooks/useTelegram";
 
-/* import * as apiClient from "../../api-clients";
-import { useMutation } from "react-query"; */
-
 export const Form = () => {
-  const { tg, user } = useTelegram();
+  const [country, setCountry] = useState("");
+  const [street, setStreet] = useState("");
+  const [subject, setSubject] = useState("physical");
+  const { tg } = useTelegram();
 
-  const [userData, setUserData] = useState({});
-
-/*     const mutation = useMutation(apiClient.register, {
-    onSuccess: (data) => {
-      console.log("Auth success:", data);
-      localStorage.setItem("token", data.token);
-    },
-    onError: (error: Error) => {
-      console.error("Auth error:", error.message);
-    },
-    }); */
-  
-  
   const onSendData = useCallback(() => {
-
-    if (user) {
-
-        setUserData({ username: user.username, id: user.id });
-        console.log({ username: user.username, id: user.id });
-        console.log(userData);
-
-      const data = {
-          id: user.id,
-          username: user.username,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          auth_date: tg.initDataUnsafe.auth_date,
-          hash: tg.initDataUnsafe.hash,
-      };
-
-      tg.sendData(JSON.stringify(data));
-    }
-  
-    
-  }, []);
+    const data = {
+      country,
+      street,
+      subject,
+    };
+    tg.sendData(JSON.stringify(data));
+  }, [country, street, subject]);
 
   useEffect(() => {
-    tg.ready();
-    tg.MainButton.setText("Войти").show();
-
-
     tg.onEvent("mainButtonClicked", onSendData);
-
-/*     tg.onEvent("mainButtonClicked", () => {
-      if (user) {
-        setUserData({ username: user.username, id: user.id });
-
-        console.log({ username: user.username, id: user.id });
-          console.log(userData);
-          
-            mutation.mutate({
-            id: user.id,
-            username: user.username,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            auth_date: tg.initDataUnsafe.auth_date,
-            hash: tg.initDataUnsafe.hash,
-            });
-      }
-    }); */
-
     return () => {
-      tg.offEvent("mainButtonClicked");
+      tg.offEvent("mainButtonClicked", onSendData);
     };
   }, [onSendData]);
 
+  useEffect(() => {
+    tg.MainButton.setParams({
+      text: "Отправить данные",
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!street || !country) {
+      tg.MainButton.hide();
+    } else {
+      tg.MainButton.show();
+    }
+  }, [country, street]);
+
+  const onChangeCountry = (e:ChangeEvent<HTMLInputElement>) => {
+    setCountry(e.target.value);
+  };
+
+  const onChangeStreet = (e:ChangeEvent<HTMLInputElement>) => {
+    setStreet(e.target.value);
+  };
+
+  const onChangeSubject = (e:ChangeEvent<HTMLSelectElement>) => {
+    setSubject(e.target.value);
+  };
+
   return (
-    <div className={styles.auth_container}>
-      <h3>Авторизация через Telegram</h3>
-          <p>Нажмите кнопку &quot;Войти&quot; в Telegram</p>
+    <div className={styles.form}>
+      <h3>Введите ваши данные</h3>
+      <input
+        className={styles.input}
+        type="text"
+        placeholder={"Страна"}
+        value={country}
+        onChange={onChangeCountry}
+      />
+      <input
+        className={styles.input}
+        type="text"
+        placeholder={"Улица"}
+        value={street}
+        onChange={onChangeStreet}
+      />
+      <select
+        value={subject}
+        onChange={onChangeSubject}
+        className={styles.select}
+      >
+        <option value={"physical"}>Физ. лицо</option>
+        <option value={"legal"}>Юр. лицо</option>
+      </select>
     </div>
   );
 };
