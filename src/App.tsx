@@ -35,7 +35,7 @@ function App() {
             <Layout>
             <span>Наша компания самая лучшая</span>
             </Layout>} />
-          <Route  path="*" element={<Navigate to="/"/>}></Route>
+          {/* <Route  path="*" element={<Navigate to="/"/>}></Route> */}
         </Routes>
     </>
   );
