@@ -1,80 +1,61 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useMutation } from "react-query";
 import styles from "./Form.module.scss";
-import { useTelegram } from "../../hooks/useTelegram";
+
+import * as apiClient from "../../api-clients";
+import { useTelegram } from "@/hooks/useTelegram";
+
+
 
 export const Form = () => {
-  const [country, setCountry] = useState("");
-  const [street, setStreet] = useState("");
-  const [subject, setSubject] = useState("physical");
-  const { tg } = useTelegram();
 
-  const onSendData = useCallback(() => {
-    const data = {
-      country,
-      street,
-      subject,
-    };
-    tg.sendData(JSON.stringify(data));
-  }, [country, street, subject]);
+   const { tg, user } = useTelegram();
 
-  useEffect(() => {
-    tg.onEvent("mainButtonClicked", onSendData);
-    return () => {
-      tg.offEvent("mainButtonClicked", onSendData);
-    };
-  }, [onSendData]);
+  const [userData, setUserData] = useState<{ username?: string; id?: number }>({});
+  
+  const mutation = useMutation(apiClient.register, {
+    onSuccess: (data) => {
+      console.log("Auth success:", data);
+      /* localStorage.setItem("token", data.token); */
+    },
+    onError: (error: Error) => {
+      console.error("Auth error:", error.message);
+    },
+  });
 
   useEffect(() => {
-    tg.MainButton.setParams({
-      text: "Отправить данные",
+    tg.ready();
+    tg.MainButton.setText("Войти").show();
+
+    tg.onEvent("mainButtonClicked", () => {
+      if (tg.initDataUnsafe?.user) {
+
+
+        
+        setUserData({ username: user.username, id: user.id });
+        console.log(userData);
+        
+
+        mutation.mutate({
+          id: user.id,
+          username: user.username,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          auth_date: tg.initDataUnsafe.auth_date,
+          hash: tg.initDataUnsafe.hash,
+        });
+      }
     });
+
+    return () => {
+      tg.offEvent("mainButtonClicked");
+    };
   }, []);
 
-  useEffect(() => {
-    if (!street || !country) {
-      tg.MainButton.hide();
-    } else {
-      tg.MainButton.show();
-    }
-  }, [country, street]);
-
-  const onChangeCountry = (e:ChangeEvent<HTMLInputElement>) => {
-    setCountry(e.target.value);
-  };
-
-  const onChangeStreet = (e:ChangeEvent<HTMLInputElement>) => {
-    setStreet(e.target.value);
-  };
-
-  const onChangeSubject = (e:ChangeEvent<HTMLSelectElement>) => {
-    setSubject(e.target.value);
-  };
-
   return (
-    <div className={styles.form}>
-      <h3>Введите ваши данные</h3>
-      <input
-        className={styles.input}
-        type="text"
-        placeholder={"Страна"}
-        value={country}
-        onChange={onChangeCountry}
-      />
-      <input
-        className={styles.input}
-        type="text"
-        placeholder={"Улица"}
-        value={street}
-        onChange={onChangeStreet}
-      />
-      <select
-        value={subject}
-        onChange={onChangeSubject}
-        className={styles.select}
-      >
-        <option value={"physical"}>Физ. лицо</option>
-        <option value={"legal"}>Юр. лицо</option>
-      </select>
+    <div className={styles.auth_container}>
+      <h3>Авторизация через Telegram</h3>
+      <p>Нажмите кнопку "Войти" в Telegram</p>
     </div>
   );
 };

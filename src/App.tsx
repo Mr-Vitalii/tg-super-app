@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./layouts/Layout";
 import { Home } from "./pages/Home/Home";
 import { FormPage } from "./pages/FormPage/FormPage";
+import { FormTest } from "./components/FormTest/FormTest";
 import { ProductsPage } from "./pages/ProductsPage/ProductsPage";
 
 
@@ -21,6 +22,10 @@ function App() {
             <Route path="/register" element={
             <Layout>
                 <FormPage/>
+          </Layout>} />
+         <Route path="/form" element={
+            <Layout>
+                <FormTest/>
               </Layout>} />
           <Route path="/product" element={
             <Layout>
