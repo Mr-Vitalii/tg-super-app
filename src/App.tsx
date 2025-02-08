@@ -23,7 +23,7 @@ function App() {
             <Layout>
                 <FormPage/>
           </Layout>} />
-         <Route path="/form" element={
+         <Route path={"form"} element={
             <Layout>
                 <FormTest/>
               </Layout>} />
