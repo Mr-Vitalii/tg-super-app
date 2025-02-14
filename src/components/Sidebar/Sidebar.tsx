@@ -10,11 +10,12 @@ import { LinkButton } from "../LinkButton/LinkButton";
 
 export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
+  const handleClose = () => setIsOpen(false);
 
   return (
    <div className={`${styles.sidebar} ${isOpen ? styles["sidebar--open"] : ""}`} onClick={(e) => e.stopPropagation()}>
     
-      <button className={styles.close_btn} onClick={() => setIsOpen(false)}>
+      <button className={styles.close_btn} onClick={handleClose}>
         <FiX size={24} />
       </button>
 
@@ -27,22 +28,53 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         <div className={styles.sidebar__actions}>
             <LinkButton
                     to="/register"
-                    variant="reg-link"
+          variant="reg-link"
                     >
               Регистрация
+            </LinkButton>
+      </div>
+        <div className={styles.sidebar__actions}>
+            <LinkButton
+                    to="/form"
+                    variant="reg-link"
+                    >
+              Форма
             </LinkButton>
       </div>
 
       <nav  className={styles.sidebar__nav}>
         <ul>
             <li className={styles.sidebar__item}>
-                <a className={styles.sidebar__link} href="#">Главная</a>
-            </li>
-           <li className={styles.sidebar__item}>
-                <a className={styles.sidebar__link} href="#">О нас</a>
+                <LinkButton
+              to="/"
+              onClick={handleClose}
+                    >
+              Главная
+            </LinkButton>
             </li>
             <li className={styles.sidebar__item}>
-                <a className={styles.sidebar__link} href="#">Контакты</a>
+            <LinkButton
+              to="/product"
+              onClick={handleClose}
+                    >
+              Продукция
+            </LinkButton>
+            </li>
+            <li className={styles.sidebar__item}>
+              <LinkButton
+              to="/about"
+              onClick={handleClose}
+                    >
+              О нас
+            </LinkButton>
+            </li>
+            <li className={styles.sidebar__item}>
+              <LinkButton
+              to="/contacts"
+              onClick={handleClose}
+                    >
+              Контакт
+            </LinkButton>
             </li>
         </ul>
       </nav>

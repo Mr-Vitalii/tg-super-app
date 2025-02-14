@@ -15,7 +15,7 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
   return (
     <header className={styles.header}>
         <button className={styles.burger} onClick={() => setIsSidebarOpen(true)}>
-            <FaHamburger size={24} />
+            <FaHamburger size={24} color="#710793" />
         </button>
       <div className={styles.header__logo}>
         <LinkButton  to="/">
@@ -24,7 +24,6 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
       </div>
 
 
-      
       <div className={styles.header__nav_menu}>
         <div className={styles.header__link}>
            <LinkButton

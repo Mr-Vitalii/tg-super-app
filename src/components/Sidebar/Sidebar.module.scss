@@ -30,20 +30,20 @@
         padding: 20px;
     }
 
-    & .sidebar__item {}
-
-    & .sidebar__link {
+    & .sidebar__item a {
         display: flex;
         width: 100%;
         padding: 10px 0;
         font-size: 20px;
-        color: $text-color;
+        color: $text-color !important;
         text-decoration: none;
 
         &:hover {
-            color: $text-color-hov;
+            color: $text-color-hov !important;
         }
     }
+
+
 
     & .sidebar__actions {
         display: flex;

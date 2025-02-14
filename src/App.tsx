@@ -35,6 +35,10 @@ function App() {
             <Layout>
             <span>Наша компания самая лучшая</span>
             </Layout>} />
+          <Route path="/contacts" element={
+            <Layout>
+            <span>Если возникли какие-либо проблемы свяжитесь с нами по email: nampohuy@loxi.com</span>
+            </Layout>} />
           {/* <Route  path="*" element={<Navigate to="/"/>}></Route> */}
         </Routes>
     </>

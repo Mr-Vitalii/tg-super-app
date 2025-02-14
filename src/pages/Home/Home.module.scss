@@ -23,7 +23,13 @@
 }
 
 .home_btn {
+    display: flex;
+    justify-content: center;
     max-width: 300px;
     margin: 0 auto;
     margin-top: 20px;
+}
+
+.home_btn button {
+    max-width: 300px !important;
 }

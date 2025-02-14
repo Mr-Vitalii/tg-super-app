@@ -1,7 +1,11 @@
+import { ProductList } from "@/components/ProductList/ProductList"
 
 
 export const ProductsPage = () => {
   return (
-   <div>Очень скоро здесь появится продукция</div>
+    <div>
+     {/*  <span> Очень скоро здесь появится продукция</span> */}
+      <ProductList/>
+   </div>
   )
 }

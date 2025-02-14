@@ -5,14 +5,13 @@ import styles from "./Form.module.scss";
 import * as apiClient from "../../api-clients";
 import { useTelegram } from "@/hooks/useTelegram";
 
-
-
 export const Form = () => {
+  const { tg, user } = useTelegram();
 
-   const { tg, user } = useTelegram();
+  const [userData, setUserData] = useState<{ username?: string; id?: number }>(
+    {}
+  );
 
-  const [userData, setUserData] = useState<{ username?: string; id?: number }>({});
-  
   const mutation = useMutation(apiClient.register, {
     onSuccess: (data) => {
       console.log("Auth success:", data);
@@ -29,15 +28,11 @@ export const Form = () => {
 
     tg.onEvent("mainButtonClicked", () => {
       if (tg.initDataUnsafe?.user) {
-
-
-        
         setUserData({ username: user.username, id: user.id });
         console.log(userData);
-        
 
         mutation.mutate({
-          id: user.id,
+          name: user?.username,
           username: user.username,
           first_name: user.first_name,
           last_name: user.last_name,
