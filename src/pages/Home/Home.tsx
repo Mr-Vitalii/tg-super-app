@@ -1,96 +1,115 @@
+import styles from './Home.module.scss'
+import { useState } from 'react'
 
-import styles from "./Home.module.scss"
-import { useState } from "react";
+import home from '/assets/home.png'
 
-import home from '/assets/home.png';
-
-import { useTelegram } from "@/hooks/useTelegram"
-import { Button } from "@/components/Button/Button";
+import { useTelegram } from '@/hooks/useTelegram'
+import { Button } from '@/components/Button/Button'
 
 const data = {
-  email: "222@gmail.com",
-  password: "123456",
-  firstName: "vitto2",
-  lastName: "gugu2",
-};
+  name: 'Vito333',
+  username: 'Vito444',
+  first_name: 'Vitalii',
+  last_name: '',
+}
 
 export const Home = () => {
-  const { user} = useTelegram();
-  
+  const { user } = useTelegram()
 
   //* Для пробной отправки запроса
-    const [response, setResponse] = useState(null);
-    const [email, setEmail] = useState(null);
-  const [error, setError] = useState<string | null>(null);
+  const [name, setName] = useState(null)
+  const [username, setUserName] = useState(null)
+  const [firstName, setFirstName] = useState(null)
+  const [lastName, setLastName] = useState(null)
 
+  const [error, setError] = useState<string | null>(null)
 
   const onSend = async () => {
-        console.log(data);
     try {
-      const res = await fetch('XXXXXXXXXX', {
-        method: 'POST', 
-        headers: {
-          'Content-Type': 'application/json', 
-        },
-        body: JSON.stringify(data),
-      });
+      const res = await fetch(
+        'https://52e8-206-189-20-158.ngrok-free.app/api/data',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      )
 
       if (!res.ok) {
-        console.log("Error");
+        console.log('Error')
         // throw new Error(`Error: ${res.status} ${res.statusText}`);
       }
 
-      const responseData = await res.json(); 
-      setResponse(responseData);
-     
+      const responseData = await res.json()
 
-      const email = responseData.data?.email; 
-       setEmail(email)
+      const name = responseData?.name
+      const username = responseData?.username
+      const firstName = responseData?.first_name
+      const lastName = responseData?.last_name
 
-       console.log("Email:", email);
-      
-      console.log(response);
+      setName(name)
+      setUserName(username)
+      setFirstName(firstName)
+      setLastName(lastName)
+
+      console.log('Name:', name)
     } catch (err: unknown) {
       if (err instanceof Error) {
-      setError(err.message);
-        } else {
-        setError("An unknown error occurred");
-        }
+        setError(err.message)
+      } else {
+        setError('An unknown error occurred')
+      }
     }
-  };
+  }
 
-
-  
   return (
-      <div>
-      <div className="home">
-        
+    <div>
+      <div className='home'>
         <p className={styles.home_greetings}>
-        Приветсвуем Вас,{" "}
-        <span className={styles.home_user_name}>{user?.username}</span> . Мы
-        рады что вы выбрали наш сервис.
+          Приветсвуем Вас,{' '}
+          <span className={styles.home_user_name}>{user?.username}</span> . Мы
+          рады что вы выбрали наш сервис.
         </p>
 
-         <div className={styles.home_img_container}>
-          <img src={home} alt="man in glasses" />
+        <div className={styles.home_img_container}>
+          <img src={home} alt='man in glasses' />
         </div>
-      
+
         <div className={styles.home_btn}>
-            <Button onClick={onSend} variant="primary" size="large">Отправить данные</Button>
+          <Button onClick={onSend} variant='primary' size='large'>
+            Отправить данные
+          </Button>
         </div>
 
         <br />
         <br />
         <br />
+        <p>Ответ:</p>
+        {name && <p>Name: {name}</p>}
+        {username && <p>Username: {username}</p>}
+        {firstName && <p>First Name: {firstName}</p>}
+        {lastName && <p>Last Name: {lastName}</p>}
 
-      {email && (
-          <p>
-            Email: <strong>{email}</strong>
-          </p>
-        )}
+        {error && <p style={{ color: 'red' }}>Ошибка: {error}</p>}
 
-        {error && <p style={{ color: "red" }}>Ошибка: {error}</p>}
-
+        {/*          <button
+          style={{
+          display: "block",
+          background: "#007bff",
+          color: "white",
+          padding: "10px 20px",
+          maxWidth: "250px",
+          margin: "0 auto",
+          borderRadius: "5px",
+          border: "none",
+          cursor: "pointer",
+        }}
+        onClick={() => setIsModalOpen(true)}
+      >
+        Открыть модалку
+      </button> */}
       </div>
     </div>
   )

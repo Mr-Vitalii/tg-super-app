@@ -1,56 +1,68 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+
 import styles from "./Form.module.scss";
 
-import * as apiClient from "../../api-clients";
 import { useTelegram } from "@/hooks/useTelegram";
+import { Modal } from "../Modal/Modal";
 
 export const Form = () => {
   const { tg, user } = useTelegram();
-
-  const [userData, setUserData] = useState<{ username?: string; id?: number }>(
-    {}
-  );
-
-  const mutation = useMutation(apiClient.register, {
-    onSuccess: (data) => {
-      console.log("Auth success:", data);
-      /* localStorage.setItem("token", data.token); */
-    },
-    onError: (error: Error) => {
-      console.error("Auth error:", error.message);
-    },
-  });
+  const [userData, setUserData] = useState("");
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     tg.ready();
     tg.MainButton.setText("Войти").show();
 
-    tg.onEvent("mainButtonClicked", () => {
-      if (tg.initDataUnsafe?.user) {
-        setUserData({ username: user.username, id: user.id });
-        console.log(userData);
 
-        mutation.mutate({
-          name: user?.username,
-          username: user.username,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          auth_date: tg.initDataUnsafe.auth_date,
-          hash: tg.initDataUnsafe.hash,
+    const handleMainButtonClick = async () => {
+      if (!user) return;
+
+      const userData = {
+        name: user?.username,
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        hash: tg.initDataUnsafe.hash,
+      };
+
+       try {
+        const response = await fetch("https://e076-188-163-81-109.ngrok-free.app/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData),
         });
+
+        const data = await response.json();
+         setUserData(data.message || "Успех");
+         tg.MainButton.setText("Войти").hide();
+         setIsModalOpen(true)
+      } catch (error:any) {
+        setUserData("Ошибка при авторизации");
       }
-    });
+    };
+
+
+   tg.onEvent("mainButtonClicked", handleMainButtonClick);
 
     return () => {
       tg.offEvent("mainButtonClicked");
     };
-  }, []);
+  }, [tg, user]);
 
   return (
-    <div className={styles.auth_container}>
-      <h3>Авторизация через Telegram</h3>
+    <>
+      <div className={styles.auth_container}>
+      <h3>Авторизация через Telegram !!!</h3>
       <p>Нажмите кнопку "Войти" в Telegram</p>
-    </div>
+      <p>Это ответ от бекенда: {userData}</p>
+      </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h2>Поздравляем!</h2>
+        <p>Вы успешно зарегистрированы</p>
+      </Modal>
+    </>
+    
   );
 };

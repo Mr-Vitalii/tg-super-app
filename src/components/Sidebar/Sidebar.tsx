@@ -29,6 +29,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             <LinkButton
                     to="/register"
           variant="reg-link"
+          onClick={handleClose}
                     >
               Регистрация
             </LinkButton>
@@ -36,7 +37,8 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         <div className={styles.sidebar__actions}>
             <LinkButton
                     to="/form"
-                    variant="reg-link"
+          variant="reg-link"
+          onClick={handleClose}
                     >
               Форма
             </LinkButton>

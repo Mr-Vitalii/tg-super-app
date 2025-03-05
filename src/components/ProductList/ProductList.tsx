@@ -40,7 +40,7 @@ export const ProductList: React.FC = () => {
       totalPrice: totalPrice1,
       queryId,
     };
-    fetch("https://tg-super-app-back2.onrender.com/web-data", {
+    fetch("https://e076-188-163-81-109.ngrok-free.app/web-data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

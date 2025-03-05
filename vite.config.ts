@@ -13,6 +13,6 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
     strictPort: true,
-    allowedHosts: ["tg-super-app.netlify.app"], 
+    /* allowedHosts: ["39a8-206-189-20-158.ngrok-free.app"],  */
   },
 });
