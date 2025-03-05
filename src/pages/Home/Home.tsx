@@ -17,6 +17,7 @@ export const Home = () => {
   const { user } = useTelegram()
 
   //* Для пробной отправки запроса
+  const [responseData, setResponseData] = useState(null)
   const [name, setName] = useState(null)
   const [username, setUserName] = useState(null)
   const [firstName, setFirstName] = useState(null)
@@ -26,16 +27,13 @@ export const Home = () => {
 
   const onSend = async () => {
     try {
-      const res = await fetch(
-        'https://52e8-206-189-20-158.ngrok-free.app/api/data',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      )
+      const res = await fetch('http://localhost:8001/api/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
 
       if (!res.ok) {
         console.log('Error')
@@ -49,6 +47,7 @@ export const Home = () => {
       const firstName = responseData?.first_name
       const lastName = responseData?.last_name
 
+      setResponseData(responseData)
       setName(name)
       setUserName(username)
       setFirstName(firstName)
@@ -87,6 +86,7 @@ export const Home = () => {
         <br />
         <br />
         <p>Ответ:</p>
+        <pre>{responseData && JSON.stringify(responseData, null, 2)}</pre>
         {name && <p>Name: {name}</p>}
         {username && <p>Username: {username}</p>}
         {firstName && <p>First Name: {firstName}</p>}
