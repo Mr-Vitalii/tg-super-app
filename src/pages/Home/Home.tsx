@@ -27,7 +27,7 @@ export const Home = () => {
 
   const onSend = async () => {
     try {
-      const res = await fetch('http://localhost:8001/api/data', {
+      const res = await fetch('https://tg-back-evst.amvera.io', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
