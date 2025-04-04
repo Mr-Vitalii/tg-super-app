@@ -17,8 +17,8 @@ import { Button } from '@/components/Button/Button'
 type Data = {
   name: string
   username: string
-  firstName: string
-  lastName: string
+  first_name: string
+  last_name: string
 }
 
 export const Home = () => {
@@ -29,8 +29,8 @@ export const Home = () => {
   const [formData, setFormData] = useState<Data>({
     name: '',
     username: '',
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,8 +40,8 @@ export const Home = () => {
   const [responseData, setResponseData] = useState(null)
   const [name, setName] = useState(null)
   const [username, setUserName] = useState(null)
-  const [firstName, setFirstName] = useState(null)
-  const [lastName, setLastName] = useState(null)
+  const [first_name, setFirstName] = useState(null)
+  const [last_name, setLastName] = useState(null)
 
   const [error, setError] = useState<string | null>(null)
 
@@ -126,8 +126,8 @@ export const Home = () => {
             <input
               type='text'
               id='first_name'
-              name='firstName'
-              value={formData.firstName}
+              name='first_name'
+              value={formData.first_name}
               onChange={handleChange}
             />
           </div>
@@ -137,8 +137,8 @@ export const Home = () => {
             <input
               type='text'
               id='last_name'
-              name='lastName'
-              value={formData.lastName}
+              name='last_name'
+              value={formData.last_name}
               onChange={handleChange}
             />
           </div>
@@ -163,8 +163,8 @@ export const Home = () => {
         <pre>{responseData && JSON.stringify(responseData, null, 2)}</pre>
         {name && <p>Name: {name}</p>}
         {username && <p>Username: {username}</p>}
-        {firstName && <p>First Name: {firstName}</p>}
-        {lastName && <p>Last Name: {lastName}</p>}
+        {first_name && <p>First Name: {first_name}</p>}
+        {last_name && <p>Last Name: {last_name}</p>}
 
         {error && <p style={{ color: 'red' }}>Ошибка: {error}</p>}
 
