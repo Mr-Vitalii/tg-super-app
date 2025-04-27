@@ -51,7 +51,7 @@ export const Form = () => {
     console.log(formData)
 
     try {
-      const res = await fetch('https://tg-back-evst.amvera.io', {
+      const res = await fetch('https://tg-3-evst.amvera.io', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
