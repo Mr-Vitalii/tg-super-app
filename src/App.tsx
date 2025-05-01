@@ -5,8 +5,9 @@ import { Layout } from './layouts/Layout'
 import { Home } from './pages/Home/Home'
 import { FormPage } from './pages/FormPage/FormPage'
 import { FormTest } from './components/FormTest/FormTest'
-import { ProductsPage } from './pages/ProductsPage/ProductsPage'
+
 import PrivateRoute from './routes/PrivateRoute'
+import { Services } from './pages/Services/Services'
 
 function App() {
   return (
@@ -38,12 +39,23 @@ function App() {
             </Layout>
           }
         />
-        <Route
+        {/*         <Route
           path='/product'
           element={
             <PrivateRoute>
               <Layout>
                 <ProductsPage />
+              </Layout>
+            </PrivateRoute>
+          }
+        /> */}
+
+        <Route
+          path='/services'
+          element={
+            <PrivateRoute>
+              <Layout>
+                <Services />
               </Layout>
             </PrivateRoute>
           }

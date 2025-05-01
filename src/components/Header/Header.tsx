@@ -29,7 +29,7 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
           <LinkButton to='/'>Главная</LinkButton>
         </div>
         <div className={styles.header__link}>
-          <LinkButton to='/product'>Продукция</LinkButton>
+          <LinkButton to='/services'>Услуги</LinkButton>
         </div>
         <div className={styles.header__link}>
           <LinkButton to='/about'>О компании</LinkButton>

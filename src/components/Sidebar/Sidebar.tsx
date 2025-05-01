@@ -61,8 +61,8 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             </LinkButton>
           </li>
           <li className={styles.sidebar__item}>
-            <LinkButton to='/product' onClick={handleClose}>
-              Продукция
+            <LinkButton to='/services' onClick={handleClose}>
+              Услуги
             </LinkButton>
           </li>
           <li className={styles.sidebar__item}>
