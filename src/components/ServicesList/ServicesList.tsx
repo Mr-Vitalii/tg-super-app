@@ -90,7 +90,7 @@ export const ServicesList: React.FC = () => {
       totalPrice: totalPrice1,
       queryId,
     }
-    fetch('https://e076-188-163-81-109.ngrok-free.app/web-data', {
+    fetch('https://zaebatiy-url-ot-evgeniy-backend/slonik', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
