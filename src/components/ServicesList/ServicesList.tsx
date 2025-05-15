@@ -1,24 +1,25 @@
-import { useCallback, useEffect, useState } from 'react'
+/* import { useCallback, useEffect, useState } from 'react' */
 import styles from './ServicesList.module.scss'
 import { v4 as uuidv4 } from 'uuid'
-import { useTelegram } from '@/hooks/useTelegram'
-import { Service } from '@/common/types/services'
+/* import { useTelegram } from '@/hooks/useTelegram' */
+/* import { Service } from '@/common/types/services' */
 import { ServiceItem } from '../ServiceItem/ServiceItem'
 import { services } from '@/data/services'
 
-const getTotalPrice = (items: Service[] = []): number => {
+/* const getTotalPrice = (items: Service[] = []): number => {
   return items.reduce((acc, item) => acc + item.price, 0)
-}
+} */
 
 export const ServicesList: React.FC = () => {
-  const [addedItems, setAddedItems] = useState<Service[]>([])
-  const [productTotalPrice, setProductTotalPrice] = useState(0)
-  const { tg, queryId } = useTelegram()
+  /*  const [addedItems, setAddedItems] = useState<Service[]>([]) */
+
+  /* const [productTotalPrice, setProductTotalPrice] = useState(0) */
+  /* const { tg, queryId } = useTelegram()
 
   const onSendData = useCallback(() => {
     const totalPrice1 = getTotalPrice(addedItems)
 
-    setProductTotalPrice(totalPrice1)
+     setProductTotalPrice(totalPrice1)
 
     const data = {
       products: addedItems,
@@ -32,20 +33,20 @@ export const ServicesList: React.FC = () => {
       },
       body: JSON.stringify(data),
     })
-  }, [addedItems, queryId])
+  }, [addedItems, queryId]) */
 
-  useEffect(() => {
+  /* useEffect(() => {
     setProductTotalPrice(getTotalPrice(addedItems))
-  }, [addedItems])
+  }, [addedItems]) */
 
-  useEffect(() => {
+  /* useEffect(() => {
     tg.onEvent('mainButtonClicked', onSendData)
     return () => {
       tg.offEvent('mainButtonClicked', onSendData)
     }
-  }, [tg, onSendData])
+  }, [tg, onSendData]) */
 
-  const onAdd = (product: Service) => {
+  /*   const onAdd = (product: Service) => {
     const alreadyAdded = addedItems.find((item) => item.id === product.id)
     let newItems: Service[] = []
 
@@ -65,7 +66,7 @@ export const ServicesList: React.FC = () => {
         text: `Купить на сумму ${getTotalPrice(newItems)} $`,
       })
     }
-  }
+  } */
 
   return (
     <div className={styles.service}>
@@ -74,7 +75,7 @@ export const ServicesList: React.FC = () => {
       <ul className={styles.service__list}>
         {services.map((item) => (
           <li className={styles.service__item} key={uuidv4()}>
-            <ServiceItem service={item} onAdd={onAdd} />
+            <ServiceItem service={item} />
           </li>
         ))}
       </ul>

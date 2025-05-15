@@ -7,10 +7,10 @@ import { useCart } from '@/context/CartContext'
 
 interface ServiceItemProps {
   service: Service
-  onAdd: (product: Service) => void
+  /* onAdd: (product: Service) => void */
 }
 
-export const ServiceItem: React.FC<ServiceItemProps> = ({ service, onAdd }) => {
+export const ServiceItem: React.FC<ServiceItemProps> = ({ service }) => {
   /*  const onAddHandler = () => {
     onAdd(service)
   } */
