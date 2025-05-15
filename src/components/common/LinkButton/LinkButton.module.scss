@@ -1,0 +1,96 @@
+@use "../../../styles/mixins"as *;
+@use "../../../styles/variables"as *;
+
+
+
+link {
+    @include flex-center;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.link a {
+    width: 100%;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 20px;
+}
+
+
+.link.initial {
+    background: transparent;
+}
+
+.link.initial a {
+    color: #000;
+}
+
+.link.more-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: $primary-color;
+    border: none;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px #5314864d,
+        0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background: $primary-color-hov;
+        box-shadow: 0 6px 15px #5314864d,
+            0 4px 8px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        background: $primary-color-hov;
+        transform: scale(0.97);
+        box-shadow: 0 2px 6px #5314864d,
+            0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.link.more-info a {
+    color: #fff;
+}
+
+.link.reg-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1c9407;
+    border: none;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover,
+    &:active {
+        background-color: #197209;
+    }
+}
+
+.link.reg-link a {
+    color: #fff;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+
+
+.link.small {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+.link.large {
+    font-size: 20px;
+    padding: 15px 30px;
+}

@@ -10,7 +10,7 @@ type Data = {
 }
 
 /* import { useTelegram } from '@/hooks/useTelegram' */
-import { Button } from '../Button/Button'
+import { Button } from '../common/Button/Button'
 import { useAppContext } from '@/context/AppContext'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '@/context/ModalContext'
@@ -49,6 +49,8 @@ export const Form = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log(formData)
+    /*     setIsAuthorized(true)
+    localStorage.setItem('token', '123456') */
 
     try {
       const res = await fetch('https://tg-3-evst.amvera.io', {

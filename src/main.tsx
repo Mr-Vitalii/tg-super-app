@@ -6,6 +6,7 @@ import App from './App.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppProvider } from './context/AppContext.tsx'
 import { ModalProvider } from './context/ModalContext.tsx'
+import { CartProvider } from './context/CartContext.tsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +22,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <AppProvider>
           <ModalProvider>
-            <App />
+            <CartProvider>
+              <App />
+            </CartProvider>
           </ModalProvider>
         </AppProvider>
       </QueryClientProvider>

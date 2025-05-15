@@ -5,9 +5,10 @@ import styles from './Sidebar.module.scss'
 import { FiX } from 'react-icons/fi'
 import { SidebarProps } from '@/common/types/sidebar'
 import logo from '/assets/logo.svg'
+
+import { useAppContext } from '@/context/AppContext'
 import { LinkButton } from '../LinkButton/LinkButton'
 import { LogoutButton } from '../Button/LogoutButton'
-import { useAppContext } from '@/context/AppContext'
 
 export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const handleClose = () => setIsOpen(false)
@@ -39,6 +40,9 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
       {isAuthorized && (
         <div className={styles.sidebar__actions}>
+          <LinkButton to='/services-cart' variant='reg-link'>
+            Мои услуги
+          </LinkButton>
           <LogoutButton />
         </div>
       )}

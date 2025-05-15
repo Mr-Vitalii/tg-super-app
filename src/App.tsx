@@ -8,6 +8,9 @@ import { FormTest } from './components/FormTest/FormTest'
 
 import PrivateRoute from './routes/PrivateRoute'
 import { Services } from './pages/Services/Services'
+import { ServiceDetailsPage } from './components/ServiceDetailsPage/ServiceDetailsPage'
+import { ServiceCartPage } from './components/ServiceCartPage/ServiceCartPage'
+import { CheckoutPage } from './components/CheckoutPage/CheckoutPage'
 
 function App() {
   return (
@@ -56,6 +59,39 @@ function App() {
             <PrivateRoute>
               <Layout>
                 <Services />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/services/:id'
+          element={
+            <PrivateRoute>
+              <Layout>
+                <ServiceDetailsPage />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/services-cart'
+          element={
+            <PrivateRoute>
+              <Layout>
+                <ServiceCartPage />
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path='/checkout'
+          element={
+            <PrivateRoute>
+              <Layout>
+                <CheckoutPage />
               </Layout>
             </PrivateRoute>
           }

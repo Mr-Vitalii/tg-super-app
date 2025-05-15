@@ -1,4 +1,9 @@
-.list {
+.service h1 {
+  margin-bottom: 40px;
+}
+
+
+.service__list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -8,10 +13,11 @@
   list-style: none;
 }
 
-.item {
+.service__item {
   flex: 0 1 calc(33% - 10px);
   display: flex;
   justify-content: center;
+  background: #fff;
   box-shadow: 0 2px 4px rgba(83, 82, 82, 0.806);
   transition: all 0.3s ease-in-out;
 
@@ -21,7 +27,7 @@
   }
 }
 
-.price {
+.service__price {
   padding: 20px;
   text-align: center;
   font-size: 20px;
@@ -29,7 +35,7 @@
 }
 
 
-@media screen and (max-width: 525px) {
+@media screen and (max-width: 660px) {
   .item {
     flex: 0 1 calc(50% - 20px);
   }

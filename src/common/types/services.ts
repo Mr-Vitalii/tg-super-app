@@ -4,4 +4,5 @@ export type Service = {
   price: number
   description: string
   img: string
+  currency: string
 }
