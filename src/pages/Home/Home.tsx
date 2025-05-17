@@ -1,3 +1,4 @@
+import { Form } from '@/components/Form/Form'
 import styles from './Home.module.scss'
 
 import home from '/assets/home.png'
@@ -19,6 +20,8 @@ export const Home = () => {
         <div className={styles.home_img_container}>
           <img src={home} alt='man in glasses' />
         </div>
+
+        <Form />
 
         {/*     <div className={styles.home_btn}>
           <Button onClick={onSend} variant='primary' size='large'>
