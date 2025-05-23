@@ -17,7 +17,10 @@ import { useModal } from '@/context/ModalContext'
 
 export const Form = () => {
   //* Для пробной отправки запроса
-  const [responseData, setResponseData] = useState(null)
+  const [responseData, setResponseData] = useState<{
+    status: string
+    message: string
+  } | null>(null)
 
   const [error, setError] = useState<string | null>(null)
 
@@ -59,7 +62,6 @@ export const Form = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-        mode: 'no-cors',
       })
 
       if (!res.ok) {
@@ -192,7 +194,8 @@ export const Form = () => {
       <br />
       <br />
       <p>Ответ:</p>
-      <pre>{responseData && JSON.stringify(responseData, null, 2)}</pre>
+      {/* <pre>{responseData && JSON.stringify(responseData, null, 2)}</pre> */}
+      <pre>{responseData && responseData?.message}</pre>
 
       {error && <p style={{ color: 'red' }}>Ошибка: {error}</p>}
     </>
