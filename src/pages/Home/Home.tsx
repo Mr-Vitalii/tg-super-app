@@ -21,8 +21,6 @@ export const Home = () => {
           <img src={home} alt='man in glasses' />
         </div>
 
-        <Form />
-
         {/*     <div className={styles.home_btn}>
           <Button onClick={onSend} variant='primary' size='large'>
             Отправить данные
