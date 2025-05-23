@@ -1,0 +1,34 @@
+.home_greetings {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.home_user_name {
+  color: #710794;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.home_img_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.home_img_container img {
+  max-width: 300px;
+}
+
+.home_btn {
+  display: flex;
+  justify-content: center;
+  max-width: 300px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.home_btn button {
+  max-width: 300px !important;
+}/*# sourceMappingURL=Home.module.css.map */

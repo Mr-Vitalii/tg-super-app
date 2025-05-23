@@ -1,0 +1,67 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100vh;
+  background-color: #222;
+  transition: left 0.3s ease-in-out;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 101;
+}
+.sidebar .sidebar__logo {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.sidebar .sidebar__logo a {
+  display: block;
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
+}
+.sidebar .sidebar__nav {
+  padding: 20px;
+}
+.sidebar .sidebar__item a {
+  display: flex;
+  width: 100%;
+  padding: 10px 0;
+  font-size: 20px;
+  color: #fff !important;
+  text-decoration: none;
+}
+.sidebar .sidebar__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.sidebar .close_btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  width: 40px;
+  height: 40px;
+  z-index: 100;
+}
+.sidebar .close_btn svg {
+  width: 40px;
+  height: 40px;
+}
+
+.sidebar--open {
+  left: 0;
+}/*# sourceMappingURL=Sidebar.module.css.map */
