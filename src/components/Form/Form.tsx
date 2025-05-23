@@ -74,7 +74,7 @@ export const Form = () => {
 
       setIsAuthorized(true)
       localStorage.setItem('token', '123456')
-      navigate('/product')
+      navigate('/services')
       handleClick()
     } catch (err: unknown) {
       if (err instanceof Error) {
