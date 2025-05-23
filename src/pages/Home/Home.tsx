@@ -1,4 +1,3 @@
-import { Form } from '@/components/Form/Form'
 import styles from './Home.module.scss'
 
 import home from '/assets/home.png'
