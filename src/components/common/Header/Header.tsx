@@ -10,9 +10,11 @@ import { LinkButton } from '../LinkButton/LinkButton'
 
 import { useAppContext } from '@/context/AppContext'
 import { LogoutButton } from '../Button/LogoutButton'
+import { useCart } from '@/context/cart/useCart'
 
 export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
   const { isAuthorized } = useAppContext()
+  const { hasNewItems } = useCart()
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
@@ -54,9 +56,12 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
         <div>
           {isAuthorized && (
             <div className={styles.header__actions}>
-              <LinkButton to='/services-cart' variant='reg-link'>
-                Мои услуги
-              </LinkButton>
+              <div className={styles.header__link_wrapper}>
+                <LinkButton to='/services-cart' variant='reg-link'>
+                  Мои услуги
+                </LinkButton>
+                {hasNewItems && <span className={styles.dot} />}
+              </div>
               <LogoutButton />
             </div>
           )}

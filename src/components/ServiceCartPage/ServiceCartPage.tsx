@@ -1,10 +1,16 @@
-import { useCart } from '@/context/CartContext'
 import styles from './ServiceCartPage.module.scss'
 import { LinkButton } from '../common/LinkButton/LinkButton'
 import { Button } from '../common/Button/Button'
+import { v4 as uuidv4 } from 'uuid'
+import { useEffect } from 'react'
+import { useCart } from '@/context/cart/useCart'
 
 export const ServiceCartPage = () => {
-  const { cart, removeFromCart } = useCart()
+  const { cart, removeFromCart, setHasNewItems } = useCart()
+
+  useEffect(() => {
+    setHasNewItems(false)
+  }, [setHasNewItems])
 
   const totalPrice = cart.reduce((sum, service) => sum + service.price, 0)
 
@@ -18,7 +24,7 @@ export const ServiceCartPage = () => {
         <>
           <div className={styles.cart__list}>
             {cart.map((service) => (
-              <div key={service.id} className={styles.cart__item}>
+              <div key={uuidv4()} className={styles.cart__item}>
                 <div className={styles.cart__left}>
                   <img
                     src={service.img}
@@ -37,6 +43,24 @@ export const ServiceCartPage = () => {
                       {service.price} {service.currency}
                     </span>
                   </div>
+                  <div className={styles.cart__details}>
+                    <span className={styles.cart__date}>
+                      Дата: {service.date}
+                    </span>
+                    <span className={styles.cart__date}>
+                      Время: {service.time}
+                    </span>
+                  </div>
+
+                  {/*        <div className={styles.cart__quantity}>
+                    <span>
+                      Количество: <span>{service.quantity || 1}</span>
+                    </span>
+                    <div className={styles.cart__quantity_action}>
+                      <button>–</button>
+                      <button>+</button>
+                    </div>
+                  </div> */}
                 </div>
                 <div className={styles.cart__right}>
                   <div className={styles.cart__actions}>
@@ -49,7 +73,7 @@ export const ServiceCartPage = () => {
 
                     <Button
                       variant='remove'
-                      onClick={() => removeFromCart(service.id)}
+                      onClick={() => removeFromCart(service)}
                     >
                       Удалить
                     </Button>

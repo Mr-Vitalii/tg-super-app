@@ -9,9 +9,11 @@ import logo from '/assets/logo.svg'
 import { useAppContext } from '@/context/AppContext'
 import { LinkButton } from '../LinkButton/LinkButton'
 import { LogoutButton } from '../Button/LogoutButton'
+import { useCart } from '@/context/cart/useCart'
 
 export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const handleClose = () => setIsOpen(false)
+  const { hasNewItems } = useCart()
 
   const { isAuthorized } = useAppContext()
 
@@ -40,9 +42,12 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
       {isAuthorized && (
         <div className={styles.sidebar__actions}>
-          <LinkButton to='/services-cart' variant='reg-link'>
-            Мои услуги
-          </LinkButton>
+          <div className={styles.sidebar__link_wrapper}>
+            <LinkButton to='/services-cart' variant='reg-link'>
+              Мои услуги
+            </LinkButton>
+            {hasNewItems && <span className={styles.dot} />}
+          </div>
           <LogoutButton />
         </div>
       )}

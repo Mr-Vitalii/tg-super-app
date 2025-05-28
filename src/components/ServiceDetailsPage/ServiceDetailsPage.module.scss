@@ -83,6 +83,28 @@
     }
   }
 
+  .date_picker {
+    margin-top: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .date_input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+  }
+
+  .weekend {
+    background-color: #f0f0f0;
+    color: #999 !important;
+    cursor: not-allowed;
+  }
 
 
   @media (max-width: 600px) {

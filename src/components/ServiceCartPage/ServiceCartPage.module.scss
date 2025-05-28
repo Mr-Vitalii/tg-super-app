@@ -82,10 +82,47 @@
   margin-top: 10px;
   color: #373636;
   font-size: 20px;
+  margin-bottom: 10px;
 }
 
 .cart__price span {
   font-weight: 600;
+}
+
+.cart__quantity {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 20px;
+}
+
+.cart__quantity_action {
+  display: flex;
+  gap: 10px;
+}
+
+.cart__quantity_action button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d8d7d7;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #cac8c8;
+  }
+}
+
+
+.cart__details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 16px;
 }
 
 

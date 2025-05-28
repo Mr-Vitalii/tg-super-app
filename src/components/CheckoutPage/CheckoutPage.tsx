@@ -1,15 +1,19 @@
-import { useCart } from '@/context/CartContext'
 import styles from './CheckoutPage.module.scss'
 import { useModal } from '@/context/ModalContext'
 import { useNavigate } from 'react-router-dom'
+
+import { format } from 'date-fns'
+import { Order } from '@/common/types/order'
+import { useCart } from '@/context/cart/useCart'
 
 export const CheckoutPage = () => {
   const { cart, clearCart } = useCart()
   const totalPrice = cart.reduce((sum, service) => sum + service.price, 0)
 
   const navigate = useNavigate()
-
   const { openModal } = useModal()
+
+  const userName = 'Иван'
   const handleModal = () => {
     openModal(
       <div>
@@ -20,26 +24,35 @@ export const CheckoutPage = () => {
   }
 
   const handleSubmitOrder = async () => {
-    clearCart()
-    navigate('/')
-    handleModal()
-    /*  try {
-      const response = await fetch('/api/checkout', {
+    const now = new Date()
+
+    const order: Order = {
+      userName,
+      orderDate: format(now, 'dd.MM.yyyy'),
+      orderTime: format(now, 'HH:mm'),
+      items: cart,
+      quantity: cart.length,
+      totalPrice,
+    }
+
+    try {
+      const response = await fetch('https://tg4-evst.amvera.io/api/orders', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ services: cart, total: totalPrice }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order),
       })
 
       if (!response.ok) {
-        throw new Error('Ошибка при оформлении заказа')
+        throw new Error('Ошибка при отправке заказа')
       }
 
+      clearCart()
+      navigate('/')
       handleModal()
     } catch (error) {
-      console.error('Ошибка:', error)
-    } */
+      console.error(error)
+      alert('Ошибка при оформлении заказа. Попробуйте позже.')
+    }
   }
 
   return (

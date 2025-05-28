@@ -5,4 +5,7 @@ export type Service = {
   description: string
   img: string
   currency: string
+  quantity?: number
+  date?: string
+  time?: string
 }

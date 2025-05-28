@@ -1,8 +1,8 @@
 import { Modal } from '@/components/common/Modal/Modal'
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode, useRef } from 'react'
 
 type ModalContextType = {
-  openModal: (content: ReactNode) => void
+  openModal: (content: ReactNode, duration?: number) => void
   closeModal: () => void
   modalContent: ReactNode | null
   isOpen: boolean
@@ -14,14 +14,33 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [modalContent, setModalContent] = useState<ReactNode | null>(null)
   const [isOpen, setIsOpen] = useState(false)
 
-  const openModal = (content: ReactNode) => {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const openModal = (content: ReactNode, duration?: number) => {
+    // Очистить предыдущий timeout, если есть
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
     setModalContent(content)
     setIsOpen(true)
+
+    if (duration) {
+      timeoutRef.current = setTimeout(() => {
+        closeModal()
+      }, duration)
+    }
   }
 
   const closeModal = () => {
     setIsOpen(false)
     setModalContent(null)
+
+    // Очищаем timeout при ручном закрытии
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
   }
 
   return (
@@ -29,7 +48,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
       value={{ openModal, closeModal, modalContent, isOpen }}
     >
       {children}
-      {/* Рендерим твой Modal здесь */}
+      {/* Рендерим Modal здесь */}
       <Modal isOpen={isOpen} onClose={closeModal}>
         {modalContent}
       </Modal>

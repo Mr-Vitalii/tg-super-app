@@ -14,6 +14,8 @@ import { Button } from '../common/Button/Button'
 import { useAppContext } from '@/context/AppContext'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '@/context/ModalContext'
+/* import { RegisterForm } from '../Auth/RegisterForm'
+import LoginForm from '../Auth/LoginForm' */
 
 export const Form = () => {
   //* Для пробной отправки запроса
@@ -52,8 +54,9 @@ export const Form = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log(formData)
-    /*     setIsAuthorized(true)
-    localStorage.setItem('token', '123456') */
+
+    setIsAuthorized(true)
+    localStorage.setItem('token', '123456')
 
     try {
       const res = await fetch('https://tg4-evst.amvera.io', {
@@ -189,6 +192,10 @@ export const Form = () => {
           </Button>
         </div>
       </form>
+
+      {/*  <RegisterForm /> */}
+
+      {/*  <LoginForm /> */}
 
       <br />
       <br />

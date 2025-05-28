@@ -2,9 +2,10 @@ import { Service } from '@/common/types/services'
 import styles from './ServiceItem.module.scss'
 
 import { LinkButton } from '../common/LinkButton/LinkButton'
-import { Button } from '../common/Button/Button'
+/* import { Button } from '../common/Button/Button'
 import { useCart } from '@/context/CartContext'
-
+import { useModal } from '@/context/ModalContext'
+import logo from '/assets/logo.svg' */
 interface ServiceItemProps {
   service: Service
   /* onAdd: (product: Service) => void */
@@ -14,8 +15,25 @@ export const ServiceItem: React.FC<ServiceItemProps> = ({ service }) => {
   /*  const onAddHandler = () => {
     onAdd(service)
   } */
+  /*   const { openModal } = useModal()
+  const { addToCart } = useCart() */
 
-  const { addToCart } = useCart()
+  /*   const handleClick = (service: Service) => {
+    addToCart(service)
+    openModal(
+      <div>
+        <h2>Услуга успешно добавлена!</h2>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img
+            style={{ width: '100px', height: '100px' }}
+            src={logo}
+            alt='logo'
+          />
+        </div>
+      </div>,
+      1000
+    )
+  } */
 
   return (
     <div className={styles.service}>
@@ -35,9 +53,9 @@ export const ServiceItem: React.FC<ServiceItemProps> = ({ service }) => {
           <LinkButton to={`/services/${service.id}`} variant='more-info'>
             Подробнее
           </LinkButton>
-          <Button onClick={() => addToCart(service)} variant='primary'>
+          {/* <Button onClick={() => handleClick(service)} variant='primary'>
             Заказать услугу
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
