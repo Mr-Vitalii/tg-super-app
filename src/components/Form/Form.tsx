@@ -55,8 +55,8 @@ export const Form = () => {
     e.preventDefault()
     console.log(formData)
 
-    setIsAuthorized(true)
-    localStorage.setItem('token', '123456')
+    /*     setIsAuthorized(true)
+    localStorage.setItem('token', '123456') */
 
     try {
       const res = await fetch('https://tg4-evst.amvera.io', {
