@@ -5,7 +5,7 @@ import App from './App.tsx'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppProvider } from './context/AppContext.tsx'
-import { ModalProvider } from './context/ModalContext.tsx'
+import { ModalProvider } from './context/modal/ModalProvider.tsx'
 import { CartProvider } from './context/cart/CartProvider.tsx'
 import { AuthProvider } from './context/auth/AuthProvider.tsx'
 

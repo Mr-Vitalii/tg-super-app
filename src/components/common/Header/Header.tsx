@@ -5,25 +5,44 @@ import styles from './Header.module.scss'
 import { HeaderProps } from '@/common/types/header'
 
 import { FaHamburger } from 'react-icons/fa'
+import { BsCart3 } from 'react-icons/bs'
+import { BsCartCheck } from 'react-icons/bs'
 
 import { LinkButton } from '../LinkButton/LinkButton'
 
 import { useAppContext } from '@/context/AppContext'
 import { LogoutButton } from '../Button/LogoutButton'
 import { useCart } from '@/context/cart/useCart'
+import { Link } from 'react-router-dom'
+import BackButton from '../BackButton/BackButton'
 
 export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
   const { isAuthorized } = useAppContext()
-  const { hasNewItems } = useCart()
+  const { cart, hasNewItems } = useCart()
   return (
     <header className={styles.header}>
       <div className={styles.header__container}>
-        <button
-          className={styles.burger}
-          onClick={() => setIsSidebarOpen(true)}
-        >
-          <FaHamburger size={24} color='#fff' />
-        </button>
+        <div className={styles.header__back_btn}>
+          <BackButton />
+        </div>
+
+        <div className={styles.header__burger_container}>
+          <Link to='/services-cart' className={styles.cart}>
+            {cart.length > 0 ? (
+              <BsCartCheck size={40} color='#fff' />
+            ) : (
+              <BsCart3 size={40} color='#fff' />
+            )}
+            {hasNewItems && <span className={styles.dot} />}
+          </Link>
+          <button
+            className={styles.burger}
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <FaHamburger size={24} color='#fff' />
+          </button>
+        </div>
+
         <div className={styles.header__logo}>
           <LinkButton to='/'>
             <img src={logo} alt='logo' />

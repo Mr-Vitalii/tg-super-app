@@ -12,10 +12,11 @@ import { useState } from 'react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale/ru'
 import { Service } from '@/common/types/services'
-import { useModal } from '@/context/ModalContext'
+
 import { isTimeAvailable } from '@/utils/dateHelpers'
 import { busySchedule } from '@/data/busySchedule'
 import { useCart } from '@/context/cart/useCart'
+import { useModal } from '@/context/modal/useModal'
 
 export const ServiceDetailsPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -104,9 +105,6 @@ export const ServiceDetailsPage: React.FC = () => {
         </div>
 
         <div className={styles.btns_container}>
-          <button onClick={() => navigate(-1)} className={styles.button}>
-            Назад
-          </button>
           <Button onClick={() => handleOrder(service)} variant='primary'>
             Заказать услугу
           </Button>

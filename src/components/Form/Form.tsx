@@ -13,7 +13,8 @@ type Data = {
 import { Button } from '../common/Button/Button'
 import { useAppContext } from '@/context/AppContext'
 import { useNavigate } from 'react-router-dom'
-import { useModal } from '@/context/ModalContext'
+import { useModal } from '@/context/modal/useModal'
+
 /* import { RegisterForm } from '../Auth/RegisterForm'
 import LoginForm from '../Auth/LoginForm' */
 
@@ -31,7 +32,15 @@ export const Form = () => {
 
   const { openModal } = useModal()
 
-  const handleClick = () => {
+  const handleModalSuccess = () => {
+    openModal(
+      <div>
+        <h2>Вы успешно авторизировались!</h2>
+        <p>Наслаждайтесь нашим сервисом 😍</p>
+      </div>
+    )
+  }
+  const handleModalError = (error: string) => {
     openModal(
       <div>
         <h2>Вы успешно авторизировались!</h2>
@@ -69,6 +78,7 @@ export const Form = () => {
 
       if (!res.ok) {
         console.log('Error')
+        console.log(res)
       }
 
       const responseData = await res.json()
@@ -78,7 +88,7 @@ export const Form = () => {
       setIsAuthorized(true)
       localStorage.setItem('token', '123456')
       navigate('/services')
-      handleClick()
+      handleModalSuccess()
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)

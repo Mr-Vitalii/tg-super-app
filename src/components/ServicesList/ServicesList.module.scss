@@ -35,6 +35,12 @@
 }
 
 
+@media screen and (max-width: 768px) {
+  .service h1 {
+    margin-bottom: 20px;
+  }
+}
+
 @media screen and (max-width: 660px) {
   .item {
     flex: 0 1 calc(50% - 20px);

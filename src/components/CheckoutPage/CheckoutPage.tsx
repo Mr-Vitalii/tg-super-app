@@ -1,10 +1,10 @@
 import styles from './CheckoutPage.module.scss'
-import { useModal } from '@/context/ModalContext'
 import { useNavigate } from 'react-router-dom'
 
 import { format } from 'date-fns'
 import { Order } from '@/common/types/order'
 import { useCart } from '@/context/cart/useCart'
+import { useModal } from '@/context/modal/useModal'
 
 export const CheckoutPage = () => {
   const { cart, clearCart } = useCart()
@@ -68,14 +68,18 @@ export const CheckoutPage = () => {
               {cart.map((service) => (
                 <li key={service.id}>
                   <span>{service.title}</span>
-                  <b>{service.price} ₴</b>
+                  <b>
+                    {service.price} {service.currency}
+                  </b>
                 </li>
               ))}
             </ul>
 
             <div className={styles.total}>
               <span>Итого:</span>
-              <b>{totalPrice} ₴</b>
+              <b>
+                {totalPrice} {cart[0].currency}
+              </b>
             </div>
 
             <button onClick={handleSubmitOrder} className={styles.confirm_btn}>
