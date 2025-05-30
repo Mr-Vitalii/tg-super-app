@@ -81,7 +81,7 @@ export const Form = () => {
       if (!res.ok) {
         console.log('Error')
         console.log(res)
-        handleModalError(res.status)
+        handleModalError(res)
         return
       }
 
