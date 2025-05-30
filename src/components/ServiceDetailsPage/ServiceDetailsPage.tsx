@@ -2,7 +2,6 @@ import logo from '/assets/logo.svg'
 import { useParams } from 'react-router-dom'
 import { services } from '@/data/services'
 import styles from './ServiceDetailsPage.module.scss'
-import { useNavigate } from 'react-router-dom'
 import { Button } from '../common/Button/Button'
 
 import DatePicker from 'react-datepicker'
@@ -20,8 +19,6 @@ import { useModal } from '@/context/modal/useModal'
 
 export const ServiceDetailsPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-
-  const navigate = useNavigate()
   const { id } = useParams()
   const service = services.find((s) => s.id === id)
 

@@ -40,11 +40,10 @@ export const Form = () => {
       </div>
     )
   }
-  const handleModalError = (error: string) => {
+  const handleModalError = (error: any) => {
     openModal(
       <div>
-        <h2>Вы успешно авторизировались!</h2>
-        <p>Наслаждайтесь нашим сервисом 😍</p>
+        <p>{'Ошибка авторизации: ' + error + ''}</p>
       </div>
     )
   }
@@ -79,6 +78,7 @@ export const Form = () => {
       if (!res.ok) {
         console.log('Error')
         console.log(res)
+        handleModalError(res.status)
       }
 
       const responseData = await res.json()
