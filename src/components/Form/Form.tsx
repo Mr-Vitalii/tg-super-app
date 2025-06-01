@@ -40,13 +40,10 @@ export const Form = () => {
       </div>
     )
   }
-  const handleModalError = (error: any) => {
+  const handleModalError = (error: string) => {
     openModal(
       <div>
-        <p>
-          {'Ошибка авторизации: ' + error.status + ', ' + error.statusText ||
-            ''}
-        </p>
+        <p>{'Ошибка авторизации: ' + error || ''}</p>
       </div>
     )
   }
@@ -78,14 +75,15 @@ export const Form = () => {
         body: JSON.stringify(formData),
       })
 
+      const responseData = await res.json()
+
       if (!res.ok) {
         console.log('Error')
-        console.log(res)
-        handleModalError(res)
+        console.log(responseData)
+        setError(responseData.message || 'An error occurred')
+        handleModalError(responseData.message)
         return
       }
-
-      const responseData = await res.json()
 
       setResponseData(responseData)
 
