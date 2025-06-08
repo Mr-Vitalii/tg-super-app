@@ -1,18 +1,18 @@
-import path from "path";
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import path from 'path'
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   server: {
-    host: "0.0.0.0",
+    host: '0.0.0.0',
     port: 5173,
     strictPort: true,
-    /* allowedHosts: ["39a8-206-189-20-158.ngrok-free.app"],  */
+    /* allowedHosts: ['https://481a-98-98-200-166.ngrok-free.app'], */
   },
-});
+})
