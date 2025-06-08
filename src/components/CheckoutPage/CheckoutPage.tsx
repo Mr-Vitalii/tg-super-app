@@ -36,7 +36,7 @@ export const CheckoutPage = () => {
     }
 
     try {
-      const response = await fetch('https://tg4-evst.amvera.io/api/order', {
+      const response = await fetch('https://tg4-evst.amvera.io/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order),
