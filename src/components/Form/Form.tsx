@@ -63,10 +63,10 @@ export const Form = () => {
     e.preventDefault()
     console.log(formData)
 
-    /*     setIsAuthorized(true)
-    localStorage.setItem('token', '123456') */
+    setIsAuthorized(true)
+    localStorage.setItem('token', '123456')
 
-    try {
+    /*     try {
       const res = await fetch('https://tg4-evst.amvera.io', {
         method: 'POST',
         headers: {
@@ -97,7 +97,7 @@ export const Form = () => {
       } else {
         setError('An unknown error occurred')
       }
-    }
+    } */
   }
 
   /*  const { tg, user } = useTelegram()

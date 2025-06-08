@@ -3,8 +3,8 @@
   margin: 40px auto;
   padding: 20px;
   border-radius: 12px;
-  background: #ebebeb;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.315);
+  background: var(--main-bg);
+  box-shadow: 0 4px 16px var(--color-card-shadow);
 
   h1 {
     font-size: 34px;
@@ -13,7 +13,6 @@
 
   p {
     font-size: 18px;
-    color: #666;
   }
 }
 
@@ -28,15 +27,16 @@
   display: flex;
   gap: 30px;
   padding: 16px 20px;
-  background: #ffffff;
+  background: var(--color-card-bg);
+  color: var(--color-card-text);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(83, 82, 82, 0.806);
+  box-shadow: 0 2px 4px var(--color-card-shadow);
   transition: all 0.3s ease-in-out;
 
 
   &:hover {
     transform: translate(0, -5px);
-    box-shadow: 0 4px 8px rgba(83, 82, 82, 0.927);
+    box-shadow: 0 4px 8px var(--color-card-shadow-hov);
   }
 }
 
@@ -70,17 +70,16 @@
 .cart__title {
   font-size: 30px;
   font-weight: 600;
+  color: var(--color-card-heading);
 }
 
 .cart__description {
   margin-top: 10px;
-  color: #373636;
   font-size: 20px;
 }
 
 .cart__price {
   margin-top: 10px;
-  color: #373636;
   font-size: 20px;
   margin-bottom: 10px;
 }
@@ -143,11 +142,10 @@
   border-top: 1px solid #848181;
   padding-top: 24px;
 
-
   & p {
     font-size: 22px;
     font-weight: 600;
-    color: #0d0d0d;
+    color: var(--color-text);
     margin-bottom: 12px;
   }
 }

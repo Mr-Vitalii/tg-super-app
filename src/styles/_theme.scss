@@ -1,0 +1,82 @@
+:root {
+  /* === Background colors === */
+  --main-bg: #e6e6e6;
+  --color-bg-secondary: #f6f6f6;
+
+  /* === Text colors === */
+  --color-text: #1a1a1a;
+  --color-heading: #111111;
+  --color-btn-text: #ffffff;
+
+  /* === Links colors === */
+  --color-link: #000;
+
+  /* === Header === */
+  --color-header-bg: #222;
+  --color-header-bg-shadow: #0000006f;
+  --color-header-text: #ffffff;
+
+  /* === Sidebar === */
+  --color-sidebar-bg: #222;
+  --color-sidebar-bg-shadow: #00000033;
+  --color-sidebar-bg-shadow: #0000006f;
+  --color-sidebar-link: #ffffff;
+
+  /* === Btns colors === */
+  --color-btn-primary: #6f1687;
+  --color-btn-primary-hov: #450b55;
+  --color-btn-primary-shadow: #5314864d;
+
+  --color-btn-primary-text: #fff;
+
+  --color-btn-secondary: #1c9407;
+  --color-btn-secondary-hov: #197209;
+
+  --color-btn-secondary-text: #fff;
+
+  --color-btn-third: #06b5e0;
+  --color-btn-third-hov: #049cc5;
+
+  --color-btn-third-text: #fff;
+
+
+  --color-btn-danger: #c2092b;
+  --color-btn-danger-hov: #890820;
+
+  --color-btn-danger-text: #fff;
+
+
+  /* === Modal === */
+  --modal-overlay: #00000080;
+  --modal-bg: #fff;
+  --modal-shadow: #00000033;
+  --modal-close-btn: #808080;
+  --modal-close-btn-hov: #000000;
+
+
+  /* === Card === */
+  --color-card-bg: #ffffff;
+  --color-card-heading: #000;
+  --color-card-text: #373636;
+
+  --color-card-shadow: #535252ce;
+  --color-card-shadow-hov: #535252ec;
+
+
+  /* === Common === */
+
+}
+
+/* 2. ТЕМНАЯ ТЕМА */
+.dark {
+  --main-bg: #131212;
+
+  /* === Text colors === */
+  --color-text: #e3e2e2;
+  --color-heading: #fff;
+  --color-btn-text: #ffffff;
+
+  /* === Links colors === */
+  --color-link: #fff;
+
+}

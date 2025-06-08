@@ -10,6 +10,7 @@ import { useAppContext } from '@/context/AppContext'
 import { LinkButton } from '../LinkButton/LinkButton'
 import { LogoutButton } from '../Button/LogoutButton'
 import { useCart } from '@/context/cart/useCart'
+/* import { ThemeToggle } from '../ThemeToggle/ThemeToggle' */
 
 export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const handleClose = () => setIsOpen(false)
@@ -30,6 +31,9 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         <Link to='/'>
           <img src={logo} alt='logo' />
         </Link>
+        {/* <div className={styles.sidebar__theme}>
+          <ThemeToggle />
+        </div> */}
       </div>
 
       {!isAuthorized && (

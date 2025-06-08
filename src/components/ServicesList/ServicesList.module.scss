@@ -17,13 +17,13 @@
   flex: 0 1 calc(33% - 10px);
   display: flex;
   justify-content: center;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(83, 82, 82, 0.806);
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 4px var(--color-card-shadow);
   transition: all 0.3s ease-in-out;
 
   &:hover {
     transform: translate(0, -5px);
-    box-shadow: 0 4px 8px rgba(83, 82, 82, 0.927);
+    box-shadow: 0 4px 8px var(--color-card-shadow-hov);
   }
 }
 

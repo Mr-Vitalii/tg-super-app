@@ -4,17 +4,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--modal-overlay);
     z-index: 50;
     transition: opacity 0.3s;
 }
 
 .modal_content {
     position: relative;
-    background: white;
+    background: var(--modal-bg);
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 10px var(--modal-shadow);
     min-width: 300px;
     max-width: 90%;
     transform: translateY(-50px);
@@ -31,10 +31,10 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
-    color: gray;
+    color: var(--modal-close-btn);
 
     &:hover {
-        color: black;
+        color: var(--modal-close-btn-hov);
     }
 }
 

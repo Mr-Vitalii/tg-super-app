@@ -7,18 +7,36 @@
     left: -250px;
     width: 250px;
     height: 100vh;
-    background-color: #222;
+    background-color: var(--color-sidebar-bg);
     transition: left 0.3s ease-in-out;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 0 10px var(--color-sidebar-bg-shadow);
     z-index: 101;
 
 
     & .sidebar__logo {
+        position: relative;
         width: 100%;
         padding: 20px;
+        padding-bottom: 30px;
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
+
+        & .sidebar__theme {
+            position: absolute;
+            bottom: -10px;
+            left: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            z-index: 100;
+
+            & svg {
+                width: 30px;
+                height: 30px;
+            }
+        }
     }
 
     & .sidebar__logo a {

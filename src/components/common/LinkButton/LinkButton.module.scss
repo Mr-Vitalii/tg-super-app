@@ -24,7 +24,7 @@ link {
 }
 
 .link.initial a {
-    color: #000;
+    color: var(--color-link);
 }
 
 .link.more-info {
@@ -36,13 +36,13 @@ link {
     width: 100%;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0 4px 10px #5314864d,
+    box-shadow: 0 4px 10px var(--color-btn-primary-shadow),
         0 2px 4px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease-in-out;
 
     &:hover {
         background: $primary-color-hov;
-        box-shadow: 0 6px 15px #5314864d,
+        box-shadow: 0 6px 15px var(--color-btn-primary-shadow),
             0 4px 8px rgba(0, 0, 0, 0.3);
         transform: translateY(-2px);
     }
@@ -50,7 +50,7 @@ link {
     &:active {
         background: $primary-color-hov;
         transform: scale(0.97);
-        box-shadow: 0 2px 6px #5314864d,
+        box-shadow: 0 2px 6px var(--color-btn-primary-shadow),
             0 1px 3px rgba(0, 0, 0, 0.2);
     }
 }
@@ -63,7 +63,7 @@ link {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1c9407;
+    background-color: var(--color-btn-secondary);
     border: none;
     width: 100%;
     max-width: 400px;
@@ -73,12 +73,12 @@ link {
 
     &:hover,
     &:active {
-        background-color: #197209;
+        background-color: var(--color-btn-secondary-hov);
     }
 }
 
 .link.reg-link a {
-    color: #fff;
+    color: var(--color-btn-secondary-text);
     font-size: 18px;
     text-decoration: none;
 }

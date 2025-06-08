@@ -15,6 +15,7 @@ import { LogoutButton } from '../Button/LogoutButton'
 import { useCart } from '@/context/cart/useCart'
 import { Link } from 'react-router-dom'
 import BackButton from '../BackButton/BackButton'
+/* import { ThemeToggle } from '../ThemeToggle/ThemeToggle' */
 
 export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
   const { isAuthorized } = useAppContext()
@@ -85,6 +86,9 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
             </div>
           )}
         </div>
+        {/* <div className={styles.header__theme_toggle}>
+          <ThemeToggle />
+        </div> */}
       </div>
     </header>
   )

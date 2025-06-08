@@ -15,22 +15,22 @@
 }
 
 .button.primary {
-  background: $primary-color;
-  color: #fff;
+  background: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
 
   &:hover,
   &:active {
-    background: $primary-color-hov;
+    background: var(--color-btn-primary-hov);
   }
 }
 
 .button.secondary {
-  background: $secondary-color;
-  color: #fff;
+  background: var(--color-btn-secondary);
+  color: var(--color-btn-secondary-text);
 
   &:hover,
   &:active {
-    background: $secondary-color-hov;
+    background-color: var(--color-btn-secondary-hov);
   }
 }
 
@@ -49,22 +49,22 @@
 
 .button.reg_btn {
   @extend .button;
-  background-color: #1c9407;
-  color: #fff;
+  background-color: var(--color-btn-secondary);
+  color: var(--color-btn-secondary-text);
 
   &:hover,
   &:active {
-    background-color: #197209;
+    background-color: var(--color-btn-secondary-hov);
   }
 }
 
 .button.remove {
   @extend .button;
-  background-color: #c2092b;
-  color: #fff;
+  background-color: var(--color-btn-danger);
+  color: var(--color-btn-danger-text);
 
   &:hover,
   &:active {
-    background-color: #890820;
+    background-color: var(--color-btn-danger-hov);
   }
 }
