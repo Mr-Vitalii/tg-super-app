@@ -67,7 +67,7 @@ export const Form = () => {
     localStorage.setItem('token', '123456') */
 
     try {
-      const res = await fetch('https://tg4-evst.amvera.io/api/users', {
+      const res = await fetch('https://test123-evst.amvera.io/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
