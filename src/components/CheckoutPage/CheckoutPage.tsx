@@ -36,11 +36,14 @@ export const CheckoutPage = () => {
     }
 
     try {
-      const response = await fetch('https://tg4-evst.amvera.io/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(order),
-      })
+      const response = await fetch(
+        'https://test123-evst.amvera.io/api/orders',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(order),
+        }
+      )
 
       if (!response.ok) {
         throw new Error('Ошибка при отправке заказа')
