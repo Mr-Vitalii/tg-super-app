@@ -7,17 +7,24 @@ export const Services = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    const cached = sessionStorage.getItem('services')
+
+    if (cached) {
+      const parsed = JSON.parse(cached)
+      setServices(parsed)
+      console.log('Загружено из localStorage')
+      return
+    }
+
     const fetchServices = async () => {
       try {
         const response = await fetch('https://tg5-evst.amvera.io/api/products')
-
-        if (!response.ok) {
-          throw new Error('Ошибка при получении списка услуг')
-        }
+        if (!response.ok) throw new Error('Ошибка при получении списка услуг')
 
         const json = await response.json()
 
         setServices(json)
+        sessionStorage.setItem('services', JSON.stringify(json))
       } catch (err) {
         console.error(err)
         setError('Ошибка при получении списка услуг.')
