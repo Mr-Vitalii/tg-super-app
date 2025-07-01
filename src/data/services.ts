@@ -6,7 +6,7 @@ export const services: Service[] = [
     title: 'Мужская стрижка',
     price: 900,
     description: 'Профессиональная классическая стрижка',
-    img: '/assets/services/haircut-men.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751208923/telegram_super_app/xbjqtn8wcmqkbajqowno.png',
     currency: '₽',
   },
   {
@@ -14,7 +14,7 @@ export const services: Service[] = [
     title: 'Стрижка бороды и усов',
     price: 600,
     description: 'Форма и уход за бородой и усами',
-    img: '/assets/services/beard-trim.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751208826/telegram_super_app/btjejbjx9g1bd6zv7xo5.png',
     currency: '₽',
   },
   {
@@ -22,7 +22,7 @@ export const services: Service[] = [
     title: 'Комбо (стрижка + борода)',
     price: 1400,
     description: 'Полный уход: стрижка головы и бороды',
-    img: '/assets/services/combo.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751208967/telegram_super_app/on91fzyfhdzbrgikvqx0.png',
     currency: '₽',
   },
   {
@@ -30,7 +30,7 @@ export const services: Service[] = [
     title: 'Стрижка под насадку + борода',
     price: 1100,
     description: 'Минимальная длина волос + уход за бородой',
-    img: '/assets/services/clippers-beard.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751208995/telegram_super_app/trp2zr4psomwenfujjga.png',
     currency: '₽',
   },
   {
@@ -38,7 +38,7 @@ export const services: Service[] = [
     title: 'Удлинённые волосы',
     price: 1100,
     description: 'Стрижка длинных волос с укладкой',
-    img: '/assets/services/long-hair.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751209021/telegram_super_app/cp6jfyow09wxjefmpgkh.png',
     currency: '₽',
   },
   {
@@ -46,7 +46,7 @@ export const services: Service[] = [
     title: 'Стрижка под насадку',
     price: 600,
     description: 'Быстрая машинная стрижка',
-    img: '/assets/services/clippers.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751209049/telegram_super_app/js4rrtfpugyjx0jfvm1s.png',
     currency: '₽',
   },
   {
@@ -54,7 +54,7 @@ export const services: Service[] = [
     title: 'Премиум-уход за лицом от Depot',
     price: 1100,
     description: 'Косметический уход за кожей лица',
-    img: '/assets/services/facial-care.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751209076/telegram_super_app/ytxn35stcodqcngcykjp.png',
     currency: '₽',
   },
   {
@@ -62,7 +62,7 @@ export const services: Service[] = [
     title: 'Камуфлирование седины',
     price: 900,
     description: 'Мягкое окрашивание седины',
-    img: '/assets/services/grey-camouflage.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751209103/telegram_super_app/t4bapfwnccbwbxf80y45.png',
     currency: '₽',
   },
   {
@@ -70,7 +70,7 @@ export const services: Service[] = [
     title: 'Укладка волос',
     price: 300,
     description: 'Фиксация и стильная укладка',
-    img: '/assets/services/styling.png',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751209131/telegram_super_app/ww5mr42dm3lu7vtzompf.png',
     currency: '₽',
   },
 ]

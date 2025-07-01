@@ -4,13 +4,19 @@ import { v4 as uuidv4 } from 'uuid'
 /* import { useTelegram } from '@/hooks/useTelegram' */
 /* import { Service } from '@/common/types/services' */
 import { ServiceItem } from '../ServiceItem/ServiceItem'
-import { services } from '@/data/services'
+import { Service } from '@/common/types/services'
+
+/* import { services } from '@/data/services' */
 
 /* const getTotalPrice = (items: Service[] = []): number => {
   return items.reduce((acc, item) => acc + item.price, 0)
 } */
 
-export const ServicesList: React.FC = () => {
+type ServicesListProps = {
+  services: Service[]
+}
+
+export const ServicesList = ({ services }: ServicesListProps) => {
   /*  const [addedItems, setAddedItems] = useState<Service[]>([]) */
 
   /* const [productTotalPrice, setProductTotalPrice] = useState(0) */
@@ -68,17 +74,23 @@ export const ServicesList: React.FC = () => {
     }
   } */
 
+  console.log(services)
+
   return (
     <div className={styles.service}>
-      {/*  <p className={styles.price}>Общая сумма заказа: {productTotalPrice} $</p> */}
       <h1>Наши услуги</h1>
-      <ul className={styles.service__list}>
-        {services.map((item) => (
-          <li className={styles.service__item} key={uuidv4()}>
-            <ServiceItem service={item} />
-          </li>
-        ))}
-      </ul>
+
+      {services.length > 0 ? (
+        <ul className={styles.service__list}>
+          {services.map((item) => (
+            <li className={styles.service__item} key={uuidv4()}>
+              <ServiceItem service={item} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Услуги отсутствуют</p>
+      )}
     </div>
   )
 }
