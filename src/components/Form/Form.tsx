@@ -3,10 +3,8 @@ import { useState } from 'react'
 import styles from './Form.module.scss'
 
 type Data = {
+  phone: string
   name: string
-  username: string
-  first_name: string
-  last_name: string
 }
 
 /* import { useTelegram } from '@/hooks/useTelegram' */
@@ -14,6 +12,7 @@ import { Button } from '../common/Button/Button'
 import { useAppContext } from '@/context/AppContext'
 import { useNavigate } from 'react-router-dom'
 import { useModal } from '@/context/modal/useModal'
+import { useTelegram } from '@/hooks/useTelegram'
 
 /* import { RegisterForm } from '../Auth/RegisterForm'
 import LoginForm from '../Auth/LoginForm' */
@@ -29,6 +28,8 @@ export const Form = () => {
 
   const navigate = useNavigate()
   const { setIsAuthorized } = useAppContext()
+
+  const { user } = useTelegram()
 
   const { openModal } = useModal()
 
@@ -49,10 +50,8 @@ export const Form = () => {
   }
 
   const [formData, setFormData] = useState<Data>({
+    phone: '',
     name: '',
-    username: '',
-    first_name: '',
-    last_name: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +61,12 @@ export const Form = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log(formData)
+
+    const payload = {
+      ...formData,
+      username: user?.username || '',
+    }
+    console.log(payload)
 
     /*   setIsAuthorized(true)
     localStorage.setItem('token', '123456') */
@@ -155,45 +160,27 @@ export const Form = () => {
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.inputGroup}>
-          <label htmlFor='name'>Name</label>
+          <label htmlFor='name'>Номер</label>
+          <input
+            type='tel'
+            id='phone'
+            name='phone'
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder='+XX (XXX) XXX-XX-XX'
+            pattern='[\d\s\+\-\(\)]*'
+            required
+          />
+        </div>
+
+        <div className={styles.inputGroup}>
+          <label htmlFor='name'>Имя</label>
           <input
             type='text'
             id='name'
             name='name'
+            placeholder='Введите ваше имя'
             value={formData.name}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label htmlFor='username'>Username</label>
-          <input
-            type='text'
-            id='username'
-            name='username'
-            value={formData.username}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label htmlFor='first_name'>First Name</label>
-          <input
-            type='text'
-            id='first_name'
-            name='first_name'
-            value={formData.first_name}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label htmlFor='last_name'>Last Name</label>
-          <input
-            type='text'
-            id='last_name'
-            name='last_name'
-            value={formData.last_name}
             onChange={handleChange}
           />
         </div>
