@@ -1,11 +1,15 @@
+import { useAppContext } from '@/context/AppContext'
 import styles from './Home.module.scss'
 
 import home from '/assets/home.png'
 
 import { useTelegram } from '@/hooks/useTelegram'
+import { LinkButton } from '@/components/common/LinkButton/LinkButton'
 
 export const Home = () => {
   const { user } = useTelegram()
+
+  const { isAuthorized } = useAppContext()
 
   return (
     <div>
@@ -19,6 +23,14 @@ export const Home = () => {
         <div className={styles.home_img_container}>
           <img src={home} alt='man in glasses' />
         </div>
+
+        {isAuthorized && (
+          <div className={styles.home__actions}>
+            <LinkButton to='/admin' variant='reg-link'>
+              Админка
+            </LinkButton>
+          </div>
+        )}
 
         {/*     <div className={styles.home_btn}>
           <Button onClick={onSend} variant='primary' size='large'>

@@ -11,6 +11,8 @@ import { Services } from './pages/Services/Services'
 import { ServiceDetailsPage } from './components/ServiceDetailsPage/ServiceDetailsPage'
 import { ServiceCartPage } from './components/ServiceCartPage/ServiceCartPage'
 import { CheckoutPage } from './components/CheckoutPage/CheckoutPage'
+import { AdminRoute } from './routes/AdminRoute'
+import { AdminDashboard } from './pages/Admin/AdminDashboard'
 
 function App() {
   return (
@@ -42,16 +44,15 @@ function App() {
             </Layout>
           }
         />
-        {/*         <Route
-          path='/product'
+
+        <Route
+          path='/admin'
           element={
-            <PrivateRoute>
-              <Layout>
-                <ProductsPage />
-              </Layout>
-            </PrivateRoute>
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
           }
-        /> */}
+        />
 
         <Route
           path='/services'

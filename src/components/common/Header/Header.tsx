@@ -86,6 +86,7 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
             </div>
           )}
         </div>
+
         {/* <div className={styles.header__theme_toggle}>
           <ThemeToggle />
         </div> */}

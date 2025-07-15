@@ -68,7 +68,7 @@ export const Form = () => {
     }
     console.log(payload)
 
-    /*   setIsAuthorized(true)
+    /* setIsAuthorized(true)
     localStorage.setItem('token', '123456') */
 
     try {
