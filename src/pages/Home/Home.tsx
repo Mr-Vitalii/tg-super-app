@@ -5,11 +5,33 @@ import home from '/assets/home.png'
 
 import { useTelegram } from '@/hooks/useTelegram'
 import { LinkButton } from '@/components/common/LinkButton/LinkButton'
+import { useEffect } from 'react'
 
 export const Home = () => {
   const { user } = useTelegram()
 
   const { isAuthorized } = useAppContext()
+
+  const { initData } = useTelegram()
+
+  useEffect(() => {
+    if (initData) {
+      fetch('https://tg5-evst.amvera.io/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ initData }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log('User verified:', data)
+        })
+        .catch((err) => {
+          console.error('Verification failed:', err)
+        })
+    }
+  }, [initData])
 
   return (
     <div>

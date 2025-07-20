@@ -17,6 +17,8 @@ export function useTelegram() {
     onClose,
     onToggleButton,
     tg,
+    initData: tg.initData, // ← строка с сериализованными данными
+    initDataUnsafe: tg.initDataUnsafe, // ← объект с распарсенными данными
     user: tg.initDataUnsafe?.user,
     queryId: tg.initDataUnsafe?.query_id,
   }
