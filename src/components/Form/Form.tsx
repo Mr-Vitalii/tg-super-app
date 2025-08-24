@@ -3,11 +3,10 @@ import { useState } from 'react'
 import styles from './Form.module.scss'
 
 type Data = {
-  phone: string
+  /*   phone: string */
   name: string
 }
 
-/* import { useTelegram } from '@/hooks/useTelegram' */
 import { Button } from '../common/Button/Button'
 import { useAppContext } from '@/context/AppContext'
 import { useNavigate } from 'react-router-dom'
@@ -29,7 +28,7 @@ export const Form = () => {
   const navigate = useNavigate()
   const { setIsAuthorized } = useAppContext()
 
-  const { user } = useTelegram()
+  const { initData } = useTelegram()
 
   const { openModal } = useModal()
 
@@ -50,7 +49,7 @@ export const Form = () => {
   }
 
   const [formData, setFormData] = useState<Data>({
-    phone: '',
+    /*  phone: '', */
     name: '',
   })
 
@@ -60,22 +59,25 @@ export const Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(formData)
+    console.log('formData:', formData)
+    console.log('initData: ', initData)
 
-    const payload = {
+    /*     const payload = {
       ...formData,
       username: user?.username || '',
+      initData,
     }
-    console.log(payload)
+    console.log(payload) */
 
     /* setIsAuthorized(true)
     localStorage.setItem('token', '123456') */
 
     try {
-      const res = await fetch('https://tg5-evst.amvera.io/api/users', {
+      const res = await fetch('https://tg5-evst.amvera.io/api/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Telegram-InitData': initData || '',
         },
         body: JSON.stringify(formData),
       })
@@ -83,17 +85,17 @@ export const Form = () => {
       const responseData = await res.json()
 
       if (!res.ok) {
-        console.log('Error')
-        console.log(responseData)
+        console.error('Error:', responseData)
         setError(responseData.message || 'An error occurred')
-        handleModalError(responseData.message)
+        handleModalError(responseData.message || 'Error')
         return
       }
 
       setResponseData(responseData)
-
       setIsAuthorized(true)
+
       localStorage.setItem('token', '123456')
+
       navigate('/services')
       handleModalSuccess()
     } catch (err: unknown) {
@@ -159,7 +161,7 @@ export const Form = () => {
       <h1 className={styles.form_title}>Регистрация</h1>
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.inputGroup}>
+        {/*         <div className={styles.inputGroup}>
           <label htmlFor='name'>Номер</label>
           <input
             type='tel'
@@ -171,7 +173,7 @@ export const Form = () => {
             pattern='[\d\s\+\-\(\)]*'
             required
           />
-        </div>
+        </div> */}
 
         <div className={styles.inputGroup}>
           <label htmlFor='name'>Имя</label>
