@@ -28,3 +28,9 @@
 .social__link a:hover .icon {
     color: var(--color-btn-primary);
 }
+
+@media screen and (max-width: 768px) {
+    .footer {
+        padding: 20px;
+    }
+}
