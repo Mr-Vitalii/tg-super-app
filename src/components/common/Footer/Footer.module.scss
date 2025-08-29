@@ -1,5 +1,30 @@
+@use "../../../styles/variables"as *;
+
 .footer {
     padding: 30px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+}
+
+.social {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 10px;
+}
+
+.social__link a {
+    display: block;
+    height: 100%;
+}
+
+.icon {
+    color: var(--color-link);
+    transition: color 0.3s ease;
+}
+
+.social__link a:hover .icon {
+    color: var(--color-btn-primary);
 }
