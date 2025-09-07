@@ -69,7 +69,7 @@ export const Form = () => {
     }
     console.log(payload) */
 
-    /* setIsAuthorized(true)
+    /*     setIsAuthorized(true)
     localStorage.setItem('token', '123456') */
 
     try {
@@ -107,74 +107,11 @@ export const Form = () => {
     }
   }
 
-  /*  const { tg, user } = useTelegram()
-  const [userData, setUserData] = useState('') */
-
-  /*   useEffect(() => {
-    tg.ready();
-    tg.MainButton.setText("Войти").show();
-    
-
-    const handleMainButtonClick = async () => {
-      if (!user) return;
-
-      const userData = {
-        name: user?.username,
-        username: user.username,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        hash: tg.initDataUnsafe.hash,
-      };
-
-       try {
-        const response = await fetch("https://e076-188-163-81-109.ngrok-free.app/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userData),
-        });
-
-        const data = await response.json();
-         setUserData(data.message || "Успех");
-         tg.MainButton.setText("Войти").hide();
-         setIsModalOpen(true)
-      } catch (error:any) {
-        setUserData("Ошибка при авторизации");
-      }
-    };
-
-
-   tg.onEvent("mainButtonClicked", handleMainButtonClick);
-
-    return () => {
-      tg.offEvent("mainButtonClicked");
-    };
-  }, [tg, user]); */
-
   return (
     <>
-      {/* <div className={styles.auth_container}>
-      <h3>Авторизация через Telegram !!!</h3>
-      <p>Нажмите кнопку "Войти" в Telegram</p>
-      <p>Это ответ от бекенда: {userData}</p>
-      </div> */}
-
       <h1 className={styles.form_title}>Регистрация</h1>
 
       <form className={styles.form} onSubmit={handleSubmit}>
-        {/*         <div className={styles.inputGroup}>
-          <label htmlFor='name'>Номер</label>
-          <input
-            type='tel'
-            id='phone'
-            name='phone'
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder='+XX (XXX) XXX-XX-XX'
-            pattern='[\d\s\+\-\(\)]*'
-            required
-          />
-        </div> */}
-
         <div className={styles.inputGroup}>
           <label htmlFor='name'>Имя</label>
           <input

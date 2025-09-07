@@ -1,43 +1,115 @@
 import { Service } from '@/common/types/services'
 import { ServicesList } from '@/components/ServicesList/ServicesList'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+import { fetchServices } from '@/api/api'
 
 export const Services = () => {
   const [services, setServices] = useState<Service[]>([])
+  /*   const [page, setPage] = useState<number>(1) */
+  const [loading, setLoading] = useState<boolean>(false)
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [isFetched, setIsFetched] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const loaderRef = useRef<HTMLDivElement | null>(null)
+  const pageRef = useRef(1)
+
+  // ✅ Загрузка из sessionStorage при монтировании
   useEffect(() => {
     const cached = sessionStorage.getItem('services')
-
     if (cached) {
       const parsed = JSON.parse(cached)
-      setServices(parsed)
-      console.log('Загружено из localStorage')
-      return
+      setServices(parsed.services || [])
+      pageRef.current = parsed.page || 1 // ✅ восстанавливаем страницу в ref
+      setIsFetched(true) // чтобы показать "Услуги отсутствуют", если массив пустой
+      console.log('✅ Загружено из sessionStorage')
+    } else {
+      // если кэша нет — грузим первую страницу
+      loadMore()
     }
-
-    const fetchServices = async () => {
-      try {
-        const response = await fetch('https://tg5-evst.amvera.io/api/products')
-        if (!response.ok) throw new Error('Ошибка при получении списка услуг')
-
-        const json = await response.json()
-
-        setServices(json)
-        sessionStorage.setItem('services', JSON.stringify(json))
-      } catch (err) {
-        console.error(err)
-        setError('Ошибка при получении списка услуг.')
-      }
-    }
-
-    fetchServices()
   }, [])
+
+  // ✅ Сохраняем в sessionStorage при изменении services/page
+  useEffect(() => {
+    if (services.length > 0) {
+      sessionStorage.setItem(
+        'services',
+        JSON.stringify({
+          services,
+          page: pageRef.current, // ✅ сохраняем страницу из ref
+        })
+      )
+      console.log('💾 Данные сохранены в sessionStorage')
+    }
+  }, [services])
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return
+    setLoading(true)
+
+    console.log('Запрашиваем данные для страницы:', pageRef.current)
+
+    try {
+      const newItems = await fetchServices(pageRef.current, 9)
+
+      setError(null)
+
+      if (newItems.length === 0) {
+        setHasMore(false)
+      } else {
+        setServices((prev) => [...prev, ...newItems])
+        pageRef.current += 1 // ⬅️ инкрементируем ref
+      }
+
+      setIsFetched(true)
+    } catch (err: any) {
+      console.error(err)
+      setError(
+        err instanceof Error ? err.message : 'Ошибка при загрузке данных'
+      )
+    } finally {
+      setLoading(false)
+    }
+  }, [loading])
+
+  useEffect(() => {
+    loadMore()
+  }, [])
+
+  useEffect(() => {
+    if (!loaderRef.current) return
+
+    const observer = new IntersectionObserver((entries) => {
+      const target = entries[0]
+
+      if (target.isIntersecting && !loading && hasMore && !error) {
+        loadMore()
+      }
+    })
+
+    if (loaderRef.current) observer.observe(loaderRef.current)
+
+    return () => observer.disconnect()
+  }, [loadMore, loading, hasMore])
 
   return (
     <div>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <ServicesList services={services} />
+      <h1 style={{ marginBottom: '30px' }}>Наши услуги</h1>
+      {error && (
+        <>
+          <p style={{ color: 'red' }}>{error}</p>
+          <p style={{ fontSize: '20px' }}>
+            😵 Временные проблемы на сервере. Попробуйте позже.
+          </p>
+        </>
+      )}
+      <ServicesList
+        isFetched={isFetched}
+        services={services}
+        loading={loading}
+        loaderRef={loaderRef}
+      />
     </div>
   )
 }
