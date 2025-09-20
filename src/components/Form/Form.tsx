@@ -79,6 +79,7 @@ export const Form = () => {
           'Content-Type': 'application/json',
           'X-Telegram-InitData': initData || '',
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       })
 
