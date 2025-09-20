@@ -13,7 +13,8 @@ export const CheckoutPage = () => {
   const navigate = useNavigate()
   const { openModal } = useModal()
 
-  const userName = 'Иван'
+  /*  const userName = 'Иван' */
+  const company = 'Barbershop'
   const handleModal = () => {
     openModal(
       <div>
@@ -27,7 +28,7 @@ export const CheckoutPage = () => {
     const now = new Date()
 
     const order: Order = {
-      userName,
+      company,
       orderDate: format(now, 'dd.MM.yyyy'),
       orderTime: format(now, 'HH:mm'),
       items: cart,
@@ -39,6 +40,7 @@ export const CheckoutPage = () => {
       const response = await fetch('https://tg5-evst.amvera.io/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(order),
       })
 
