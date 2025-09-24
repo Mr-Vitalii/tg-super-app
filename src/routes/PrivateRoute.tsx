@@ -1,15 +1,24 @@
-import { useAppContext } from '../context/AppContext'
 import { Navigate } from 'react-router-dom'
 import { ReactNode } from 'react'
+import { useAuth } from '@/context/auth/useAuth'
 
 type Props = {
   children: ReactNode
 }
 
 const PrivateRoute = ({ children }: Props) => {
-  const { isAuthorized } = useAppContext()
+  const { user, loading } = useAuth()
 
-  return isAuthorized ? children : <Navigate to='/register' replace />
+  if (loading) {
+    // Можно показать спиннер или заглушку
+    return <div>Загрузка...</div>
+  }
+
+  if (!user) {
+    return <Navigate to='/register' replace />
+  }
+
+  return <>{children}</>
 }
 
 export default PrivateRoute

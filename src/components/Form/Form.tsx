@@ -1,57 +1,41 @@
 import { useState } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import styles from './Form.module.scss'
 
+import { Button } from '../common/Button/Button'
+import { useModal } from '@/context/modal/useModal'
+import { useTelegram } from '@/hooks/useTelegram'
+import { useAuth } from '@/context/auth/useAuth'
+
 type Data = {
-  /*   phone: string */
   name: string
 }
 
-import { Button } from '../common/Button/Button'
-import { useAppContext } from '@/context/AppContext'
-import { useNavigate } from 'react-router-dom'
-import { useModal } from '@/context/modal/useModal'
-import { useTelegram } from '@/hooks/useTelegram'
-
-/* import { RegisterForm } from '../Auth/RegisterForm'
-import LoginForm from '../Auth/LoginForm' */
-
 export const Form = () => {
-  //* Для пробной отправки запроса
-  const [responseData, setResponseData] = useState<{
-    status: string
-    message: string
-  } | null>(null)
-
+  const [formData, setFormData] = useState<Data>({ name: '' })
   const [error, setError] = useState<string | null>(null)
 
   const navigate = useNavigate()
-  const { setIsAuthorized } = useAppContext()
-
-  const { initData } = useTelegram()
-
   const { openModal } = useModal()
+  const { initData } = useTelegram()
+  const { authorize } = useAuth()
 
   const handleModalSuccess = () => {
     openModal(
       <div>
         <h2>Вы успешно авторизировались!</h2>
-        <p>Наслаждайтесь нашим сервисом 😍</p>
-      </div>
-    )
-  }
-  const handleModalError = (error: string) => {
-    openModal(
-      <div>
-        <p>{'Ошибка авторизации: ' + error || ''}</p>
+        <p>Добро пожаловать 🚀</p>
       </div>
     )
   }
 
-  const [formData, setFormData] = useState<Data>({
-    /*  phone: '', */
-    name: '',
-  })
+  const handleModalError = (error: string) => {
+    openModal(
+      <div>
+        <p>{'Ошибка авторизации: ' + error}</p>
+      </div>
+    )
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -59,52 +43,17 @@ export const Form = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('formData:', formData)
-    console.log('initData: ', initData)
-
-    /*     const payload = {
-      ...formData,
-      username: user?.username || '',
-      initData,
-    }
-    console.log(payload) */
-
-    /*     setIsAuthorized(true)
-    localStorage.setItem('token', '123456') */
+    setError(null)
 
     try {
-      const res = await fetch('https://tg5-evst.amvera.io/api/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Telegram-InitData': initData || '',
-        },
-        credentials: 'include',
-        body: JSON.stringify(formData),
-      })
-
-      const responseData = await res.json()
-
-      if (!res.ok) {
-        console.error('Error:', responseData)
-        setError(responseData.message || 'An error occurred')
-        handleModalError(responseData.message || 'Error')
-        return
-      }
-
-      setResponseData(responseData)
-      setIsAuthorized(true)
-
-      localStorage.setItem('token', '123456')
+      await authorize(initData || '', formData.name)
 
       navigate('/services')
       handleModalSuccess()
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError('An unknown error occurred')
-      }
+      const message = err instanceof Error ? err.message : 'Неизвестная ошибка'
+      setError(message)
+      handleModalError(message)
     }
   }
 
@@ -132,16 +81,10 @@ export const Form = () => {
         </div>
       </form>
 
-      {/*  <RegisterForm /> */}
-
-      {/*  <LoginForm /> */}
-
       <br />
       <br />
       <br />
       <p>Ответ:</p>
-      {/* <pre>{responseData && JSON.stringify(responseData, null, 2)}</pre> */}
-      <pre>{responseData && responseData?.message}</pre>
 
       {error && <p style={{ color: 'red' }}>Ошибка: {error}</p>}
     </>

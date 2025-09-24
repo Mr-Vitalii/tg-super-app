@@ -8,12 +8,19 @@
 
 import { User } from './user'
 
-export type AuthContextType = {
+/* export type AuthContextType = {
   user: User | null
   token: string | null
   login: (token: string, user: User) => void
   logout: () => void
   register: (formData: RegisterFormData) => Promise<void>
+} */
+
+export type AuthContextType = {
+  user: User | null
+  loading: boolean
+  authorize: (initData: string, name: string) => Promise<void>
+  logout: () => Promise<void>
 }
 
 export type LoginFormData = {
