@@ -65,14 +65,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Логаут
   const logout = useCallback(async () => {
-    try {
+    /* try {
       await fetch('/api/logout', {
         method: 'POST',
         credentials: 'include',
       })
     } catch (e) {
       console.warn('Logout request failed:', e)
-    }
+    } */
     setUser(null)
   }, [])
 
