@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Авторизация через Telegram initData
   const authorize = useCallback(async (initData: string, name: string) => {
     const res = await fetch('https://tg5-evst.amvera.io/api/auth', {
+      method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
