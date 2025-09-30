@@ -8,14 +8,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useState<any>(null) */ /* для локальной пробной загрузки */
   const [loading, setLoading] = useState(true)
 
-  // Проверяем текущего пользователя при старте
+  // ✅ 1. Проверяем пользователя при загрузке
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('https://tg5-evst.amvera.io/api/me', {
+        // Сначала пробуем с cookie
+        let res = await fetch('https://tg5-evst.amvera.io/api/me', {
           method: 'GET',
-          credentials: 'include', // отправляем sid-cookie
+          credentials: 'include',
         })
+
+        // Если cookie не сработала → пробуем X-Session-Id
+        if (res.status === 401) {
+          const sid = localStorage.getItem('sid')
+          if (sid) {
+            res = await fetch('https://tg5-evst.amvera.io/api/me', {
+              method: 'GET',
+              headers: {
+                'X-Session-Id': sid,
+              },
+            })
+          }
+        }
 
         if (res.ok) {
           const data = await res.json()
@@ -54,6 +68,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     console.log(data)
 
+    if (data.sid) {
+      localStorage.setItem('sid', data.sid)
+    }
+
     // Для локальной загрузки
     /*         const data = {
       user: {
@@ -68,6 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Логаут
   const logout = useCallback(async () => {
+    localStorage.removeItem('sid')
     /* try {
       await fetch('/api/logout', {
         method: 'POST',
