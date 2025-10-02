@@ -43,7 +43,7 @@ export const apiFetch = async (
   const finalInit: RequestInit = {
     ...init,
     headers,
-    credentials: 'include', // пробуем куки всегда
+    /* credentials: 'include',  */ // пробуем куки всегда
   }
 
   return fetch(input, finalInit)
