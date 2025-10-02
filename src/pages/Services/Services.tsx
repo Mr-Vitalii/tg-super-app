@@ -23,7 +23,6 @@ export const Services = () => {
       setServices(parsed.services || [])
       pageRef.current = parsed.page || 1 // ✅ восстанавливаем страницу в ref
       setIsFetched(true) // чтобы показать "Услуги отсутствуют", если массив пустой
-      console.log('✅ Загружено из sessionStorage')
     } else {
       // если кэша нет — грузим первую страницу
       loadMore()
@@ -40,7 +39,6 @@ export const Services = () => {
           page: pageRef.current, // ✅ сохраняем страницу из ref
         })
       )
-      console.log('💾 Данные сохранены в sessionStorage')
     }
   }, [services])
 
