@@ -16,9 +16,6 @@ export const ServicesList = ({
   isFetched,
   loaderRef,
 }: ServicesListProps) => {
-  console.log(services)
-  console.log(isFetched)
-
   return (
     <div className={styles.service}>
       {services.length > 0 ? (

@@ -48,8 +48,6 @@ export const Services = () => {
     if (loading || !hasMore) return
     setLoading(true)
 
-    console.log('Запрашиваем данные для страницы:', pageRef.current)
-
     try {
       const newItems = await fetchServices(pageRef.current, 9)
 

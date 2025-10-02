@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(data)
         } else {
           setUser(null)
+          console.log('Not authorized:' + res)
         }
       } catch (e) {
         setUser(null)

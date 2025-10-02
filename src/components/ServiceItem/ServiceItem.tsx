@@ -9,8 +9,6 @@ interface ServiceItemProps {
 }
 
 const ServiceCardComponent: React.FC<ServiceItemProps> = ({ service }) => {
-  console.log(`🔄 Ререндер карточки: ${service.id}`)
-
   return (
     <div className={styles.service}>
       <div className={styles.service__img}>
