@@ -1,12 +1,11 @@
-import { useAppContext } from '@/context/AppContext'
 import { Button } from './Button'
+import { useAuth } from '@/context/auth/useAuth'
 
 export const LogoutButton = () => {
-  const { setIsAuthorized } = useAppContext()
+  const { logout } = useAuth()
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    setIsAuthorized(false)
+    logout()
   }
 
   return (
