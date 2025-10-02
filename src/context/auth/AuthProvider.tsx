@@ -43,7 +43,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!res.ok) throw new Error('Auth failed')
 
     const data = await res.json()
+    console.log('localStorage доступен:', typeof window !== 'undefined')
     if (data.sid) localStorage.setItem('sid', data.sid)
+    console.log('Сохранён sid:', localStorage.getItem('sid'))
     setUser(data.user)
   }, [])
 

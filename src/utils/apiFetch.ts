@@ -33,9 +33,12 @@ export const apiFetch = async (
   // Нормализуем заголовки в экземпляр Headers
   const headers = new Headers(init.headers)
 
+  console.log('headers из apiFetch ', headers)
+
   // Добавляем sid из localStorage (если есть)
   if (typeof window !== 'undefined') {
     const sid = localStorage.getItem('sid')
+    console.log('sid из apiFetch ', sid)
     if (sid) headers.set('X-Session-Id', sid)
   }
 
