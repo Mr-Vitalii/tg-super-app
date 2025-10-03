@@ -51,16 +51,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   // Логаут
-  const logout = useCallback(async () => {
+  /*   const logout = useCallback(async () => {
     localStorage.removeItem('sid')
-    /* try {
+    try {
       await fetch('/api/logout', {
         method: 'POST',
         credentials: 'include',
       })
     } catch (e) {
       console.warn('Logout request failed:', e)
-    } */
+    }
+    setUser(null)
+  }, []) */
+
+  const logout = useCallback(async () => {
+    // 1. Удаляем sid заранее, чтобы он НЕ ушёл в X-Session-Id
+    localStorage.removeItem('sid')
+    try {
+      // 2. Вызываем logout через apiFetch (без credentials)
+      await apiFetch('https://tg5-evst.amvera.io/api/logout', {
+        method: 'POST',
+      })
+    } catch (e) {
+      console.warn('Logout request failed:', e)
+    }
+    // 3. Сбрасываем состояние пользователя
     setUser(null)
   }, [])
 
