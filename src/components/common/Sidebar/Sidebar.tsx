@@ -56,16 +56,6 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         </div>
       )}
 
-      {/*   <div className={styles.sidebar__actions}>
-            <LinkButton
-                    to="/form"
-          variant="reg-link"
-          onClick={handleClose}
-                    >
-              Форма
-            </LinkButton>
-      </div> */}
-
       <nav className={styles.sidebar__nav}>
         <ul>
           <li className={styles.sidebar__item}>

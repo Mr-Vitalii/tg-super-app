@@ -3,6 +3,7 @@ import { useState, useEffect, ReactNode, useMemo, useCallback } from 'react'
 import { AuthContext } from './AuthContext'
 
 import { apiFetch } from '@/utils/apiFetch'
+import { useTelegram } from '@/hooks/useTelegram'
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -10,8 +11,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useState<any>(null) */ /* для локальной пробной загрузки */
   const [loading, setLoading] = useState(true)
 
+  const { initData } = useTelegram()
+
   // ✅ 1. Проверяем пользователя при загрузке
-  useEffect(() => {
+  /*   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await apiFetch('https://tg5-evst.amvera.io/api/me')
@@ -28,6 +31,52 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false)
       }
     }
+    fetchUser()
+  }, []) */
+
+  // ✅ 1. Проверяем пользователя при загрузке
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // 2️⃣ Готовим заголовки
+        const headers: Record<string, string> = {}
+        if (initData) {
+          headers['X-Telegram-InitData'] = initData
+        }
+
+        // 3️⃣ Делаем запрос к API
+        const res = await apiFetch('https://tg5-evst.amvera.io/api/me', {
+          method: 'GET',
+          headers,
+        })
+
+        // 4️⃣ Проверяем результат
+        if (!res.ok) {
+          console.warn('🚫 /api/me вернул ошибку:', res.status)
+          setUser(null)
+          return
+        }
+
+        // 5️⃣ Парсим тело ответа
+        const data = await res.json()
+        console.log('✅ /api/me response:', data)
+
+        // 6️⃣ Если сервер прислал новый sid — сохраняем
+        if (data.sid && typeof window !== 'undefined') {
+          localStorage.setItem('sid', data.sid)
+          console.log('💾 Новый sid сохранён в localStorage:', data.sid)
+        }
+
+        // 7️⃣ Сохраняем пользователя
+        setUser(data.user || data)
+      } catch (err) {
+        console.error('💥 Ошибка при выполнении /api/me:', err)
+        setUser(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchUser()
   }, [])
 
@@ -51,30 +100,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   // Логаут
-  /*   const logout = useCallback(async () => {
-    localStorage.removeItem('sid')
-    try {
-      await fetch('/api/logout', {
-        method: 'POST',
-        credentials: 'include',
-      })
-    } catch (e) {
-      console.warn('Logout request failed:', e)
-    }
-    setUser(null)
-  }, []) */
-
   const logout = useCallback(async () => {
     try {
-      // 1. Вызываем logout через apiFetch (без credentials)
       await apiFetch('https://tg5-evst.amvera.io/api/logout', {
         method: 'POST',
       })
     } catch (e) {
       console.warn('Logout request failed:', e)
     }
-    // 2. Удаляем sid заранее, чтобы он НЕ ушёл в X-Session-Id
-    // 3. Сбрасываем состояние пользователя
+
     localStorage.removeItem('sid')
     setUser(null)
   }, [])

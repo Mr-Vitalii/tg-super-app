@@ -1,7 +1,6 @@
 import { Service } from './services'
 
 export type Order = {
-  /* userName: string */
   company: string
   orderDate: string
   orderTime: string
