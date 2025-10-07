@@ -51,3 +51,9 @@ export async function fetchServices(
 
   return data as Service[]
 }
+
+export async function fetchServiceById(id: string) {
+  const res = await fetch(`/api/services/${id}`)
+  if (!res.ok) throw new Error('Услуга не найдена')
+  return res.json()
+}

@@ -23,3 +23,12 @@ export const removeFromStorage = (key: string): void => {
     console.error(`Ошибка удаления ${key}`, err)
   }
 }
+
+export const loadCachedServices = () => {
+  try {
+    const data = sessionStorage.getItem('services')
+    return data ? JSON.parse(data).services || [] : []
+  } catch {
+    return []
+  }
+}
