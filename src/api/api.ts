@@ -53,7 +53,7 @@ export async function fetchServices(
 }
 
 export async function fetchServiceById(id: string) {
-  const res = await fetch(`/api/services/${id}`)
+  const res = await fetch(`https://tg5-evst.amvera.io/api/products/${id}`)
   if (!res.ok) throw new Error('Услуга не найдена')
   return res.json()
 }
