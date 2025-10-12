@@ -16,7 +16,8 @@ import { busySchedule } from '@/data/busySchedule'
 import { useCart } from '@/hooks/useCart'
 import { useModal } from '@/context/modal/useModal'
 import { loadCachedServices } from '@/utils/storage'
-import { fetchServiceById } from '@/api/api'
+
+import { useGetProductQuery } from '@/services/productsApi'
 
 export const ServiceDetailsPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -24,7 +25,6 @@ export const ServiceDetailsPage: React.FC = () => {
   const [service, setService] = useState<Service | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  /*  const service = services.find((s) => s.id === id) */
 
   const { openModal } = useModal()
   const { addToCart } = useCart()
@@ -40,19 +40,34 @@ export const ServiceDetailsPage: React.FC = () => {
       setLoading(false)
       return
     }
-
-    // если нет в кэше — загружаем с сервера
-    ;(async () => {
-      try {
-        const data = await fetchServiceById(id)
-        setService(data)
-      } catch (err: any) {
-        setError(err.message || 'Ошибка при загрузке услуги')
-      } finally {
-        setLoading(false)
-      }
-    })()
   }, [id])
+
+  const {
+    data: productData,
+    isFetching,
+    isError,
+    error: productError,
+  } = useGetProductQuery(id ?? '', {
+    skip: !id || !!service,
+  })
+
+  useEffect(() => {
+    if (productData) {
+      setService(productData)
+      setLoading(false)
+    } else if (isError) {
+      // productError может быть FetchBaseQueryError или SerializedError
+      const msg =
+        (productError as any)?.data?.message ||
+        (productError as any)?.message ||
+        'Ошибка при загрузке услуги'
+      setError(msg)
+      setLoading(false)
+    } else if (!productData && !isFetching && !service) {
+      // когда нет данных, но запрос не выполняется — пометим как загружено
+      setLoading(false)
+    }
+  }, [productData, isFetching, isError, productError, service])
 
   if (loading) return <div>Загрузка...</div>
   if (error) return <div>{error}</div>

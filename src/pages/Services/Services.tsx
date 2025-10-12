@@ -2,7 +2,7 @@ import { Service } from '@/common/types/services'
 import { ServicesList } from '@/components/ServicesList/ServicesList'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { fetchServices } from '@/api/api'
+import { useLazyGetProductsQuery } from '@/services/productsApi'
 
 export const Services = () => {
   const [services, setServices] = useState<Service[]>([])
@@ -13,6 +13,8 @@ export const Services = () => {
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
   const pageRef = useRef(1)
+
+  const [triggerGetProducts] = useLazyGetProductsQuery()
 
   // ✅ Загрузка из sessionStorage при монтировании
   useEffect(() => {
@@ -46,7 +48,11 @@ export const Services = () => {
     setLoading(true)
 
     try {
-      const newItems = await fetchServices(pageRef.current, 9)
+      const result = await triggerGetProducts({
+        page: pageRef.current,
+        limit: 9,
+      }).unwrap()
+      const newItems = result ?? []
 
       setError(null)
 
@@ -66,7 +72,7 @@ export const Services = () => {
     } finally {
       setLoading(false)
     }
-  }, [loading])
+  }, [loading, triggerGetProducts, hasMore])
 
   useEffect(() => {
     loadMore()
@@ -86,7 +92,7 @@ export const Services = () => {
     if (loaderRef.current) observer.observe(loaderRef.current)
 
     return () => observer.disconnect()
-  }, [loadMore, loading, hasMore])
+  }, [loadMore, loading, hasMore, error])
 
   return (
     <div>
