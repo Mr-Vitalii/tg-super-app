@@ -6,7 +6,6 @@ import { fetchServices } from '@/api/api'
 
 export const Services = () => {
   const [services, setServices] = useState<Service[]>([])
-  /*   const [page, setPage] = useState<number>(1) */
   const [loading, setLoading] = useState<boolean>(false)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isFetched, setIsFetched] = useState(false)

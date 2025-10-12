@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom'
 import { Layout } from './layouts/Layout'
 import { Home } from './pages/Home/Home'
 import { FormPage } from './pages/FormPage/FormPage'
-import { FormTest } from './components/FormTest/FormTest'
 
 import PrivateRoute from './routes/PrivateRoute'
 import { Services } from './pages/Services/Services'
@@ -32,15 +31,6 @@ function App() {
           element={
             <Layout>
               <FormPage />
-            </Layout>
-          }
-        />
-
-        <Route
-          path={'form'}
-          element={
-            <Layout>
-              <FormTest />
             </Layout>
           }
         />

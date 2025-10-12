@@ -9,7 +9,7 @@ import logo from '/assets/logo.svg'
 import { LinkButton } from '../LinkButton/LinkButton'
 import { LogoutButton } from '../Button/LogoutButton'
 import { useCart } from '@/context/cart/useCart'
-import { useAuth } from '@/context/auth/useAuth'
+import { useAuth } from '@/hooks/useAuth'
 /* import { ThemeToggle } from '../ThemeToggle/ThemeToggle' */
 
 export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {

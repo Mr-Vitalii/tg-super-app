@@ -5,7 +5,7 @@ import styles from './Form.module.scss'
 import { Button } from '../common/Button/Button'
 import { useModal } from '@/context/modal/useModal'
 import { useTelegram } from '@/hooks/useTelegram'
-import { useAuth } from '@/context/auth/useAuth'
+import { useAuth } from '@/hooks/useAuth'
 
 type Data = {
   name: string
@@ -18,7 +18,7 @@ export const Form = () => {
   const navigate = useNavigate()
   const { openModal } = useModal()
   const { initData } = useTelegram()
-  const { authorize } = useAuth()
+  const { authorize, loading } = useAuth()
 
   const handleModalSuccess = () => {
     openModal(
@@ -71,12 +71,18 @@ export const Form = () => {
             placeholder='Введите ваше имя'
             value={formData.name}
             onChange={handleChange}
+            disabled={loading}
           />
         </div>
 
         <div className={styles.formButton}>
-          <Button type='submit' variant='primary' size='large'>
-            Зарегистрироваться
+          <Button
+            type='submit'
+            variant='primary'
+            size='large'
+            disabled={loading}
+          >
+            {loading ? 'Авторизация...' : 'Зарегистрироваться'}
           </Button>
         </div>
       </form>

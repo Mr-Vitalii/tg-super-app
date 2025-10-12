@@ -10,15 +10,15 @@ import { BsCartCheck } from 'react-icons/bs'
 
 import { LinkButton } from '../LinkButton/LinkButton'
 
-import { useAppContext } from '@/context/AppContext'
 import { LogoutButton } from '../Button/LogoutButton'
 import { useCart } from '@/context/cart/useCart'
 import { Link } from 'react-router-dom'
 import BackButton from '../BackButton/BackButton'
 /* import { ThemeToggle } from '../ThemeToggle/ThemeToggle' */
+import { useAuth } from '@/hooks/useAuth'
 
 export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
-  const { isAuthorized } = useAppContext()
+  const { user } = useAuth()
   const { cart, hasNewItems } = useCart()
   return (
     <header className={styles.header}>
@@ -65,7 +65,7 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
           </div>
         </div>
 
-        {!isAuthorized && (
+        {!user && (
           <div className={styles.header__regBtn}>
             <LinkButton to='/register' variant='reg-link'>
               Регистрация
@@ -74,7 +74,7 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
         )}
 
         <div>
-          {isAuthorized && (
+          {user && (
             <div className={styles.header__actions}>
               <div className={styles.header__link_wrapper}>
                 <LinkButton to='/services-cart' variant='reg-link'>
