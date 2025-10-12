@@ -11,7 +11,7 @@ import { BsCartCheck } from 'react-icons/bs'
 import { LinkButton } from '../LinkButton/LinkButton'
 
 import { LogoutButton } from '../Button/LogoutButton'
-import { useCart } from '@/context/cart/useCart'
+import { useCart } from '@/hooks/useCart'
 import { Link } from 'react-router-dom'
 import BackButton from '../BackButton/BackButton'
 /* import { ThemeToggle } from '../ThemeToggle/ThemeToggle' */

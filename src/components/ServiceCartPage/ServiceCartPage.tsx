@@ -1,9 +1,9 @@
 import styles from './ServiceCartPage.module.scss'
 import { LinkButton } from '../common/LinkButton/LinkButton'
 import { Button } from '../common/Button/Button'
-import { v4 as uuidv4 } from 'uuid'
+
 import { useEffect } from 'react'
-import { useCart } from '@/context/cart/useCart'
+import { useCart } from '@/hooks/useCart'
 
 export const ServiceCartPage = () => {
   const { cart, removeFromCart, setHasNewItems } = useCart()
@@ -13,6 +13,7 @@ export const ServiceCartPage = () => {
   }, [setHasNewItems])
 
   const totalPrice = cart.reduce((sum, service) => sum + service.price, 0)
+  const currency = cart[0]?.currency ?? ''
 
   return (
     <div className={styles.cart}>
@@ -23,72 +24,64 @@ export const ServiceCartPage = () => {
       ) : (
         <>
           <div className={styles.cart__list}>
-            {cart.map((service) => (
-              <div key={uuidv4()} className={styles.cart__item}>
-                <div className={styles.cart__left}>
-                  <img
-                    src={service.img}
-                    alt={service.title}
-                    className={styles.image}
-                  />
-                </div>
-                <div className={styles.cart__center}>
-                  <div className={styles.cart__title}>{service.title}</div>
-                  <div className={styles.cart__description}>
-                    {service.description}
+            {cart.map((service) => {
+              const key = `${service.id}-${service.date ?? 'no-date'}-${service.time ?? 'no-time'}`
+              return (
+                <div key={key} className={styles.cart__item}>
+                  <div className={styles.cart__left}>
+                    <img
+                      src={service.img}
+                      alt={service.title}
+                      className={styles.image}
+                    />
                   </div>
-                  <div className={styles.cart__price}>
-                    Стоимость:{' '}
-                    <span>
-                      {service.price} {service.currency}
-                    </span>
-                  </div>
-                  <div className={styles.cart__details}>
-                    <span className={styles.cart__date}>
-                      Дата: {service.date}
-                    </span>
-                    <span className={styles.cart__date}>
-                      Время: {service.time}
-                    </span>
-                  </div>
-
-                  {/*        <div className={styles.cart__quantity}>
-                    <span>
-                      Количество: <span>{service.quantity || 1}</span>
-                    </span>
-                    <div className={styles.cart__quantity_action}>
-                      <button>–</button>
-                      <button>+</button>
+                  <div className={styles.cart__center}>
+                    <div className={styles.cart__title}>{service.title}</div>
+                    <div className={styles.cart__description}>
+                      {service.description}
                     </div>
-                  </div> */}
-                </div>
-                <div className={styles.cart__right}>
-                  <div className={styles.cart__actions}>
-                    <LinkButton
-                      to={`/services/${service.id}`}
-                      variant='more-info'
-                    >
-                      Подробнее
-                    </LinkButton>
+                    <div className={styles.cart__price}>
+                      Стоимость:{' '}
+                      <span>
+                        {service.price} {service.currency}
+                      </span>
+                    </div>
+                    <div className={styles.cart__details}>
+                      <span className={styles.cart__date}>
+                        Дата: {service.date}
+                      </span>
+                      <span className={styles.cart__date}>
+                        Время: {service.time}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={styles.cart__right}>
+                    <div className={styles.cart__actions}>
+                      <LinkButton
+                        to={`/services/${service.id}`}
+                        variant='more-info'
+                      >
+                        Подробнее
+                      </LinkButton>
 
-                    <Button
-                      variant='remove'
-                      onClick={() => removeFromCart(service)}
-                    >
-                      Удалить
-                    </Button>
+                      <Button
+                        variant='remove'
+                        onClick={() => removeFromCart(service)}
+                      >
+                        Удалить
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
           <div className={styles.cart__summary}>
             <p>
               <strong>Количество заказанных услуг:</strong> {cart.length}
             </p>
             <p>
-              <strong>Полная стоимость услуг:</strong> {totalPrice}{' '}
-              {cart[0].currency}
+              <strong>Полная стоимость услуг:</strong> {totalPrice} {currency}
             </p>
             <div className={styles.cart__summary_btn}>
               <LinkButton to={`/checkout`} variant='reg-link'>

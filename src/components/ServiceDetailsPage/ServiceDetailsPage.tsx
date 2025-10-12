@@ -1,6 +1,5 @@
 import logo from '/assets/logo.svg'
 import { useParams } from 'react-router-dom'
-/* import { services } from '@/data/services' */
 import styles from './ServiceDetailsPage.module.scss'
 import { Button } from '../common/Button/Button'
 
@@ -14,7 +13,7 @@ import { Service } from '@/common/types/services'
 
 import { isTimeAvailable } from '@/utils/dateHelpers'
 import { busySchedule } from '@/data/busySchedule'
-import { useCart } from '@/context/cart/useCart'
+import { useCart } from '@/hooks/useCart'
 import { useModal } from '@/context/modal/useModal'
 import { loadCachedServices } from '@/utils/storage'
 import { fetchServiceById } from '@/api/api'
@@ -54,10 +53,6 @@ export const ServiceDetailsPage: React.FC = () => {
       }
     })()
   }, [id])
-
-  /*   if (!service) {
-    return <div>Услуга не найдена</div>
-  } */
 
   if (loading) return <div>Загрузка...</div>
   if (error) return <div>{error}</div>

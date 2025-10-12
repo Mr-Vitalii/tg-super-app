@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { format } from 'date-fns'
 import { Order } from '@/common/types/order'
-import { useCart } from '@/context/cart/useCart'
+/* import { useCart } from '@/context/cart/useCart' */
 import { useModal } from '@/context/modal/useModal'
-import { apiFetch } from '@/utils/apiFetch'
+import { useCart } from '@/hooks/useCart'
+import { useCreateOrderMutation } from '@/services/ordersApi'
+/* import { apiFetch } from '@/utils/apiFetch' */
 
 export const CheckoutPage = () => {
   const { cart, clearCart } = useCart()
@@ -13,6 +15,8 @@ export const CheckoutPage = () => {
 
   const navigate = useNavigate()
   const { openModal } = useModal()
+
+  const [createOrder, { isLoading: isCreating }] = useCreateOrderMutation()
 
   /*  const userName = 'Иван' */
   const company = 'Barbershop'
@@ -37,37 +41,10 @@ export const CheckoutPage = () => {
       totalPrice,
     }
 
-    /*     try {
-      const response = await fetch('https://tg5-evst.amvera.io/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(order),
-      })
-
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке заказа')
-      }
-
-      clearCart()
-      navigate('/')
-      handleModal()
-    } catch (error) {
-      console.error(error)
-      alert('Ошибка при оформлении заказа. Попробуйте позже.')
-    } */
-
     try {
-      const response = await apiFetch('https://tg5-evst.amvera.io/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(order),
-      })
-
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке заказа')
-      }
-
+      // Используем RTK Query mutation
+      await createOrder(order).unwrap()
+      // при успехе очищаем корзину и показываем модал
       clearCart()
       navigate('/')
       handleModal()
@@ -88,7 +65,7 @@ export const CheckoutPage = () => {
           <div className={styles.summary}>
             <ul className={styles.service_list}>
               {cart.map((service) => (
-                <li key={service.id}>
+                <li key={`${service.id}-${service.date}-${service.time}`}>
                   <span>{service.title}</span>
                   <b>
                     {service.price} {service.currency}
@@ -104,8 +81,12 @@ export const CheckoutPage = () => {
               </b>
             </div>
 
-            <button onClick={handleSubmitOrder} className={styles.confirm_btn}>
-              Подтвердить заказ
+            <button
+              onClick={handleSubmitOrder}
+              className={styles.confirm_btn}
+              disabled={isCreating}
+            >
+              {isCreating ? 'Отправка...' : 'Подтвердить заказ'}
             </button>
           </div>
         </>

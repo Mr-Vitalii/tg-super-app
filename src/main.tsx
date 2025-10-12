@@ -9,10 +9,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider as ReduxProvider } from 'react-redux'
 import { store } from '@/store/store'
 
-import { AppProvider } from './context/AppContext.tsx'
 import { ModalProvider } from './context/modal/ModalProvider.tsx'
-import { CartProvider } from './context/cart/CartProvider.tsx'
-/* import { AuthProvider } from './context/auth/AuthProvider.tsx' */
 import { ThemeProvider } from './context/theme/ThemeProvider.tsx'
 
 const queryClient = new QueryClient({
@@ -29,13 +26,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <ReduxProvider store={store}>
-            <AppProvider>
-              <ModalProvider>
-                <CartProvider>
-                  <App />
-                </CartProvider>
-              </ModalProvider>
-            </AppProvider>
+            <ModalProvider>
+              <App />
+            </ModalProvider>
           </ReduxProvider>
         </ThemeProvider>
       </QueryClientProvider>
