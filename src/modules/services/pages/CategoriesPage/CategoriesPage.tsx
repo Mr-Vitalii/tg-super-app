@@ -6,6 +6,12 @@ import { Card } from '@/components/common/Card/Card'
 import { CardsList } from '@/components/common/CardList/CardList'
 
 const CategoriesPage = () => {
+  /*   const {
+    data: categories,
+    isLoading,
+    isError,
+    error, 
+  } = useGetCategoriesQuery() */
   const {
     data: categories,
     isLoading,

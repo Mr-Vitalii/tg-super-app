@@ -1,57 +1,31 @@
-// src/services/categoriesApi.ts
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import type { Category } from '@/modules/services/data/categories'
-import { categories as mockCategories } from '@/modules/services/data/categories'
+/* import { categories as mockCategories } from '@/modules/services/data/categories' */
+import { baseQuery } from './baseQuery' // ✅ используем общий baseQuery
 
-/**
- * Локальный baseQuery, имитирующий поведение сетевого запроса.
- * - args: объект или строка, указывает endpoint и опции (мы не используем сейчас)
- * - Возвращает { data } или { error }
- *
- * Когда будете готовы переходить на реальный сервер —
- * замените baseQuery на fetchBaseQuery({ baseUrl }) и оставьте endpoints без изменений.
- */
-const localBaseQuery: BaseQueryFn<
-  { url?: string; method?: string; params?: any } | string,
-  unknown,
-  { status?: number; error?: string }
-> = async (args) => {
-  // небольшая искусственная задержка, чтобы видеть загрузку в UI
-  await new Promise((res) => setTimeout(res, 120))
+/* ============================================================
+ * 🔹 Вариант 1: ЛОКАЛЬНЫЙ режим (mock, когда сервер недоступен)
+ * ============================================================ */
+// const localBaseQuery: BaseQueryFn = async () => {
+//   await new Promise((res) => setTimeout(res, 150))
+//   return { data: mockCategories }
+// }
 
-  try {
-    // В этой простой реализации мы смотрим на args.url или возвращаем категории по умолчанию
-    // Можно расширить: если args.url === '/api/categories' return mockCategories
-    // Для гибкости используем проверку на совпадение строки или поле url
-    const url = typeof args === 'string' ? args : args?.url
-
-    if (!url || url === '/api/categories' || url === 'getCategories') {
-      return { data: mockCategories as Category[] }
-    }
-
-    // Если запрос не опознан — возвращаем ошибку
-    return { error: { status: 404, error: 'Not found (local mock)' } }
-  } catch (err: any) {
-    return {
-      error: {
-        status: 500,
-        error: err?.message ?? 'Local baseQuery error',
-      },
-    }
-  }
-}
+/* ============================================================
+ * 🔹 Вариант 2: РЕАЛЬНЫЙ запрос на сервер (с авторизацией)
+ * ============================================================ */
 
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
-  baseQuery: localBaseQuery,
+  baseQuery, // ✅ базовый запрос с поддержкой X-Session-Id
+  // baseQuery: localBaseQuery, // 🧩 ← включи для офлайн-режима
   endpoints: (build) => ({
-    // GET /api/categories
     getCategories: build.query<Category[], void>({
-      // Здесь query может быть пустым — baseQuery игнорирует args и возвращает mock
-      query: () => ({ url: '/api/categories', method: 'GET' }),
-      // Если нужно — добавьте transformResponse, providesTags и т.д.
-      // transformResponse: (response: Category[]) => response,
+      query: () => ({
+        url: '/api/categories',
+        method: 'GET',
+      }),
+      // transformResponse: (response: { data: Category[] }) => response.data,
     }),
   }),
 })
