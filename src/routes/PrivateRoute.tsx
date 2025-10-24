@@ -1,22 +1,22 @@
-import { Navigate } from 'react-router-dom'
+/* import { Navigate } from 'react-router-dom' */
 import { ReactNode } from 'react'
-import { useAuth } from '@/hooks/useAuth'
+/* import { useAuth } from '@/hooks/useAuth' */
 
 type Props = {
   children: ReactNode
 }
 
 const PrivateRoute = ({ children }: Props) => {
-  const { user, loading } = useAuth()
+  /*  const { user, loading } = useAuth() */
 
-  if (loading) {
+  /*   if (loading) {
     // Можно показать спиннер или заглушку
     return <div>Загрузка...</div>
-  }
+  } */
 
-  if (!user) {
+  /*   if (!user) {
     return <Navigate to='/register' replace />
-  }
+  } */
 
   return <>{children}</>
 }

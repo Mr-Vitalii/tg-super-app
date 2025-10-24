@@ -1,6 +1,6 @@
 import styles from './AdminDashboard.module.scss'
 
-export const AdminDashboard = () => {
+const AdminDashboard = () => {
   return (
     <div className={styles.admin}>
       <h1>Админ-панель</h1>
@@ -9,3 +9,5 @@ export const AdminDashboard = () => {
     </div>
   )
 }
+
+export default AdminDashboard

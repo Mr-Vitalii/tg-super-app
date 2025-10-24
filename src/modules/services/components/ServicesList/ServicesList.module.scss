@@ -7,6 +7,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -42,13 +43,13 @@
 }
 
 @media screen and (max-width: 660px) {
-  .item {
-    flex: 0 1 calc(50% - 20px);
+  .service__item {
+    flex: 0 1 calc(50% - 10px);
   }
 }
 
-@media screen and (max-width: 450px) {
-  .item {
-    flex: 0 1 90%;
+@media screen and (max-width: 470px) {
+  .service__item {
+    flex: 1;
   }
 }

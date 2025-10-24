@@ -1,7 +1,7 @@
 import { Form } from '../../components/Form/Form'
 
-export const FormPage = () => {
-  return (
-   <Form/>
-  )
+const FormPage = () => {
+  return <Form />
 }
+
+export default FormPage

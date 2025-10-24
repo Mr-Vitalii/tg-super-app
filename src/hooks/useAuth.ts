@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { /* useAppSelector, */ useAppDispatch } from '@/store/hooks'
 import {
   useLoginMutation,
   useLogoutMutation,
@@ -8,7 +8,10 @@ import {
 import { clearUser } from '@/features/auth/authSlice'
 
 export const useAuth = () => {
-  const user = useAppSelector((s) => s.auth.user)
+  /* const user = useAppSelector((s) => s.auth.user) */
+
+  /*  для теста */
+  const user = { sid: 'abc123', user: { id: '343567', name: 'РЕКС' } }
   const dispatch = useAppDispatch()
 
   // GET /api/me — выполняется автоматически при монтировании компонента, если нужно

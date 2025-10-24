@@ -9,7 +9,7 @@ import { useCart } from '@/hooks/useCart'
 import { useCreateOrderMutation } from '@/services/ordersApi'
 /* import { apiFetch } from '@/utils/apiFetch' */
 
-export const CheckoutPage = () => {
+const CheckoutPage = () => {
   const { cart, clearCart } = useCart()
   const totalPrice = cart.reduce((sum, service) => sum + service.price, 0)
 
@@ -94,3 +94,5 @@ export const CheckoutPage = () => {
     </div>
   )
 }
+
+export default CheckoutPage

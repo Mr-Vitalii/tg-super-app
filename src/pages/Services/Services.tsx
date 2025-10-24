@@ -1,7 +1,6 @@
 import { Service } from '@/common/types/services'
-import { ServicesList } from '@/components/ServicesList/ServicesList'
+import { ServicesList } from '@/modules/services/components/ServicesList/ServicesList'
 import { useCallback, useEffect, useRef, useState } from 'react'
-
 import { useLazyGetProductsQuery } from '@/services/productsApi'
 
 export const Services = () => {
@@ -60,7 +59,7 @@ export const Services = () => {
         setHasMore(false)
       } else {
         setServices((prev) => [...prev, ...newItems])
-        pageRef.current += 1 // ⬅️ инкрементируем ref
+        pageRef.current += 1
       }
 
       setIsFetched(true)

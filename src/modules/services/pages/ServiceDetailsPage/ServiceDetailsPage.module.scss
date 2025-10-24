@@ -46,8 +46,14 @@
   }
 
 
+  .service_title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+
   .description {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.6;
     margin-bottom: 20px;
   }
@@ -58,6 +64,30 @@
     font-size: 20px;
     font-weight: 600;
   }
+
+  .date__picker {
+    margin-bottom: 20px;
+  }
+
+  .date__picker label {
+    font-size: 18px;
+  }
+
+  .date__picker input {
+    margin-left: 10px;
+    font-size: 16px;
+    min-width: 200px;
+    padding: 8px 10px;
+  }
+
+  .date__picker select {
+    margin-left: 10px;
+    font-size: 16px;
+    min-width: 170px;
+    padding: 8px 10px;
+  }
+
+
 
 
   .btns_container {

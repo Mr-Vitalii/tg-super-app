@@ -48,7 +48,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         <div className={styles.sidebar__actions}>
           <div className={styles.sidebar__link_wrapper}>
             <LinkButton to='/services-cart' variant='reg-link'>
-              Мои услуги
+              Мои заказы
             </LinkButton>
             {hasNewItems && <span className={styles.dot} />}
           </div>
@@ -65,7 +65,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           </li>
           <li className={styles.sidebar__item}>
             <LinkButton to='/services' onClick={handleClose}>
-              Услуги
+              Сервисы
             </LinkButton>
           </li>
           <li className={styles.sidebar__item}>

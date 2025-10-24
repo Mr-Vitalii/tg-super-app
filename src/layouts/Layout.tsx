@@ -1,12 +1,13 @@
 import { Header } from '@/components/common/Header/Header'
-import { LayoutProps } from '../common/types/layout'
+/* import { LayoutProps } from '../common/types/layout' */
 import { Footer } from '../components/common/Footer/Footer'
 
 import styles from './Layout.module.scss'
 import { useState } from 'react'
 import { Sidebar } from '@/components/common/Sidebar/Sidebar'
+import { Outlet } from 'react-router-dom'
 
-export const Layout = ({ children }: LayoutProps) => {
+const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
@@ -17,8 +18,12 @@ export const Layout = ({ children }: LayoutProps) => {
       />
       <Header setIsSidebarOpen={setIsSidebarOpen} />
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-      <div className={styles.container}>{children}</div>
+      <div className={styles.container}>
+        <Outlet />
+      </div>
       <Footer />
     </div>
   )
 }
+
+export default Layout

@@ -55,7 +55,7 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
             <LinkButton to='/'>Главная</LinkButton>
           </div>
           <div className={styles.header__link}>
-            <LinkButton to='/services'>Услуги</LinkButton>
+            <LinkButton to='/services'>Сервисы</LinkButton>
           </div>
           <div className={styles.header__link}>
             <LinkButton to='/about'>О компании</LinkButton>
@@ -78,7 +78,7 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
             <div className={styles.header__actions}>
               <div className={styles.header__link_wrapper}>
                 <LinkButton to='/services-cart' variant='reg-link'>
-                  Мои услуги
+                  Мои заказы
                 </LinkButton>
                 {hasNewItems && <span className={styles.dot} />}
               </div>

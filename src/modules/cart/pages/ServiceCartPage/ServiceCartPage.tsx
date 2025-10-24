@@ -1,11 +1,11 @@
 import styles from './ServiceCartPage.module.scss'
-import { LinkButton } from '../common/LinkButton/LinkButton'
-import { Button } from '../common/Button/Button'
+import { LinkButton } from '@/components/common/LinkButton/LinkButton'
+import { Button } from '@/components/common/Button/Button'
 
 import { useEffect } from 'react'
 import { useCart } from '@/hooks/useCart'
 
-export const ServiceCartPage = () => {
+const ServiceCartPage = () => {
   const { cart, removeFromCart, setHasNewItems } = useCart()
 
   useEffect(() => {
@@ -94,3 +94,5 @@ export const ServiceCartPage = () => {
     </div>
   )
 }
+
+export default ServiceCartPage

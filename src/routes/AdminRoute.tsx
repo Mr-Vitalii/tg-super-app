@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom'
 /* import { useAuth } from '@/context/auth/useAuth' */
 
-export const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   /* const { user } = useAuth() */
 
   const user = {
@@ -13,3 +13,5 @@ export const AdminRoute = ({ children }: { children: React.ReactNode }) => {
 
   return <>{children}</>
 }
+
+export default AdminRoute
