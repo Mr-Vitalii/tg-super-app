@@ -1,5 +1,6 @@
+// src/hooks/useAuth.ts
 import { useCallback } from 'react'
-import { /* useAppSelector, */ useAppDispatch } from '@/store/hooks'
+import { useAppDispatch } from '@/store/hooks'
 import {
   useLoginMutation,
   useLogoutMutation,
@@ -7,53 +8,101 @@ import {
 } from '@/services/authApi'
 import { clearUser } from '@/features/auth/authSlice'
 
-export const useAuth = () => {
-  /* const user = useAppSelector((s) => s.auth.user) */
+/**
+ * 🔧 Режим работы авторизации:
+ * true  — использовать локальные мок-данные (тест без сервера)
+ * false — использовать реальный backend (через authApi)
+ */
 
-  /*  для теста */
-  const user = { sid: 'abc123', user: { id: '343567', name: 'РЕКС' } }
+/* const USE_LOCAL_AUTH = false */
+
+export const useAuth = () => {
   const dispatch = useAppDispatch()
 
-  // GET /api/me — выполняется автоматически при монтировании компонента, если нужно
-  // (вернёт { data, isLoading, isError } ), но мы не привязываем данные напрямую к UI.
+  // ========================================================================
+  // 1️⃣ ЛОКАЛЬНЫЙ ВАРИАНТ (mock, без сервера)
+  // ========================================================================
+  /*   if (USE_LOCAL_AUTH) {
+    const mockUser = { sid: 'abc123', user: { id: '343567', name: 'РЕКС' } }
+
+    const authorize = async (initData: string, name: string) => {
+      console.log('[LOCAL AUTH] Авторизация без сервера:', { initData, name })
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('sid', mockUser.sid)
+      }
+      return mockUser
+    }
+
+    const logout = async () => {
+      console.log('[LOCAL AUTH] Логаут без сервера')
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('sid')
+      }
+      dispatch(clearUser())
+    }
+
+    return {
+      user: mockUser.user,
+      loading: false,
+      authorize,
+      logout,
+      _internal: { mode: 'local' as const },
+    }
+  } */
+
+  // ========================================================================
+  // 2️⃣ СЕРВЕРНЫЙ ВАРИАНТ (production)
+  // ========================================================================
+
+  // GET /api/me
   const meQuery = useGetMeQuery(undefined, {
-    // Не переконфигурируем: вызов где надо будет запускать вручную
-    // но оставим авто-вызов здесь удобным: если хук используется в корневом компоненте,
-    // он загрузит профиль автоматически
-    skip: false,
+    skip: false, // выполняем при монтировании (можно сделать true и вызывать вручную)
   })
 
-  // Мутации
+  // POST /api/auth
   const [login, loginResult] = useLoginMutation()
-  const [logout, logoutResult] = useLogoutMutation()
 
-  // authorize wrapper: сохраняет совместимый интерфейс
+  // POST /api/logout
+  const [logoutMutation, logoutResult] = useLogoutMutation()
+
+  /**
+   * Авторизация (POST /api/auth)
+   * backend возвращает объект { sid, user }, sid сохраняется внутри authApi
+   */
   const authorize = useCallback(
     async (initData: string, name: string) => {
-      // вызываем login мутацию — login сам положит sid в localStorage и setUser через onQueryStarted
       const res = await login({ name, initData }).unwrap()
       return res
     },
     [login]
   )
 
+  /**
+   * Логаут (POST /api/logout)
+   * удаляет sid и очищает store
+   */
   const doLogout = useCallback(async () => {
     try {
-      await logout().unwrap()
+      await logoutMutation().unwrap()
     } catch {
-      // onQueryStarted в logout очищает localStorage и user, поэтому игнорируем ошибку
-      dispatch(clearUser())
+      // если сеть недоступна — всё равно чистим локальные данные
       if (typeof window !== 'undefined') localStorage.removeItem('sid')
+      dispatch(clearUser())
     }
-  }, [logout, dispatch])
+  }, [logoutMutation, dispatch])
+
+  /**
+   * Текущий пользователь из кэша /api/me
+   */
+  const user = (meQuery.data as any)?.user || null
 
   return {
     user,
-    loading: meQuery.isFetching, // приблизительно: если выполняется getMe
+    loading: meQuery.isFetching,
     authorize,
     logout: doLogout,
-    // если нужно - expose меньше/больше метаданных
     _internal: {
+      mode: 'server' as const,
       meQuery,
       loginResult,
       logoutResult,
