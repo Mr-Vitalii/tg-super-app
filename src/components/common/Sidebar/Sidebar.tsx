@@ -17,6 +17,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const { hasNewItems } = useCart()
 
   const { user } = useAuth()
+  console.log('user:', user)
 
   return (
     <div
