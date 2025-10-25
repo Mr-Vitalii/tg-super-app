@@ -40,6 +40,7 @@ export const authApi = createApi({
           }
 
           const user = (anyData?.user ?? data) as User | null
+          console.log('user from getMe', user)
           dispatch(setUser(user || null))
         } catch {
           dispatch(clearUser())
@@ -69,6 +70,7 @@ export const authApi = createApi({
             localStorage.setItem('sid', anyData.sid)
           }
           const user = (anyData?.user ?? data) as User | null
+          console.log('user from login', user)
           dispatch(setUser(user || null))
         } catch {
           // ignore
