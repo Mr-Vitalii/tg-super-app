@@ -9,6 +9,8 @@ type Props = {
 const PrivateRoute = ({ children }: Props) => {
   const { user, loading } = useAuth()
 
+  console.log('user from PrivateRoute', user)
+
   if (loading) {
     // Можно показать спиннер или заглушку
     return <div>Загрузка...</div>

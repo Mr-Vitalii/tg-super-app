@@ -1,6 +1,6 @@
 // src/hooks/useAuth.ts
 import { useCallback } from 'react'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   useLoginMutation,
   useLogoutMutation,
@@ -17,6 +17,7 @@ import { clearUser } from '@/features/auth/authSlice'
 /* const USE_LOCAL_AUTH = false */
 
 export const useAuth = () => {
+  const user = useAppSelector((s) => s.auth.user)
   const dispatch = useAppDispatch()
 
   // ========================================================================
@@ -94,7 +95,7 @@ export const useAuth = () => {
   /**
    * Текущий пользователь из кэша /api/me
    */
-  const user = (meQuery.data as any)?.user || null
+  /* const user = (meQuery.data as any)?.user || null */
 
   console.log('useAuth', { user, loading: meQuery.isFetching })
 
