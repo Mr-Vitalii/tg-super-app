@@ -96,6 +96,8 @@ export const useAuth = () => {
    */
   const user = (meQuery.data as any)?.user || null
 
+  console.log('useAuth', { user, loading: meQuery.isFetching })
+
   return {
     user,
     loading: meQuery.isFetching,
