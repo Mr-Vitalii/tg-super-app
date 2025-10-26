@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import {
   useLazyGetCompanyServicesQuery,
   /*  useLazyGetCompanyServicesQuery, */
-  useLazyGetProductsQuery,
+  /* useLazyGetProductsQuery */
 } from '@/services/productsApi'
 
 const CompanyServicesPage = () => {
@@ -61,9 +61,11 @@ const CompanyServicesPage = () => {
     if (loading || !hasMore) return
     setLoading(true)
 
+    if (!companyId) return null
+
     try {
       const result = await triggerGetCompanyServices({
-        companyId,
+        companyId: companyId!,
         page: pageRef.current,
         limit: 9,
       }).unwrap()
