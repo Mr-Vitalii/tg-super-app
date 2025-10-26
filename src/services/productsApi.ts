@@ -32,46 +32,7 @@ export const productsApi = createApi({
       query: (id) => `/api/products/${id}`,
     }),
 
-    /*     // ✅ Новый endpoint — услуги конкретной компании (пока из локального файла)
-    getCompanyServices: build.query<
-      Service[],
-      { companyId: string; page: number; limit?: number }
-    >({
-      // ❗ Используем "queryFn", чтобы не дергать настоящий сервер
-      async queryFn({ companyId, page, limit = 9 }) {
-        try {
-          const filtered = localServices.filter(
-            (s) => s.companyId === companyId
-          )
-          const start = (page - 1) * limit
-          const paginated = filtered.slice(start, start + limit)
-
-          return { data: paginated }
-        } catch (e) {
-          return { error: { status: 500, data: 'Ошибка при загрузке услуг' } }
-        }
-      },
-    }), */
-
-    /*     // ✅ Новый endpoint — услуги конкретной компании (тоже для локального файла - другая логика)
-    getCompanyServices: build.query<
-      Service[],
-      { companyId: string; page: number; limit?: number }
-    >({
-      // Временный локальный источник данных
-      queryFn: async ({ companyId, page, limit = 9 }) => {
-        try {
-          const { services } = await import('@/modules/services/data/services')
-          const filtered = services.filter((s) => s.companyId === companyId)
-          const start = (page - 1) * limit
-          const paginated = filtered.slice(start, start + limit)
-          return { data: paginated }
-        } catch (err) {
-          return { error: { status: 500, data: 'Ошибка загрузки услуг' } }
-        }
-      },
-    }), */
-    getCompanyServices: build.query<
+    /*     getCompanyServices: build.query<
       Service[],
       { companyId: string; page: number; limit?: number }
     >({
@@ -92,7 +53,7 @@ export const productsApi = createApi({
           return { error: { status: 500, data: 'Ошибка загрузки услуг' } }
         }
       },
-    }),
+    }), */
   }),
 })
 
@@ -101,6 +62,5 @@ export const productsApi = createApi({
 export const {
   useLazyGetProductsQuery,
   useGetProductQuery,
-  /* useGetCompanyServicesQuery, */
-  useLazyGetCompanyServicesQuery,
+  /*  useLazyGetCompanyServicesQuery, */
 } = productsApi

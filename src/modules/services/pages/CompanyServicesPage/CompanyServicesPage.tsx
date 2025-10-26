@@ -3,8 +3,8 @@ import { ServicesList } from '@/modules/services/components/ServicesList/Service
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  useLazyGetCompanyServicesQuery,
-  /* useLazyGetProductsQuery, */
+  /*  useLazyGetCompanyServicesQuery, */
+  useLazyGetProductsQuery,
 } from '@/services/productsApi'
 
 const CompanyServicesPage = () => {
@@ -22,10 +22,10 @@ const CompanyServicesPage = () => {
     categoryId: string
   }>()
 
-  /* const [triggerGetProducts] = useLazyGetProductsQuery() */
+  const [triggerGetProducts] = useLazyGetProductsQuery()
 
   /* для теста локальной разработки */
-  const [triggerGetCompanyServices] = useLazyGetCompanyServicesQuery()
+  /*  const [triggerGetCompanyServices] = useLazyGetCompanyServicesQuery() */
 
   // ✅ Загрузка из sessionStorage при монтировании
   useEffect(() => {
@@ -61,16 +61,17 @@ const CompanyServicesPage = () => {
     setLoading(true)
 
     try {
-      //           const result = await triggerGetProducts({
-      //      page: pageRef.current,
-      //      limit: 9,
-      //     }).unwrap()
-
-      const result = await triggerGetCompanyServices({
-        companyId: companyId!, // ✅ подставляем в запрос
+      const result = await triggerGetProducts({
         page: pageRef.current,
         limit: 9,
       }).unwrap()
+
+      /* для теста локальной разработки */
+      /*       const result = await triggerGetCompanyServices({
+        companyId: companyId!, 
+        page: pageRef.current,
+        limit: 9,
+      }).unwrap() */
 
       const newItems = result ?? []
 
@@ -92,7 +93,7 @@ const CompanyServicesPage = () => {
     } finally {
       setLoading(false)
     }
-  }, [loading, /* triggerGetProducts */ triggerGetCompanyServices, hasMore])
+  }, [loading, triggerGetProducts /* triggerGetCompanyServices */, hasMore])
 
   useEffect(() => {
     loadMore()
