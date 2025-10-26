@@ -1,38 +1,44 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import type { Service } from '@/common/types/services'
+import { baseQuery } from '@/services/baseQuery' // ✅ используем общий baseQuery
 
 /* import { services as localServices } from '@/modules/services/data/services' */
 
-const BASE_URL = 'https://tg5-evst.amvera.io'
-
 export const productsApi = createApi({
   reducerPath: 'productsApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-    prepareHeaders: (headers) => {
-      if (typeof window !== 'undefined') {
-        const sid = localStorage.getItem('sid')
-        if (sid) headers.set('X-Session-Id', sid)
-      }
-      try {
-        const tg = (window as any).Telegram?.WebApp
-        if (tg?.initData) headers.set('X-Telegram-InitData', tg.initData)
-      } catch {
-        // noop
-      }
-      return headers
-    },
-  }),
+  baseQuery, // ✅ подключаем общий baseQuery с X-Session-Id и X-Telegram-InitData
   endpoints: (build) => ({
+    // ===============================
+    // 🔹 Получение всех услуг (странично)
+    // ===============================
     getProducts: build.query<Service[], { page: number; limit?: number }>({
       query: ({ page, limit = 9 }) =>
         `/api/products?page=${page}&limit=${limit}`,
     }),
+
+    // ===============================
+    // 🔹 Получение конкретной услуги
+    // ===============================
     getProduct: build.query<Service, string>({
       query: (id) => `/api/products/${id}`,
     }),
 
-    /*     getCompanyServices: build.query<
+    // ===============================
+    // 🔹 Услуги конкретной компании (запрос на сервер)
+    // ===============================
+    getCompanyServices: build.query<
+      Service[],
+      { companyId: string; page: number; limit?: number }
+    >({
+      query: ({ companyId, page, limit = 9 }) =>
+        `/api/companies/${companyId}/services?page=${page}&limit=${limit}`,
+    }),
+
+    // ===============================
+    // 🔸 Старый локальный вариант (на случай оффлайна)
+    // ===============================
+    /*
+    getCompanyServices: build.query<
       Service[],
       { companyId: string; page: number; limit?: number }
     >({
@@ -40,27 +46,27 @@ export const productsApi = createApi({
         try {
           const { services } = await import('@/modules/services/data/services')
 
-          // ✅ Фильтрация по companyId + пагинация
           const filtered = services.filter((s) => s.companyId === companyId)
           const start = (page - 1) * limit
           const paginated = filtered.slice(start, start + limit)
 
-          // ✅ Имитация задержки 400ms — как будто сервер обрабатывает
-          await new Promise((r) => setTimeout(r, 400))
+          await new Promise((r) => setTimeout(r, 400)) // имитация задержки
 
           return { data: paginated }
         } catch (err) {
           return { error: { status: 500, data: 'Ошибка загрузки услуг' } }
         }
       },
-    }), */
+    }),
+    */
   }),
 })
 
-/* export const { useLazyGetProductsQuery, useGetProductQuery } = productsApi */
-
+// ===============================
+// Экспорт хуков
+// ===============================
 export const {
   useLazyGetProductsQuery,
   useGetProductQuery,
-  /*  useLazyGetCompanyServicesQuery, */
+  useLazyGetCompanyServicesQuery,
 } = productsApi

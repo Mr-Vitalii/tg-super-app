@@ -3,6 +3,7 @@ import { ServicesList } from '@/modules/services/components/ServicesList/Service
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
+  useLazyGetCompanyServicesQuery,
   /*  useLazyGetCompanyServicesQuery, */
   useLazyGetProductsQuery,
 } from '@/services/productsApi'
@@ -22,7 +23,7 @@ const CompanyServicesPage = () => {
     categoryId: string
   }>()
 
-  const [triggerGetProducts] = useLazyGetProductsQuery()
+  const [triggerGetCompanyServices] = useLazyGetCompanyServicesQuery()
 
   /* для теста локальной разработки */
   /*  const [triggerGetCompanyServices] = useLazyGetCompanyServicesQuery() */
@@ -61,7 +62,8 @@ const CompanyServicesPage = () => {
     setLoading(true)
 
     try {
-      const result = await triggerGetProducts({
+      const result = await triggerGetCompanyServices({
+        companyId,
         page: pageRef.current,
         limit: 9,
       }).unwrap()
@@ -93,7 +95,12 @@ const CompanyServicesPage = () => {
     } finally {
       setLoading(false)
     }
-  }, [loading, triggerGetProducts /* triggerGetCompanyServices */, hasMore])
+  }, [
+    loading,
+    triggerGetCompanyServices /* triggerGetCompanyServices */,
+    hasMore,
+    companyId,
+  ])
 
   useEffect(() => {
     loadMore()
