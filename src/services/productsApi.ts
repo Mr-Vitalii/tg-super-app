@@ -20,7 +20,7 @@ export const productsApi = createApi({
     // 🔹 Получение конкретной услуги
     // ===============================
     getProduct: build.query<Service, string>({
-      query: (id) => `/api/products/${id}`,
+      query: (id) => `/api/services/${id}`,
     }),
 
     // ===============================
