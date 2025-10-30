@@ -1,4 +1,4 @@
-export const formatTime = (date: Date): string =>
+/* export const formatTime = (date: Date): string =>
   date.toLocaleTimeString('ru-RU', {
     hour: '2-digit',
     minute: '2-digit',
@@ -14,3 +14,4 @@ export const isTimeAvailable = (
   const busyTimes = busySchedule[dateKey]
   return !busyTimes?.includes(time)
 }
+ */

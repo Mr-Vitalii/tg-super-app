@@ -5,12 +5,12 @@ export const masters: Master[] = [
     id: 'm1',
     firstName: 'Эдуард',
     lastName: 'Суровый',
-    services: ['1', '2', '3', '4', '5', '6', '7'], // может обслуживать сервисы с ID 1 и 2
+    services: ['1', '2', '3', '4', '5', '6', '7'],
     availableDates: [
       {
         date: '2025-10-31',
         times: [
-          '9:00',
+          '09:00',
           '10:00',
           '11:00',
           '15:00',
@@ -57,7 +57,7 @@ export const masters: Master[] = [
       {
         date: '2025-10-31',
         times: [
-          '9:00',
+          '09:00',
           '10:00',
           '11:00',
           '15:00',
@@ -72,51 +72,3 @@ export const masters: Master[] = [
     ],
   },
 ]
-
-/* export type MasterSlot = {
-  id: string
-  name: string
-  services: string[]
-  availableSlots: { date: string; time: string }[]
-}
-
-export const masters: MasterSlot[] = [
-  {
-    id: 'm1',
-    name: 'Иван Петров',
-    services: ['1', '2'],
-    availableSlots: [
-      { date: '2025-10-31', time: '10:00' },
-      { date: '2025-10-31', time: '11:00' },
-      { date: '2025-10-31', time: '15:00' },
-      { date: '2025-11-01', time: '09:00' },
-      { date: '2025-11-01', time: '14:00' },
-    ],
-  },
-  {
-    id: 'm2',
-    name: 'Анна Иванова',
-    services: ['1'],
-    availableSlots: [
-      { date: '2025-10-31', time: '12:00' },
-      { date: '2025-10-31', time: '16:00' },
-    ],
-  },
-  {
-    id: 'm3',
-    name: 'Сергей Кузнецов',
-    services: ['3'],
-    availableSlots: [{ date: '2025-11-01', time: '10:00' }],
-  },
-  {
-    id: 'm4',
-    name: 'Мария Сидорова',
-    services: ['1', '2', '3'],
-    availableSlots: [
-      { date: '2025-10-31', time: '11:00' },
-      { date: '2025-10-31', time: '12:00' },
-      { date: '2025-10-31', time: '13:00' },
-      { date: '2025-11-01', time: '15:00' },
-    ],
-  },
-] */

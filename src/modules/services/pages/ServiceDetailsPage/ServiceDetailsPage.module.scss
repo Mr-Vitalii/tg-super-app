@@ -10,22 +10,22 @@
   border-radius: 16px;
   box-shadow: 0 8px 20px var(--color-card-shadow);
 
-  h1 {
+  .service__title {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 24px;
     color: var(--color-card-heading);
   }
 
-  .service_left {
+  .service__left {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
   }
 
 
-  .image {
+  .service__image {
     width: 100%;
     max-width: 400px;
     object-fit: cover;
@@ -34,62 +34,232 @@
   }
 
 
-  .service_right {
+  .service__right {
     flex: 1;
     display: flex;
     flex-direction: column;
   }
 
-  .service_content {
+  .service__content {
     flex: 1;
     margin-bottom: 30px;
   }
 
 
-  .service_title {
+  .service__title {
     font-size: 32px;
     font-weight: 600;
     margin-bottom: 30px;
   }
 
-  .description {
+  .service__description {
     font-size: 20px;
     line-height: 1.6;
     margin-bottom: 20px;
   }
 
-  .price {
+  .service__price {
     display: flex;
     gap: 10px;
     font-size: 20px;
     font-weight: 600;
   }
 
+  /* ==============================
+   🔹 РЕЖИМ ВЫБОРА (по дате / по мастеру)
+   ============================== */
+  .selection_mode {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+
+    .selection_mode__label {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333;
+      white-space: nowrap;
+      margin-bottom: 0;
+    }
+
+    .selection_mode__buttons {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .selection_mode__btn {
+      width: max-content;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      border: 1px solid #d0d0d0;
+      background-color: #fafafa;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      &.active_mode {
+        background-color: var(--color-secondary);
+        border-color: var(--color-secondary);
+        color: #fff;
+        box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+      }
+    }
+  }
+
+  /* ----------------------------- Дата и выбор ----------------------------- */
   .date__picker {
-    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .date__label {
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .date__input {
+      padding: 0.6rem 1rem;
+      margin-left: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 220px;
+      font-size: 0.95rem;
+
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-secondary);
+      }
+    }
+
+    .no_times,
+    .no_masters {
+      color: #999;
+      font-size: 0.9rem;
+    }
   }
 
-  .date__picker label {
-    font-size: 18px;
+
+  /* ----------------------------- Мастера ----------------------------- */
+  .schedule_section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 20px;
+
+    .schedule__title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0px;
+    }
   }
 
-  .date__picker input {
-    margin-left: 10px;
-    font-size: 16px;
-    min-width: 200px;
-    padding: 8px 10px;
+  .schedule__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.2rem;
   }
 
-  .date__picker select {
-    margin-left: 10px;
-    font-size: 16px;
-    min-width: 170px;
-    padding: 8px 10px;
+  /* Карточка мастера */
+  .schedule_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      background-color: rgb(from var(--color-secondary) r g b / 0.1);
+      /*  background-color: #f9eafd; */
+      transform: translateY(-3px);
+    }
+
+    .schedule_card__avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.8rem;
+      border: 2px solid #ccc;
+    }
+
+    .schedule_card__title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .schedule_card__info {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .schedule_card__time_slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: center;
+    }
+
+    .schedule_card__time_slot {
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      background: #fff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: rgb(from var(--color-secondary) r g b / 0.03);
+        border-color: rgb(from var(--color-secondary) r g b / 0.8);
+      }
+    }
+
+    .schedule_card__selected_slot {
+      background-color: var(--color-secondary);
+      color: white;
+      border-color: var(--color-secondary);
+      font-weight: 600;
+
+      &:hover {
+        background-color: var(--color-secondary);
+      }
+    }
+  }
+
+
+  .selection_mode__btn {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #f8f8f8;
+
+    &.active_mode {
+      background: #007bff;
+      color: white;
+    }
   }
 
 
 
-
+  /* ----------------------------- Кнопка заказа ----------------------------- */
   .btns_container {
     width: 100%;
     display: flex;
@@ -97,61 +267,37 @@
     margin-top: auto;
   }
 
-
   .btns_container button {
     max-width: 280px;
     height: 50px;
     max-height: 50px;
   }
 
-  .date_picker {
-    margin-top: 20px;
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    .date_input {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-  }
-
-
-  @media (max-width: 600px) {
-    padding: 20px 15px;
-
-    h1 {
-      font-size: 24px;
-    }
-
-    .description {
-      font-size: 16px;
-    }
-
-    .price {
-      font-size: 18px;
-    }
-  }
-
 }
 
+/* ----------------------------- Адаптивность ----------------------------- */
 
 @media (max-width: 900px) {
 
   .service_details {
 
 
-    .service_left {
+    .service__left {
       width: 50%;
     }
 
-    .service_right {
+    .service__right {
       width: 50%;
+    }
+
+    .date__picker {
+      flex-direction: column;
+      align-items: start;
+
+      .date__input {
+        margin-left: 0px;
+        margin-top: 10px;
+      }
     }
 
     .btns_container {
@@ -169,24 +315,80 @@
     align-items: center;
     gap: 20px;
 
-    .service_left {
+    .service__left {
       width: 100%;
     }
 
-    .service_right {
+    .service__right {
       align-items: center;
       text-align: center;
       width: 100%;
     }
 
-    .price {
+    .service__price {
       justify-content: center;
       text-align: center;
     }
 
+    .selection_mode {
+      align-items: flex-start;
+
+      .selection_mode__label {
+        margin-bottom: 0.5rem;
+      }
+
+      .selection_mode__buttons {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .selection_mode__btn {
+        flex: 1;
+        text-align: center;
+      }
+    }
   }
+
+  .date__picker {
+    align-items: center;
+
+    .date__input {
+      text-align: center;
+    }
+  }
+
+  .schedule__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule_card {
+    align-items: stretch;
+  }
+
+  .btns_container {
+    align-items: center;
+  }
+
 }
 
+
+@media (max-width: 600px) {
+  .service_details {
+    padding: 20px 15px;
+
+    .service__title {
+      font-size: 24px;
+    }
+
+    .service__description {
+      font-size: 16px;
+    }
+
+    .service__price {
+      font-size: 18px;
+    }
+  }
+}
 
 @media (max-width: 525px) {
 
