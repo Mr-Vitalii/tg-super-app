@@ -159,7 +159,7 @@ export const mastersApi = createApi({
         const params = new URLSearchParams({ companyId, serviceId, date })
         if (time) params.append('time', time)
         return {
-          url: `/masters/available?${params.toString()}`,
+          url: `/api/masters/available?${params.toString()}`,
           method: 'GET',
         }
       },
@@ -197,7 +197,7 @@ export const mastersApi = createApi({
       query: ({ companyId, serviceId }) => {
         const params = new URLSearchParams({ companyId, serviceId })
         return {
-          url: `/masters/by-service?${params.toString()}`,
+          url: `/api/masters/by-service?${params.toString()}`,
           method: 'GET',
         }
       },
@@ -228,7 +228,7 @@ export const mastersApi = createApi({
       query: ({ companyId, serviceId, masterId }) => {
         const params = new URLSearchParams({ companyId, serviceId, masterId })
         return {
-          url: `/masters/availability?${params.toString()}`,
+          url: `/api/masters/availability?${params.toString()}`,
           method: 'GET',
         }
       },
