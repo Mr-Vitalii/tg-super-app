@@ -18,6 +18,7 @@ import { useGetProductQuery } from '@/services/productsApi'
 import {
   useLazyGetAvailableMastersQuery,
   useGetMastersByServiceQuery,
+  useLazyGetMasterAvailabilityQuery,
 } from '@/services/mastersApi'
 
 // -----------------------------------------------------------------------------
@@ -33,6 +34,11 @@ type MasterItem = {
 
 const ServiceDetailsPage: React.FC = () => {
   const { serviceId } = useParams<{ serviceId?: string }>()
+  const { companyId } = useParams<{ companyId?: string }>()
+
+  console.log('serviceId:', serviceId)
+  console.log('companyId:', companyId)
+
   const [service, setService] = useState<Service | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -44,14 +50,22 @@ const ServiceDetailsPage: React.FC = () => {
   const [selectionMode, setSelectionMode] = useState<'date' | 'master'>('date')
 
   const [masters, setMasters] = useState<MasterItem[]>([])
+  // Для режима "по мастеру" — хранит расписание выбранного мастера
+  const [masterAvailability, setMasterAvailability] =
+    useState<MasterItem | null>(null)
+
   const [loadMasters, { isLoading: isLoadingMasters }] =
     useLazyGetAvailableMastersQuery()
 
   const { data: mastersByService = [], isLoading: isLoadingMastersByService } =
     useGetMastersByServiceQuery(
-      { serviceId: service?.id ?? '' },
-      { skip: !service?.id }
+      { companyId: companyId ?? '', serviceId: service?.id ?? '' },
+      { skip: !service?.id || !companyId }
     )
+
+  // ленивый запрос для получения расписания конкретного мастера (companyId, serviceId, masterId)
+  const [loadMasterAvailability, { isLoading: isLoadingMasterAvailability }] =
+    useLazyGetMasterAvailabilityQuery()
 
   const { addToCart } = useCart()
   const { openModal } = useModal()
@@ -105,6 +119,7 @@ const ServiceDetailsPage: React.FC = () => {
       try {
         const result = await loadMasters({
           serviceId: service.id,
+          companyId: companyId ?? '',
           date: dateISO,
         }).unwrap()
         setMasters(result as MasterItem[])
@@ -112,7 +127,7 @@ const ServiceDetailsPage: React.FC = () => {
         setMasters([])
       }
     })()
-  }, [selectedDate, service, loadMasters])
+  }, [selectedDate, service, loadMasters, companyId, selectionMode])
 
   useEffect(() => {
     setSelectedMaster(null)
@@ -120,6 +135,39 @@ const ServiceDetailsPage: React.FC = () => {
     setSelectedDate(null)
     setMasters([])
   }, [selectionMode])
+
+  // При выборе конкретного мастера (в режиме "по мастеру") — подгружаем его расписание
+  useEffect(() => {
+    if (
+      selectionMode !== 'master' ||
+      !selectedMaster ||
+      !service?.id ||
+      !companyId
+    ) {
+      setMasterAvailability(null)
+      return
+    }
+
+    ;(async () => {
+      try {
+        const result = await loadMasterAvailability({
+          companyId: companyId ?? '',
+          serviceId: service.id,
+          masterId: selectedMaster,
+        }).unwrap()
+        // result — мастер с normalized availableDates (см. mastersApi.transformResponse)
+        setMasterAvailability(result as MasterItem)
+      } catch {
+        setMasterAvailability(null)
+      }
+    })()
+  }, [
+    selectionMode,
+    selectedMaster,
+    service,
+    companyId,
+    loadMasterAvailability,
+  ])
 
   // ---------------------------------------------------------------------------
   // обработчик выбора слота
@@ -324,39 +372,45 @@ const ServiceDetailsPage: React.FC = () => {
                   </h3>
 
                   <div className={styles.schedule__grid}>
-                    {mastersByService
-                      .find((m) => m.id === selectedMaster)
-                      ?.availableDates.map((d) => (
-                        <div key={d.date} className={styles.schedule_card}>
-                          <div className={styles.schedule_card__title}>
-                            {d.date}
-                          </div>
-                          <div className={styles.schedule_card__time_slots}>
-                            {d.times.map((t) => {
-                              const isSelected =
-                                selectedDate &&
-                                format(selectedDate, 'yyyy-MM-dd') === d.date &&
-                                selectedTime === t
-                              return (
-                                <button
-                                  key={t}
-                                  className={`${styles.schedule_card__time_slot} ${
-                                    isSelected
-                                      ? styles.schedule_card__selected_slot
-                                      : ''
-                                  }`}
-                                  onClick={() => {
-                                    setSelectedDate(new Date(d.date))
-                                    setSelectedTime(t)
-                                  }}
-                                >
-                                  {t}
-                                </button>
-                              )
-                            })}
-                          </div>
+                    {isLoadingMasterAvailability && (
+                      <p>Загрузка расписания мастера...</p>
+                    )}
+                    {!isLoadingMasterAvailability &&
+                      (!masterAvailability ||
+                        masterAvailability.availableDates.length === 0) && (
+                        <p>У выбранного мастера нет доступных слотов.</p>
+                      )}
+                    {masterAvailability?.availableDates.map((d) => (
+                      <div key={d.date} className={styles.schedule_card}>
+                        <div className={styles.schedule_card__title}>
+                          {d.date}
                         </div>
-                      ))}
+                        <div className={styles.schedule_card__time_slots}>
+                          {d.times.map((t) => {
+                            const isSelected =
+                              selectedDate &&
+                              format(selectedDate, 'yyyy-MM-dd') === d.date &&
+                              selectedTime === t
+                            return (
+                              <button
+                                key={t}
+                                className={`${styles.schedule_card__time_slot} ${
+                                  isSelected
+                                    ? styles.schedule_card__selected_slot
+                                    : ''
+                                }`}
+                                onClick={() => {
+                                  setSelectedDate(new Date(d.date))
+                                  setSelectedTime(t)
+                                }}
+                              >
+                                {t}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

@@ -1,4 +1,4 @@
-import { createApi } from '@reduxjs/toolkit/query/react'
+/* import { createApi } from '@reduxjs/toolkit/query/react'
 import type { Master } from '@/common/types/masters'
 import { masters } from '@/modules/services/data/masters'
 import { normalizeAndSortTimes, normalizeTime } from '@/utils/helpers'
@@ -14,16 +14,15 @@ export const mastersApi = createApi({
   baseQuery: async () => ({ data: null }),
 
   endpoints: (builder) => ({
-    /**
-     * 🔹 getAvailableMasters:
-     * Используется в режиме "Выбор мастера по дате".
-     * Возвращает мастеров, у которых есть слоты на указанную дату (и время, если задано).
-     *
-     * params: { serviceId, date, time? }
-     */
+    // 🔹 getAvailableMasters:
+    // Используется в режиме "Выбор мастера по дате".
+    // Возвращает мастеров, у которых есть слоты на указанную дату (и время, если задано).
+    //
+    // params: { serviceId, date, time? }
+
     getAvailableMasters: builder.query<
       Master[],
-      { serviceId: string; date: string; time?: string }
+      { companyId: string; serviceId: string; date: string; time?: string }
     >({
       queryFn: async ({ serviceId, date, time }) => {
         try {
@@ -64,14 +63,13 @@ export const mastersApi = createApi({
       },
     }),
 
-    /**
-     * 🔹 getMastersByService:
-     * Используется в режиме "Выбор по мастеру".
-     * Возвращает всех мастеров, предоставляющих данную услугу (serviceId),
-     * вместе со всеми их доступными датами и временем.
-     *
-     * params: { serviceId }
-     */
+    // 🔹 getMastersByService:
+    // Используется в режиме "Выбор по мастеру".
+    // Возвращает всех мастеров, предоставляющих данную услугу (serviceId),
+    // вместе со всеми их доступными датами и временем.
+    //
+    // params: { serviceId }
+
     getMastersByService: builder.query<Master[], { serviceId: string }>({
       queryFn: async ({ serviceId }) => {
         try {
@@ -109,62 +107,167 @@ export const {
   useLazyGetMastersByServiceQuery,
 } = mastersApi
 
+export default mastersApi */
+
+// src/services/mastersApi.ts
+import { createApi } from '@reduxjs/toolkit/query/react'
+import type { Master } from '@/common/types/masters'
+import { baseQuery } from '@/services/baseQuery'
+import { normalizeAndSortTimes } from '@/utils/helpers'
+
+// ============================================================================
+// ✅ СЕРВЕРНЫЙ ВАРИАНТ — АКТИВЕН
+// ============================================================================
+//
+// Поддерживаются два режима работы:
+//
+// 1️⃣ Режим "Выбор мастера по дате"
+//     → метод: getAvailableMasters()
+//     → параметры: { companyId, serviceId, date, time? }
+//
+//     Возвращает список мастеров компании, предоставляющих услугу serviceId,
+//     у которых есть слоты в указанную дату (и время, если указано).
+//
+// 2️⃣ Режим "Выбор по мастеру"
+//     → метод: getMastersByService()   — получить всех мастеров компании по услуге
+//     → метод: getMasterAvailability() — получить доступные даты/время конкретного мастера
+//
+//     2.1 getMastersByService() принимает параметры: { companyId, serviceId }
+//         Возвращает список мастеров компании, выполняющих указанную услугу.
+//
+//     2.2 getMasterAvailability() принимает параметры: { companyId, serviceId, masterId }
+//         Возвращает доступные даты и время конкретного мастера.
+//
+export const mastersApi = createApi({
+  reducerPath: 'mastersApi',
+  baseQuery, // общий baseQuery: добавляет X-Session-Id и X-Telegram-InitData
+  endpoints: (builder) => ({
+    // ------------------------------------------------------------------------
+    // 🔹 1️⃣ ВАРИАНТ: "ВЫБОР МАСТЕРА ПО ДАТЕ"
+    // ------------------------------------------------------------------------
+    getAvailableMasters: builder.query<
+      Master[],
+      { companyId: string; serviceId: string; date: string; time?: string }
+    >({
+      /**
+       * companyId  — идентификатор компании
+       * serviceId  — идентификатор услуги
+       * date       — дата, на которую ищем мастеров (формат YYYY-MM-DD)
+       * time?      — необязательный параметр: конкретное время (если пользователь выбрал)
+       */
+      query: ({ companyId, serviceId, date, time }) => {
+        const params = new URLSearchParams({ companyId, serviceId, date })
+        if (time) params.append('time', time)
+        return {
+          url: `/masters/available?${params.toString()}`,
+          method: 'GET',
+        }
+      },
+      /**
+       * Приводим временные слоты к единому формату ("HH:mm") и сортируем.
+       * Это важно, если сервер возвращает неотсортированные или разнородные строки времени.
+       */
+      transformResponse: (response: any) => {
+        if (!Array.isArray(response)) return []
+        return response.map((m: any) => ({
+          ...m,
+          availableDates: Array.isArray(m.availableDates)
+            ? m.availableDates.map((d: any) => ({
+                date: d.date,
+                times: normalizeAndSortTimes(d.times || []),
+              }))
+            : [],
+        })) as Master[]
+      },
+    }),
+
+    // ------------------------------------------------------------------------
+    // 🔹 2️⃣ ВАРИАНТ: "ВЫБОР ПО МАСТЕРУ"
+    // ------------------------------------------------------------------------
+
+    // 2.1 Получить всех мастеров компании, выполняющих услугу
+    getMastersByService: builder.query<
+      Master[],
+      { companyId: string; serviceId: string }
+    >({
+      /**
+       * companyId — идентификатор компании
+       * serviceId — идентификатор услуги
+       */
+      query: ({ companyId, serviceId }) => {
+        const params = new URLSearchParams({ companyId, serviceId })
+        return {
+          url: `/masters/by-service?${params.toString()}`,
+          method: 'GET',
+        }
+      },
+      transformResponse: (response: any) => {
+        if (!Array.isArray(response)) return []
+        return response.map((m: any) => ({
+          ...m,
+          availableDates: Array.isArray(m.availableDates)
+            ? m.availableDates.map((d: any) => ({
+                date: d.date,
+                times: normalizeAndSortTimes(d.times || []),
+              }))
+            : [],
+        })) as Master[]
+      },
+    }),
+
+    // 2.2 Получить доступное расписание (даты/время) конкретного мастера
+    getMasterAvailability: builder.query<
+      Master,
+      { companyId: string; serviceId: string; masterId: string }
+    >({
+      /**
+       * companyId — идентификатор компании
+       * serviceId — идентификатор услуги
+       * masterId  — идентификатор выбранного мастера
+       */
+      query: ({ companyId, serviceId, masterId }) => {
+        const params = new URLSearchParams({ companyId, serviceId, masterId })
+        return {
+          url: `/masters/availability?${params.toString()}`,
+          method: 'GET',
+        }
+      },
+      transformResponse: (response: any) => {
+        if (!response) return null as any
+        const m = response as any
+        return {
+          ...m,
+          availableDates: Array.isArray(m.availableDates)
+            ? m.availableDates.map((d: any) => ({
+                date: d.date,
+                times: normalizeAndSortTimes(d.times || []),
+              }))
+            : [],
+        } as Master
+      },
+    }),
+  }),
+})
+
+// -----------------------------------------------------------------------------
+// 🔹 Экспорт хуков
+// -----------------------------------------------------------------------------
+export const {
+  useGetAvailableMastersQuery,
+  useLazyGetAvailableMastersQuery,
+  useGetMastersByServiceQuery,
+  useLazyGetMastersByServiceQuery,
+  useGetMasterAvailabilityQuery,
+  useLazyGetMasterAvailabilityQuery,
+} = mastersApi
+
 export default mastersApi
 
 // ============================================================================
-// 💤 СЕРВЕРНЫЙ ВАРИАНТ (ПРИМЕР) — ОТКЛЮЧЁН
-// ============================================================================
-//
-// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-// import type { Master } from '@/common/types/masters'
-//
-// export const mastersApi = createApi({
-//   reducerPath: 'mastersApi',
-//   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-//   endpoints: (builder) => ({
-//     /**
-//      * Серверный endpoint для режима "по дате".
-//      * GET /api/masters/available?serviceId=...&date=...&time=...
-//      */
-//     getAvailableMasters: builder.query<
-//       Master[],
-//       { serviceId: string; date: string; time?: string }
-//     >({
-//       query: ({ serviceId, date, time }) => {
-//         const params = new URLSearchParams({ serviceId, date })
-//         if (time) params.append('time', time)
-//         return {
-//           url: `/masters/available?${params.toString()}`,
-//           method: 'GET',
-//         }
-//       },
-//     }),
-//
-//     /**
-//      * Серверный endpoint для режима "по мастеру".
-//      * GET /api/masters/by-service?serviceId=...
-//      */
-//     getMastersByService: builder.query<Master[], { serviceId: string }>({
-//       query: ({ serviceId }) => ({
-//         url: `/masters/by-service?serviceId=${serviceId}`,
-//         method: 'GET',
-//       }),
-//     }),
-//   }),
-// })
-//
-// export const {
-//   useGetAvailableMastersQuery,
-//   useLazyGetAvailableMastersQuery,
-//   useGetMastersByServiceQuery,
-//   useLazyGetMastersByServiceQuery,
-// } = mastersApi
-//
-// export default mastersApi
-//
-// ============================================================================
-// 💡 Переключение режима:
-//    • Для работы с сервером: закомментируйте локальный блок выше и
-//      раскомментируйте серверный блок.
-//    • Хуки и интерфейсы полностью совместимы, правки в компонентах не требуются.
+// 💡 Примечания:
+// - Все запросы — GET, параметры передаются через URLSearchParams (надёжно и безопасно).
+// - transformResponse нормализует массивы времени с помощью normalizeAndSortTimes()
+//   → гарантирует единый формат ("HH:mm") и сортировку даже при непоследовательном ответе сервера.
+// - Используется централизованный baseQuery (автоматически добавляет заголовки X-Session-Id и X-Telegram-InitData).
+// - Все хуки (включая ленивые useLazy...) доступны и для server, и для mock режима.
 // ============================================================================
