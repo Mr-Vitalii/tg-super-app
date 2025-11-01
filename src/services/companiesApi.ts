@@ -56,10 +56,10 @@ export const { useGetCompaniesQuery } = companiesApi */
 // src/services/companiesApi.ts
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { Company } from '@/common/types/services'
-/* import { baseQuery } from '@/services/baseQuery' */ // ✅ универсальный baseQuery
+import { baseQuery } from '@/services/baseQuery' // ✅ универсальный baseQuery
 
 // 💤 Локальные mock-данные (оставляем для офлайна или тестов)
-import { companies as mockCompanies } from '@/modules/services/data/companies'
+/* import { companies as mockCompanies } from '@/modules/services/data/companies'
 
 // ============================================================================
 // 💤 1️⃣ ЛОКАЛЬНЫЙ ВАРИАНТ (mock) — отключён, но можно включить при офлайне
@@ -98,12 +98,12 @@ const localBaseQuery: BaseQueryFn<
   } catch (err: any) {
     return { error: { status: 500, error: err?.message ?? 'Local error' } }
   }
-}
+} */
 
 // ============================================================================
 // ✅ 2️⃣ РЕАЛЬНЫЙ ВАРИАНТ (использует общий baseQuery)
 // ============================================================================
-/* export const companiesApi = createApi({
+export const companiesApi = createApi({
   reducerPath: 'companiesApi',
   baseQuery, // ✅ используем общий базовый запрос с авторизацией
   endpoints: (build) => ({
@@ -123,12 +123,12 @@ const localBaseQuery: BaseQueryFn<
       },
     }),
   }),
-}) */
+})
 
 // ============================================================================
 // ✅ 3️⃣ АКТИВНЫЙ mock API
 // ============================================================================
-export const companiesApi = createApi({
+/* export const companiesApi = createApi({
   reducerPath: 'companiesApi',
   baseQuery: localBaseQuery, // ✅ используем локальный mock
   endpoints: (build) => ({
@@ -141,7 +141,7 @@ export const companiesApi = createApi({
       },
     }),
   }),
-})
+}) */
 
 export const { useGetCompaniesQuery } = companiesApi
 export default companiesApi
