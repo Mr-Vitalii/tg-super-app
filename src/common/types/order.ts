@@ -1,7 +1,6 @@
 import { Service } from './services'
 
 export type Order = {
-  company: string
   orderDate: string
   orderTime: string
   items: Service[]
@@ -10,3 +9,20 @@ export type Order = {
 }
 
 export type Orders = Order[]
+
+export type OrderStatus = 'confirmed' | 'cancelled'
+
+export interface OrderHistoryEntry {
+  id: string
+  title: string
+  status: OrderStatus
+  date: string // ISO
+  price: number
+  currency: string
+  // optional fields
+  canceledReason?: string
+  createdAt?: string
+  categoryId: string
+  companyId: string
+  serviceId: string
+}

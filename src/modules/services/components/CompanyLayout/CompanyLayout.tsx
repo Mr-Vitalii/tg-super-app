@@ -25,6 +25,14 @@ const CompanyLayout = () => {
         >
           Наши специалисты
         </NavLink>
+        <NavLink
+          to={`/services/${categoryId}/${companyId}/contacts`}
+          className={({ isActive }) =>
+            isActive ? styles.activeLink : styles.link
+          }
+        >
+          Контакты
+        </NavLink>
       </div>
 
       {/* Здесь будет подставляться нужная страница */}

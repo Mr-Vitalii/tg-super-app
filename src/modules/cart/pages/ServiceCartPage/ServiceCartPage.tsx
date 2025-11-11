@@ -8,6 +8,8 @@ import { useCart } from '@/hooks/useCart'
 const ServiceCartPage = () => {
   const { cart, removeFromCart, setHasNewItems } = useCart()
 
+  console.log('cart', cart)
+
   useEffect(() => {
     setHasNewItems(false)
   }, [setHasNewItems])
@@ -52,6 +54,9 @@ const ServiceCartPage = () => {
                       </span>
                       <span className={styles.cart__date}>
                         Время: {service.time}
+                      </span>
+                      <span className={styles.cart__date}>
+                        Мастер: {service.masterName}
                       </span>
                     </div>
                   </div>

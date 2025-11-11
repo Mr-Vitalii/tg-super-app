@@ -1,26 +1,5 @@
 import './App.scss'
-/* import { Route, Routes } from 'react-router-dom'
 
-import { Layout } from './layouts/Layout'
-import { Home } from './pages/Home/Home'
-import { FormPage } from './pages/FormPage/FormPage'
-
-import PrivateRoute from './routes/PrivateRoute' */
-
-/* import { Services } from './pages/Services/Services' */
-
-/* import { ServiceDetailsPage } from './modules/services/pages/ServiceDetailsPage/ServiceDetailsPage'
-import { ServiceCartPage } from './components/ServiceCartPage/ServiceCartPage'
-import { CheckoutPage } from './components/CheckoutPage/CheckoutPage'
-import { AdminRoute } from './routes/AdminRoute'
-import { AdminDashboard } from './pages/Admin/AdminDashboard'
-import { CategoriesPage } from './modules/services/pages/CategoriesPage/CategoriesPage'
-import { CompaniesPage } from './modules/services/pages/CompaniesPage/CompaniesPage'
-import { CompanyServicesPage } from './modules/services/pages/CompanyServicesPage/CompanyServicesPage'
-import { CompanyLayout } from './modules/services/components/CompanyLayout/CompanyLayout'
-import { CompanyMastersPage } from './modules/services/pages/CompanyMastersPage/CompanyMastersPage' */
-
-// App.tsx
 import { Suspense, lazy } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from '@/layouts/Layout'
@@ -44,6 +23,14 @@ const CompanyServicesPage = lazy(
   () =>
     import('@/modules/services/pages/CompanyServicesPage/CompanyServicesPage')
 )
+/* const CompanyContactsPage = lazy(
+  () =>
+    import('@/modules/services/pages/CompanyContactsPage/CompanyContactsPage')
+) */
+const CompanyContactsPage2 = lazy(
+  () =>
+    import('@/modules/services/pages/CompanyContactsPage/CompanyContactsPage2')
+)
 const CompanyMastersPage = lazy(
   () => import('@/modules/services/pages/CompanyMastersPage/CompanyMastersPage')
 )
@@ -55,6 +42,9 @@ const ServiceCartPage = lazy(
 )
 const CheckoutPage = lazy(
   () => import('@/modules/checkout/pages/CheckoutPage/CheckoutPage')
+)
+const OrdersHistoryPage = lazy(
+  () => import('@/modules/ordersHistory/pages/OrdersHistoryPage')
 )
 const About = lazy(() => import('@/pages/About/About'))
 const Contacts = lazy(() => import('@/pages/Contacts/Contacts'))
@@ -125,6 +115,15 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              {/* /contacts -> контакты комапнии */}
+              <Route
+                path='contacts'
+                element={
+                  <PrivateRoute>
+                    <CompanyContactsPage2 />
+                  </PrivateRoute>
+                }
+              />
             </Route>
 
             {/* /services/:categoryId/:companyId/:serviceId -> конкретная услуга */}
@@ -153,6 +152,15 @@ function App() {
             element={
               <PrivateRoute>
                 <CheckoutPage />
+              </PrivateRoute>
+            }
+          />
+          {/* ---  История заказов --- */}
+          <Route
+            path='orders-history'
+            element={
+              <PrivateRoute>
+                <OrdersHistoryPage />
               </PrivateRoute>
             }
           />

@@ -115,7 +115,7 @@
   }
 
   /* ----------------------------- Дата и выбор ----------------------------- */
-  .date__picker {
+  /*   .date__picker {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -145,31 +145,31 @@
       color: #999;
       font-size: 0.9rem;
     }
-  }
+  } */
 
 
   /* ----------------------------- Мастера ----------------------------- */
-  .schedule_section {
+  .master_section {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-top: 20px;
+    margin-bottom: 20px;
 
-    .schedule__title {
+    .master__title {
       font-weight: 600;
       font-size: 1.1rem;
       margin-bottom: 0px;
     }
   }
 
-  .schedule__grid {
+  .master__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 1.2rem;
   }
 
-  /* Карточка мастера */
-  .schedule_card {
+  .master_card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -182,81 +182,28 @@
 
     &:hover {
       background-color: rgb(from var(--color-secondary) r g b / 0.1);
-      /*  background-color: #f9eafd; */
       transform: translateY(-3px);
     }
 
-    .schedule_card__avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 0.8rem;
-      border: 2px solid #ccc;
-    }
-
-    .schedule_card__title {
+    .master_card__title {
       font-weight: 600;
       font-size: 1rem;
       margin-bottom: 0.5rem;
       text-align: center;
     }
 
-    .schedule_card__info {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
+  }
 
-    .schedule_card__time_slots {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      justify-content: center;
-    }
+  .master_card__selected {
+    background-color: var(--color-secondary);
+    color: white;
+    border-color: var(--color-secondary);
+    font-weight: 600;
 
-    .schedule_card__time_slot {
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      border: 1px solid #bbb;
-      background: #fff;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background-color: rgb(from var(--color-secondary) r g b / 0.03);
-        border-color: rgb(from var(--color-secondary) r g b / 0.8);
-      }
-    }
-
-    .schedule_card__selected_slot {
+    &:hover {
       background-color: var(--color-secondary);
-      color: white;
-      border-color: var(--color-secondary);
-      font-weight: 600;
-
-      &:hover {
-        background-color: var(--color-secondary);
-      }
     }
   }
-
-
-  .selection_mode__btn {
-    border: 1px solid #ccc;
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #f8f8f8;
-
-    &.active_mode {
-      background: #007bff;
-      color: white;
-    }
-  }
-
 
 
   /* ----------------------------- Кнопка заказа ----------------------------- */
@@ -357,11 +304,11 @@
     }
   }
 
-  .schedule__grid {
+  .master__grid {
     grid-template-columns: 1fr;
   }
 
-  .schedule_card {
+  .master_card {
     align-items: stretch;
   }
 

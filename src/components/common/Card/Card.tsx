@@ -10,6 +10,12 @@ interface CardProps {
   actions?: React.ReactNode // Нижняя часть (например, кнопки)
   className?: string
   style?: React.CSSProperties
+  classes?: {
+    image?: string
+    title?: string
+    info?: string
+    actions?: string
+  }
 }
 
 const CardComponent: React.FC<CardProps> = ({
@@ -21,13 +27,14 @@ const CardComponent: React.FC<CardProps> = ({
   actions,
   className,
   style,
+  classes,
 }) => {
   return (
     <div className={`${styles.card} ${className || ''}`} style={style}>
       {image ? (
         /* ✅ Если image — строка */
         typeof image === 'string' ? (
-          <div className={styles.card__image}>
+          <div className={`${styles.card__image} ${classes?.image || ''}`}>
             <img src={image} alt={imageAlt} />
           </div>
         ) : (
@@ -38,9 +45,19 @@ const CardComponent: React.FC<CardProps> = ({
         <div className={styles.card__imgPlaceholder} />
       )}
 
-      {title && <TitleTag className={styles.card__title}>{title}</TitleTag>}
-      <div className={styles.card__info}>{children}</div>
-      {actions && <div className={styles.card__actions}>{actions}</div>}
+      {title && (
+        <TitleTag className={`${styles.card__title} ${classes?.title || ''}`}>
+          {title}
+        </TitleTag>
+      )}
+      <div className={`${styles.card__info} ${classes?.info || ''}`}>
+        {children}
+      </div>
+      {actions && (
+        <div className={`${styles.card__actions} ${classes?.actions || ''}`}>
+          {actions}
+        </div>
+      )}
     </div>
   )
 }

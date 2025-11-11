@@ -3,11 +3,8 @@ import { useParams } from 'react-router-dom'
 import styles from './ServiceDetailsPage.module.scss'
 import { Button } from '@/components/common/Button/Button'
 
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
-import { ru } from 'date-fns/locale/ru'
 import { Service } from '@/common/types/services'
 
 import { useCart } from '@/hooks/useCart'
@@ -20,17 +17,10 @@ import {
   useGetMastersByServiceQuery,
   useLazyGetMasterAvailabilityQuery,
 } from '@/services/mastersApi'
-
-// -----------------------------------------------------------------------------
-// Тип для мастера
-type MasterItem = {
-  id: string
-  firstName: string
-  lastName: string
-  services: string[]
-  availableDates: { date: string; times: string[] }[]
-}
-// -----------------------------------------------------------------------------
+import DateSelector from '@/components/common/DatePicker/DateSelector'
+import DateAndTimePicker from '@/modules/services/components/DateAndTimePicker/DateAndTimePicker'
+import MasterSlotsByDate from '../../components/MasterSlotsByDate/MasterSlotsByDate'
+import { Master } from '@/common/types/masters'
 
 const ServiceDetailsPage: React.FC = () => {
   const { serviceId } = useParams<{ serviceId?: string }>()
@@ -40,19 +30,24 @@ const ServiceDetailsPage: React.FC = () => {
   console.log('companyId:', companyId)
 
   const [service, setService] = useState<Service | null>(null)
+  console.log('service:', service)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   // выборы пользователя
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [selectedMaster, setSelectedMaster] = useState<string | null>(null)
+  const [selectedMaster, setSelectedMaster] = useState<{
+    id: string
+    name: string
+  } | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [selectionMode, setSelectionMode] = useState<'date' | 'master'>('date')
 
-  const [masters, setMasters] = useState<MasterItem[]>([])
+  const [masters, setMasters] = useState<Master[]>([])
   // Для режима "по мастеру" — хранит расписание выбранного мастера
-  const [masterAvailability, setMasterAvailability] =
-    useState<MasterItem | null>(null)
+  /*   const [masterAvailability, setMasterAvailability] = useState<Master | null>(
+    null
+  ) */
 
   const [loadMasters, { isLoading: isLoadingMasters }] =
     useLazyGetAvailableMastersQuery()
@@ -64,8 +59,7 @@ const ServiceDetailsPage: React.FC = () => {
     )
 
   // ленивый запрос для получения расписания конкретного мастера (companyId, serviceId, masterId)
-  const [loadMasterAvailability, { isLoading: isLoadingMasterAvailability }] =
-    useLazyGetMasterAvailabilityQuery()
+  const [loadMasterAvailability] = useLazyGetMasterAvailabilityQuery()
 
   const { addToCart } = useCart()
   const { openModal } = useModal()
@@ -122,7 +116,7 @@ const ServiceDetailsPage: React.FC = () => {
           companyId: companyId ?? '',
           date: dateISO,
         }).unwrap()
-        setMasters(result as MasterItem[])
+        setMasters(result as Master[])
       } catch {
         setMasters([])
       }
@@ -136,7 +130,7 @@ const ServiceDetailsPage: React.FC = () => {
     setMasters([])
   }, [selectionMode])
 
-  // При выборе конкретного мастера (в режиме "по мастеру") — подгружаем его расписание
+  /*   // При выборе конкретного мастера (в режиме "по мастеру") — подгружаем его расписание
   useEffect(() => {
     if (
       selectionMode !== 'master' ||
@@ -156,7 +150,7 @@ const ServiceDetailsPage: React.FC = () => {
           masterId: selectedMaster,
         }).unwrap()
         // result — мастер с normalized availableDates (см. mastersApi.transformResponse)
-        setMasterAvailability(result as MasterItem)
+        setMasterAvailability(result as Master)
       } catch {
         setMasterAvailability(null)
       }
@@ -167,12 +161,20 @@ const ServiceDetailsPage: React.FC = () => {
     service,
     companyId,
     loadMasterAvailability,
-  ])
+  ]) */
 
   // ---------------------------------------------------------------------------
   // обработчик выбора слота
-  const handleSelectSlot = (masterId: string, time: string) => {
-    setSelectedMaster(masterId)
+  const handleSelectSlot = (
+    masterId: string,
+    masterFirstName: string,
+    masterLastName: string,
+    time: string
+  ) => {
+    setSelectedMaster({
+      id: masterId,
+      name: `${masterFirstName} ${masterLastName}`,
+    })
     setSelectedTime(time)
   }
 
@@ -188,12 +190,13 @@ const ServiceDetailsPage: React.FC = () => {
       alert('Пожалуйста, выберите дату, мастера и время.')
       return
     }
-
+    console.log('svc', svc)
     addToCart({
       ...svc,
       date: format(selectedDate, 'dd.MM.yyyy'),
       time: selectedTime,
-      masterId: selectedMaster,
+      masterId: selectedMaster.id,
+      masterName: selectedMaster.name,
     } as any)
 
     openModal(
@@ -261,30 +264,30 @@ const ServiceDetailsPage: React.FC = () => {
           {/* ---------- Режим по дате ---------- */}
           {selectionMode === 'date' && (
             <>
-              {/* ---------- выбор даты ---------- */}
-              <div className={styles.date__picker}>
-                <label htmlFor='mastername'>Выберите дату услуги:</label>
-                <div className={styles.date__label}>
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => setSelectedDate(date)}
-                    filterDate={(date) => {
-                      const day = date.getDay()
-                      return day !== 0 && day !== 6
-                    }}
-                    locale={ru}
-                    placeholderText='Кликните для выбора даты'
-                    dateFormat='dd.MM.yyyy'
-                    minDate={new Date()}
-                    shouldCloseOnSelect={true}
-                    className={styles.date__input}
-                    id='mastername'
-                  />
-                </div>
+              <div style={{ maxWidth: 500 }}>
+                <DateSelector
+                  selectedDate={selectedDate}
+                  onChange={setSelectedDate}
+                  label='Выберите дату услуги:'
+                  id='master-date'
+                />
               </div>
 
-              {/* ---------- мастера ---------- */}
               {selectedDate && (
+                <div className={styles.schedule_section}>
+                  <h3 className={styles.schedule__title}>Доступные мастера:</h3>
+                  <MasterSlotsByDate
+                    masters={masters}
+                    selectedMaster={selectedMaster}
+                    selectedTime={selectedTime}
+                    onSelect={handleSelectSlot}
+                    isLoading={isLoadingMasters}
+                  />
+                </div>
+              )}
+
+              {/* ---------- мастера ---------- */}
+              {/*               {selectedDate && (
                 <div className={styles.schedule_section}>
                   <h3 className={styles.schedule__title}>Доступные мастера:</h3>
 
@@ -326,15 +329,31 @@ const ServiceDetailsPage: React.FC = () => {
                     })}
                   </div>
                 </div>
-              )}
+              )} */}
+
+              {/*         {selectedDate && (
+                <DateAndTimePicker
+                  companyId={companyId ?? ''}
+                  serviceId={service?.id ?? ''}
+                  masterId={selectedMaster ?? ''} // можно добавить выбор мастера отдельно
+                  selectedDate={selectedDate}
+                  selectedTime={selectedTime}
+                  loadAvailability={loadMasterAvailability}
+                  onSelect={(date, time) => {
+                    setSelectedDate(date)
+                    setSelectedTime(time)
+                  }}
+                  view='cards'
+                />
+              )} */}
             </>
           )}
           {/* ---------- Режим по мастеру ---------- */}
           {selectionMode === 'master' && (
             <>
               {/* ---------- выбор мастера ---------- */}
-              <div className={styles.schedule_section}>
-                <label className={styles.schedule__label_master}>
+              <div className={styles.master_section}>
+                <label className={styles.master__label_master}>
                   Выберите мастера:
                 </label>
 
@@ -344,18 +363,23 @@ const ServiceDetailsPage: React.FC = () => {
                     <p>Нет мастеров, выполняющих эту услугу.</p>
                   )}
 
-                <div className={styles.schedule__grid}>
+                <div className={styles.master__grid}>
                   {mastersByService.map((m) => {
-                    const isSelected = selectedMaster === m.id
+                    const isSelected = selectedMaster?.id === m.id
                     return (
                       <div
                         key={m.id}
-                        className={`${styles.schedule_card} ${
-                          isSelected ? styles.schedule_card__selected : ''
+                        className={`${styles.master_card} ${
+                          isSelected ? styles.master_card__selected : ''
                         }`}
-                        onClick={() => setSelectedMaster(m.id)}
+                        onClick={() =>
+                          setSelectedMaster({
+                            id: m.id,
+                            name: `${m.firstName} ${m.lastName}`,
+                          })
+                        }
                       >
-                        <div className={styles.schedule_card__title}>
+                        <div className={styles.master_card__title}>
                           {m.firstName} {m.lastName}
                         </div>
                       </div>
@@ -365,7 +389,7 @@ const ServiceDetailsPage: React.FC = () => {
               </div>
 
               {/* ---------- выбор даты и времени для выбранного мастера ---------- */}
-              {selectedMaster && (
+              {/*               {selectedMaster && (
                 <div className={styles.schedule_section}>
                   <h3 className={styles.schedule__title}>
                     Выберите дату и время:
@@ -413,21 +437,45 @@ const ServiceDetailsPage: React.FC = () => {
                     ))}
                   </div>
                 </div>
+              )} */}
+              {selectedMaster && (
+                <div className={styles.schedule_section}>
+                  <h3 className={styles.schedule__title}>
+                    Выберите дату и время:
+                  </h3>
+
+                  <DateAndTimePicker
+                    companyId={companyId ?? ''}
+                    serviceId={service?.id ?? ''}
+                    masterId={selectedMaster.id}
+                    selectedDate={selectedDate}
+                    selectedTime={selectedTime}
+                    loadAvailability={loadMasterAvailability}
+                    onSelect={(date, time) => {
+                      setSelectedDate(date)
+                      setSelectedTime(time)
+                    }}
+                    view='cards'
+                  />
+                </div>
               )}
             </>
           )}
         </div>
 
         {/* ---------- кнопка заказа ---------- */}
-        <div className={styles.btns_container}>
-          <Button
-            onClick={() => handleOrder(service)}
-            variant='primary'
-            disabled={!canOrder}
-          >
-            Заказать услугу
-          </Button>
-        </div>
+
+        {selectedDate && selectedTime && (
+          <div className={styles.btns_container}>
+            <Button
+              onClick={() => handleOrder(service)}
+              variant='primary'
+              disabled={!canOrder}
+            >
+              Заказать услугу
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )

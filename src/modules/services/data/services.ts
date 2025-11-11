@@ -22,6 +22,16 @@ export const services: Service[] = [
     companyName: 'BeautyStudio',
   },
   {
+    id: '3',
+    title: 'Комбо (стрижка + борода)',
+    price: 1400,
+    description: 'Полный уход: стрижка головы и бороды',
+    img: 'https://res.cloudinary.com/di8xukyyj/image/upload/v1751208967/telegram_super_app/on91fzyfhdzbrgikvqx0.png',
+    currency: '₽',
+    companyId: 'comp-1',
+    companyName: 'Barbershop',
+  },
+  {
     id: '5',
     title: 'Удлинённые волосы',
     price: 1100,

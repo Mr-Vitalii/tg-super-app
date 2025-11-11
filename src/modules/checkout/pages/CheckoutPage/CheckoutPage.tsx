@@ -3,11 +3,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { format } from 'date-fns'
 import { Order } from '@/common/types/order'
-/* import { useCart } from '@/context/cart/useCart' */
 import { useModal } from '@/context/modal/useModal'
 import { useCart } from '@/hooks/useCart'
 import { useCreateOrderMutation } from '@/services/ordersApi'
-/* import { apiFetch } from '@/utils/apiFetch' */
 
 const CheckoutPage = () => {
   const { cart, clearCart } = useCart()
@@ -18,8 +16,6 @@ const CheckoutPage = () => {
 
   const [createOrder, { isLoading: isCreating }] = useCreateOrderMutation()
 
-  /*  const userName = 'Иван' */
-  const company = 'Barbershop'
   const handleModal = () => {
     openModal(
       <div>
@@ -33,7 +29,6 @@ const CheckoutPage = () => {
     const now = new Date()
 
     const order: Order = {
-      company,
       orderDate: format(now, 'dd.MM.yyyy'),
       orderTime: format(now, 'HH:mm'),
       items: cart,

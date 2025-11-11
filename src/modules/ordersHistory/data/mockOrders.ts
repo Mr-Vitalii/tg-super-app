@@ -1,0 +1,157 @@
+/**
+ * Mock-данные для страницы "История заказов".
+ * Набор записей покрывает несколько месяцев и содержит подтверждённые и отменённые заказы.
+ *
+ * Поля:
+ * - id: уникальный идентификатор заказа
+ * - serviceId: id услуги
+ * - title: название услуги (чтобы отображать в карточке)
+ * - status: 'confirmed' | 'cancelled'
+ * - date: ISO дата/время услуги
+ * - price: число
+ * - currency: строка валюты
+ * - canceledReason?: причина отмены (опционально)
+ * - createdAt?: когда был создан заказ (опционально)
+ */
+
+import { OrderHistoryEntry } from '@/common/types/order'
+
+export const mockOrders: OrderHistoryEntry[] = [
+  {
+    id: 'ord-001',
+    serviceId: '1',
+    categoryId: 'cat-hair',
+    companyId: 'comp-1',
+    title: 'Мужская стрижка',
+    status: 'confirmed',
+    date: '2025-11-02T09:00:00+03:00',
+    price: 900,
+    currency: '₽',
+    createdAt: '2025-10-25T12:34:00+03:00',
+  },
+  {
+    id: 'ord-002',
+    serviceId: '3',
+    categoryId: 'cat-hair',
+    companyId: 'comp-1',
+    title: 'Комбо (стрижка + борода)',
+    status: 'cancelled',
+    date: '2025-11-05T14:00:00+03:00',
+    price: 1400,
+    currency: '₽',
+    createdAt: '2025-10-26T09:20:00+03:00',
+    canceledReason: 'Салон отменил из-за технических причин',
+  },
+  {
+    id: 'ord-003',
+    serviceId: '34',
+    categoryId: 'cat-beauty',
+    companyId: 'comp-4',
+    title: 'Маникюр классический',
+    status: 'cancelled',
+    date: '2025-10-12T11:00:00+03:00',
+    price: 800,
+    currency: '₽',
+    canceledReason: 'Клиент отменил за 2 часа до записи',
+    createdAt: '2025-10-01T15:05:00+03:00',
+  },
+  {
+    id: 'ord-004',
+    serviceId: '36',
+    categoryId: 'cat-beauty',
+    companyId: 'comp-4',
+    title: 'Окрашивание волос',
+    status: 'confirmed',
+    date: '2025-10-20T16:30:00+03:00',
+    price: 2500,
+    currency: '₽',
+    createdAt: '2025-09-28T10:00:00+03:00',
+  },
+  {
+    id: 'ord-006',
+    serviceId: '35',
+    categoryId: 'cat-beauty',
+    companyId: 'comp-3',
+    title: 'Педикюр спа',
+    status: 'cancelled',
+    date: '2025-09-15T10:00:00+03:00',
+    price: 1500,
+    currency: '₽',
+    canceledReason: 'Салон отменил из-за технических причин',
+    createdAt: '2025-09-01T11:11:00+03:00',
+  },
+  {
+    id: 'ord-007',
+    serviceId: '2',
+    categoryId: 'cat-hair',
+    companyId: 'comp-2',
+    title: 'Стрижка бороды и усов',
+    status: 'confirmed',
+    date: '2025-11-10T18:00:00+03:00',
+    price: 600,
+    currency: '₽',
+    createdAt: '2025-10-30T09:10:00+03:00',
+  },
+  {
+    id: 'ord-008',
+    serviceId: '33',
+    categoryId: 'cat-beauty',
+    companyId: 'comp-3',
+    title: 'Стрижка женская',
+    status: 'confirmed',
+    date: '2025-10-03T12:30:00+03:00',
+    price: 1200,
+    currency: '₽',
+    createdAt: '2025-09-20T14:00:00+03:00',
+  },
+  {
+    id: 'ord-009',
+    serviceId: '36',
+    categoryId: 'cat-beauty',
+    companyId: 'comp-4',
+    title: 'Окрашивание волос',
+    status: 'confirmed',
+    date: '2025-10-20T16:30:00+03:00',
+    price: 2500,
+    currency: '₽',
+    createdAt: '2025-09-12T10:00:00+03:00',
+  },
+  {
+    id: 'ord-010',
+    serviceId: '5',
+    categoryId: 'cat-hair',
+    companyId: 'comp-1',
+    title: 'Удлинённые волосы',
+    status: 'confirmed',
+    date: '2025-11-15T11:00:00+03:00',
+    price: 1100,
+    currency: '₽',
+    createdAt: '2025-11-01T09:00:00+03:00',
+  },
+  {
+    id: 'ord-011',
+    serviceId: '5',
+    categoryId: 'cat-hair',
+    companyId: 'comp-1',
+    title: 'Удлинённые волосы',
+    status: 'confirmed',
+    date: '2025-10-28T15:00:00+03:00',
+    price: 1100,
+    currency: '₽',
+    createdAt: '2025-10-10T12:00:00+03:00',
+  },
+  {
+    id: 'ord-012',
+    serviceId: '33',
+    categoryId: 'cat-beauty',
+    companyId: 'comp-3',
+    title: 'Стрижка женская',
+    status: 'confirmed',
+    date: '2025-09-15T12:30:00+03:00',
+    price: 1200,
+    currency: '₽',
+    createdAt: '2025-10-14T11:11:00+03:00',
+  },
+]
+
+export default mockOrders

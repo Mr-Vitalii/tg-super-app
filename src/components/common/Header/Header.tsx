@@ -58,7 +58,10 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
             <LinkButton to='/services'>Сервисы</LinkButton>
           </div>
           <div className={styles.header__link}>
-            <LinkButton to='/about'>О компании</LinkButton>
+            <LinkButton to='/orders-history'>История заказов</LinkButton>
+          </div>
+          <div className={styles.header__link}>
+            <LinkButton to='/about'>О нас</LinkButton>
           </div>
           <div className={styles.header__link}>
             <LinkButton to='/contacts'>Контакты</LinkButton>
@@ -69,6 +72,9 @@ export const Header = ({ setIsSidebarOpen }: HeaderProps) => {
           <div className={styles.header__regBtn}>
             <LinkButton to='/register' variant='reg-link'>
               Регистрация
+            </LinkButton>
+            <LinkButton to='/services-cart' variant='reg-link'>
+              Мои заказы
             </LinkButton>
           </div>
         )}

@@ -1,0 +1,74 @@
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+.checkIcon {
+  color: #22c55e; // зеленая галочка
+}
+
+.crossIcon {
+  color: #ef4444; // красный крестик
+}
+
+.title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.details {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  color: #888;
+}
+
+.statusConfirmed {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.statusCancelled {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.confirmed {
+  border-left: 4px solid #22c55e;
+}
+
+.cancelled {
+  border-left: 4px solid #ef4444;
+}

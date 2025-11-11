@@ -28,26 +28,3 @@ export function CardsList<T>({
     </ul>
   )
 }
-
-/* interface CardsListProps {
-  children: React.ReactNode
-  columns?: number
-  gap?: number
-} */
-
-/* export const CardsList: React.FC<CardsListProps> = ({
-  children,
-  columns = 3,
-  gap = 20,
-}) => {
-  return (
-    <ul
-      className={styles.cards_list}
-      style={{
-        gap: `${gap}px`,
-      }}
-    >
-      {children}
-    </ul>
-  )
-} */

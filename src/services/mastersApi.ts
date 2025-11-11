@@ -1,11 +1,11 @@
+// ============================================================================
+// ✅ ЛОКАЛЬНЫЙ (mock) ВАРИАНТ — АКТИВЕН
+// ============================================================================
+
 /* import { createApi } from '@reduxjs/toolkit/query/react'
 import type { Master } from '@/common/types/masters'
 import { masters } from '@/modules/services/data/masters'
 import { normalizeAndSortTimes, normalizeTime } from '@/utils/helpers'
-
-// ============================================================================
-// ✅ ЛОКАЛЬНЫЙ (mock) ВАРИАНТ — АКТИВЕН
-// ============================================================================
 
 export const mastersApi = createApi({
   reducerPath: 'mastersApi',
@@ -14,12 +14,9 @@ export const mastersApi = createApi({
   baseQuery: async () => ({ data: null }),
 
   endpoints: (builder) => ({
-    // 🔹 getAvailableMasters:
-    // Используется в режиме "Выбор мастера по дате".
-    // Возвращает мастеров, у которых есть слоты на указанную дату (и время, если задано).
-    //
-    // params: { serviceId, date, time? }
-
+    // ------------------------------------------------------------------------
+    // 🔹 1️⃣ "ВЫБОР МАСТЕРА ПО ДАТЕ"
+    // ------------------------------------------------------------------------
     getAvailableMasters: builder.query<
       Master[],
       { companyId: string; serviceId: string; date: string; time?: string }
@@ -29,7 +26,7 @@ export const mastersApi = createApi({
           const normReqTime = time ? normalizeTime(time) : undefined
 
           const filtered = masters
-            .filter((m) => m.services.includes(serviceId))
+            .filter((m) => m.services.some((s) => s.id === serviceId))
             .map((m) => {
               const matchedDates = m.availableDates
                 .filter((d) => d.date === date)
@@ -50,31 +47,41 @@ export const mastersApi = createApi({
             )
 
           await new Promise((r) => setTimeout(r, 120)) // имитация latency
-
           return { data: filtered }
         } catch (e) {
-          return {
-            error: {
-              status: 'CUSTOM_ERROR',
-              data: e,
-            } as any,
-          }
+          return { error: { status: 'CUSTOM_ERROR', data: e } as any }
         }
       },
     }),
 
-    // 🔹 getMastersByService:
-    // Используется в режиме "Выбор по мастеру".
-    // Возвращает всех мастеров, предоставляющих данную услугу (serviceId),
-    // вместе со всеми их доступными датами и временем.
-    //
-    // params: { serviceId }
-
-    getMastersByService: builder.query<Master[], { serviceId: string }>({
-      queryFn: async ({ serviceId }) => {
+    // ------------------------------------------------------------------------
+    // 🔹 2️⃣ "ВЫБОР ПО МАСТЕРУ"
+    // ------------------------------------------------------------------------
+    getMastersByService: builder.query<
+      Master[],
+      { companyId: string; serviceId: string }
+    >({
+      queryFn: async ({ companyId, serviceId }) => {
         try {
+          console.log('companyId', companyId, 'serviceId', serviceId)
+
+          // companyId в мастерах — number, в роутинге — string (comp-1/comp-2/...).
+          // Предположим, companyId приходит в формате 'comp-1' — нужно привести к числу.
+          // Если у вас другой формат, замените логику преобразования на нужную.
+          // Здесь поддерживаем два варианта: '1'|'2'|'3'|'4' или 'comp-1'...
+          const extractNumeric = (cid: string) => {
+            const match = cid.match(/\d+$/)
+            return match ? Number(match[0]) : Number(cid)
+          }
+
+          const numericCompanyId = extractNumeric(companyId)
+
           const filtered = masters
-            .filter((m) => m.services.includes(serviceId))
+            .filter(
+              (m) =>
+                m.companyId === numericCompanyId &&
+                m.services.some((s) => s.id === serviceId)
+            )
             .map((m) => ({
               ...m,
               availableDates: m.availableDates.map((d) => ({
@@ -84,36 +91,96 @@ export const mastersApi = createApi({
             }))
 
           await new Promise((r) => setTimeout(r, 100))
-
           return { data: filtered }
         } catch (e) {
-          return {
-            error: {
-              status: 'CUSTOM_ERROR',
-              data: e,
-            } as any,
+          return { error: { status: 'CUSTOM_ERROR', data: e } as any }
+        }
+      },
+    }),
+
+    // ------------------------------------------------------------------------
+    // 🔹 3️⃣ "РАСПИСАНИЕ КОНКРЕТНОГО МАСТЕРА"
+    // ------------------------------------------------------------------------
+    getMasterAvailability: builder.query<
+      Master | null,
+      { companyId: string; serviceId: string; masterId: string }
+    >({
+      queryFn: async ({ serviceId, masterId }) => {
+        try {
+          const master = masters.find(
+            (m) =>
+              m.id === masterId && m.services.some((s) => s.id === serviceId)
+          )
+          if (!master) return { data: null }
+
+          const normalized = {
+            ...master,
+            availableDates: master.availableDates.map((d) => ({
+              date: d.date,
+              times: normalizeAndSortTimes(d.times),
+            })),
           }
+
+          await new Promise((r) => setTimeout(r, 100))
+          return { data: normalized }
+        } catch (e) {
+          return { error: { status: 'CUSTOM_ERROR', data: e } as any }
+        }
+      },
+    }),
+
+    // ------------------------------------------------------------------------
+    // 4. НОВЫЙ: ПОЛУЧИТЬ ВСЕХ МАСТЕРОВ КОМПАНИИ
+    // ------------------------------------------------------------------------
+    getMastersByCompany: builder.query<Master[], { companyId: string }>({
+      queryFn: async ({ companyId }) => {
+        try {
+          // companyId в мастерах — number, в роутинге — string (comp-1/comp-2/...).
+          // Предположим, companyId приходит в формате 'comp-1' — нужно привести к числу.
+          // Если у вас другой формат, замените логику преобразования на нужную.
+          // Здесь поддерживаем два варианта: '1'|'2'|'3'|'4' или 'comp-1'...
+          const extractNumeric = (cid: string) => {
+            const match = cid.match(/\d+$/)
+            return match ? Number(match[0]) : Number(cid)
+          }
+
+          const numericCompanyId = extractNumeric(companyId)
+
+          const filtered = masters
+            .filter((m) => Number(m.companyId) === numericCompanyId)
+            .map((m) => ({
+              ...m,
+              availableDates: m.availableDates.map((d) => ({
+                date: d.date,
+                times: normalizeAndSortTimes(d.times),
+              })),
+            }))
+
+          await new Promise((r) => setTimeout(r, 100))
+          return { data: filtered }
+        } catch (e) {
+          return { error: { status: 'CUSTOM_ERROR', data: e } as any }
         }
       },
     }),
   }),
 })
 
-// 🔹 Экспорт хуков (общий для локальной и серверной версии)
+// -----------------------------------------------------------------------------
+// 🔹 Экспорт хуков (единый для локального и серверного режима)
+// -----------------------------------------------------------------------------
 export const {
   useGetAvailableMastersQuery,
   useLazyGetAvailableMastersQuery,
   useGetMastersByServiceQuery,
   useLazyGetMastersByServiceQuery,
+  useGetMasterAvailabilityQuery,
+  useLazyGetMasterAvailabilityQuery,
+  useGetMastersByCompanyQuery,
+  useLazyGetMastersByCompanyQuery,
 } = mastersApi
 
 export default mastersApi */
-
-// src/services/mastersApi.ts
-import { createApi } from '@reduxjs/toolkit/query/react'
-import type { Master } from '@/common/types/masters'
-import { baseQuery } from '@/services/baseQuery'
-import { normalizeAndSortTimes } from '@/utils/helpers'
 
 // ============================================================================
 // ✅ СЕРВЕРНЫЙ ВАРИАНТ — АКТИВЕН
@@ -138,6 +205,12 @@ import { normalizeAndSortTimes } from '@/utils/helpers'
 //     2.2 getMasterAvailability() принимает параметры: { companyId, serviceId, masterId }
 //         Возвращает доступные даты и время конкретного мастера.
 //
+
+import { createApi } from '@reduxjs/toolkit/query/react'
+import type { Master } from '@/common/types/masters'
+import { baseQuery } from '@/services/baseQuery'
+import { normalizeAndSortTimes } from '@/utils/helpers'
+
 export const mastersApi = createApi({
   reducerPath: 'mastersApi',
   baseQuery, // общий baseQuery: добавляет X-Session-Id и X-Telegram-InitData
@@ -149,12 +222,11 @@ export const mastersApi = createApi({
       Master[],
       { companyId: string; serviceId: string; date: string; time?: string }
     >({
-      /**
-       * companyId  — идентификатор компании
-       * serviceId  — идентификатор услуги
-       * date       — дата, на которую ищем мастеров (формат YYYY-MM-DD)
-       * time?      — необязательный параметр: конкретное время (если пользователь выбрал)
-       */
+      // companyId  — идентификатор компании
+      // serviceId  — идентификатор услуги
+      // date       — дата, на которую ищем мастеров (формат YYYY-MM-DD)
+      // time?      — необязательный параметр: конкретное время (если пользователь выбрал)
+
       query: ({ companyId, serviceId, date, time }) => {
         const params = new URLSearchParams({ companyId, serviceId, date })
         if (time) params.append('time', time)
@@ -163,10 +235,10 @@ export const mastersApi = createApi({
           method: 'GET',
         }
       },
-      /**
-       * Приводим временные слоты к единому формату ("HH:mm") и сортируем.
-       * Это важно, если сервер возвращает неотсортированные или разнородные строки времени.
-       */
+
+      // Приводим временные слоты к единому формату ("HH:mm") и сортируем.
+      // Это важно, если сервер возвращает неотсортированные или разнородные строки времени.
+
       transformResponse: (response: any) => {
         if (!Array.isArray(response)) return []
         return response.map((m: any) => ({
@@ -190,10 +262,9 @@ export const mastersApi = createApi({
       Master[],
       { companyId: string; serviceId: string }
     >({
-      /**
-       * companyId — идентификатор компании
-       * serviceId — идентификатор услуги
-       */
+      // companyId — идентификатор компании
+      // serviceId — идентификатор услуги
+
       query: ({ companyId, serviceId }) => {
         const params = new URLSearchParams({ companyId, serviceId })
         return {
@@ -220,11 +291,10 @@ export const mastersApi = createApi({
       Master,
       { companyId: string; serviceId: string; masterId: string }
     >({
-      /**
-       * companyId — идентификатор компании
-       * serviceId — идентификатор услуги
-       * masterId  — идентификатор выбранного мастера
-       */
+      // companyId — идентификатор компании
+      // serviceId — идентификатор услуги
+      // masterId  — идентификатор выбранного мастера
+
       query: ({ companyId, serviceId, masterId }) => {
         const params = new URLSearchParams({ companyId, serviceId, masterId })
         return {
@@ -246,6 +316,31 @@ export const mastersApi = createApi({
         } as Master
       },
     }),
+
+    // ------------------------------
+    // NEW: getMastersByCompany (server)
+    // ------------------------------
+    getMastersByCompany: builder.query<Master[], { companyId: string }>({
+      query: ({ companyId }) => {
+        const params = new URLSearchParams({ companyId })
+        return {
+          url: `/api/masters/by-company?${params.toString()}`,
+          method: 'GET',
+        }
+      },
+      transformResponse: (response: any) => {
+        if (!Array.isArray(response)) return []
+        return response.map((m: any) => ({
+          ...m,
+          availableDates: Array.isArray(m.availableDates)
+            ? m.availableDates.map((d: any) => ({
+                date: d.date,
+                times: normalizeAndSortTimes(d.times || []),
+              }))
+            : [],
+        })) as Master[]
+      },
+    }),
   }),
 })
 
@@ -259,6 +354,8 @@ export const {
   useLazyGetMastersByServiceQuery,
   useGetMasterAvailabilityQuery,
   useLazyGetMasterAvailabilityQuery,
+  useGetMastersByCompanyQuery,
+  useLazyGetMastersByCompanyQuery,
 } = mastersApi
 
 export default mastersApi

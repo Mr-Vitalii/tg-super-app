@@ -1,7 +1,6 @@
 // src/services/productsApi.ts
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { Service } from '@/common/types/services'
-import { baseQuery } from '@/services/baseQuery' // для работы с сервером
 
 // ============================================================================
 // ✅ 1️⃣ ЛОКАЛЬНЫЙ ВАРИАНТ (mock) — АКТИВЕН
@@ -70,11 +69,14 @@ import { baseQuery } from '@/services/baseQuery' // для работы с се�
       },
     }),
   }),
-}) */
-
+})
+ */
 // ============================================================================
 // 💤 2️⃣ РЕАЛЬНЫЙ ВАРИАНТ (через сервер) — ОТКЛЮЧЁН
 // ============================================================================
+
+import { baseQuery } from '@/services/baseQuery' // для работы с сервером
+
 export const productsApi = createApi({
   reducerPath: 'productsApi',
   baseQuery, // ✅ используется общий baseQuery с X-Session-Id и X-Telegram-InitData
