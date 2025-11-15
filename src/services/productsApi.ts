@@ -6,7 +6,7 @@ import type { Service } from '@/common/types/services'
 // ✅ 1️⃣ ЛОКАЛЬНЫЙ ВАРИАНТ (mock) — АКТИВЕН
 // ============================================================================
 
-export const productsApi = createApi({
+/* export const productsApi = createApi({
   reducerPath: 'productsApi',
   baseQuery: async () => ({ data: {} }), // фиктивный baseQuery (не используется)
   endpoints: (build) => ({
@@ -69,13 +69,13 @@ export const productsApi = createApi({
       },
     }),
   }),
-})
+}) */
 
 // ============================================================================
 // 💤 2️⃣ РЕАЛЬНЫЙ ВАРИАНТ (через сервер) — ОТКЛЮЧЁН
 // ============================================================================
 
-/* import { baseQuery } from '@/services/baseQuery' // для работы с сервером
+import { baseQuery } from '@/services/baseQuery' // для работы с сервером
 
 export const productsApi = createApi({
   reducerPath: 'productsApi',
@@ -101,7 +101,7 @@ export const productsApi = createApi({
         `/api/companies/${companyId}/services?page=${page}&limit=${limit}`,
     }),
   }),
-}) */
+})
 
 // ============================================================================
 // 🔸 ЕДИНЫЙ ЭКСПОРТ ХУКОВ (общий для обоих режимов)
