@@ -26,10 +26,10 @@ const OrdersHistoryPage: React.FC = () => {
   ] = useLazyGetOrdersHistoryQuery()
 
   // Первичный запрос
-  /*   useEffect(() => {
+  useEffect(() => {
     loadMore()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) */
+  }, [])
 
   // Обработка загрузки новой порции
   useEffect(() => {
