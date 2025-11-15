@@ -20,8 +20,8 @@ export const companies: Company[] = [
     info: 'Супер стрижки на любой вкус',
     address: 'Улица Кубика-Рубика, д. 69',
     phone: ['+7 (999) 111-22-33'],
-    email: 'contact@barbershop.ru',
-    website: 'https://barbershop.ru',
+    email: 'contact@barbershop.com',
+    website: 'https://barbershop.com',
     socials: [
       { name: 'telegram', url: 'https://telegram.org/barbershop' },
       { name: 'vk', url: 'https://vk.com/barbershop' },
@@ -52,7 +52,7 @@ export const companies: Company[] = [
     ],
     address: 'Улица Телеграмная, д. 12',
     phone: ['+7 (495) 123-45-67', '+7 (925) 222-33-44'],
-    email: 'service@oldboy.ru',
+    email: 'service@oldboy.com',
     socials: [
       { name: 'telegram', url: 'https://telegram.org/oldboy' },
       { name: 'vk', url: 'https://vk.com/oldboy' },
@@ -80,8 +80,8 @@ export const companies: Company[] = [
     ],
     address: 'Улица Муркина, д. 19',
     phone: ['+7 (999) 777-88-99'],
-    email: 'hello@beautystudio.ru',
-    website: 'https://beautystudio.ru',
+    email: 'hello@beautystudio.com',
+    website: 'https://beautystudio.com',
     socials: [{ name: 'vk', url: 'https://vk.com/beautystudio' }],
     coords: { lat: 55.753215, lng: 37.622504 },
     workHours: [
@@ -108,7 +108,7 @@ export const companies: Company[] = [
     ],
     address: 'Улица Эдуарда Сурового, д. 9999',
     phone: ['+7 (900) 555-00-11'],
-    email: 'princess@beauty.ru',
+    email: 'princess@beauty.com',
     socials: [{ name: 'vk', url: 'https://vk.com/beautyprincess' }],
     coords: { lat: 55.748772, lng: 37.627095 },
     workHours: [

@@ -1,11 +1,12 @@
-import { /* BaseQueryFn, */ createApi } from '@reduxjs/toolkit/query/react'
-import type { Category } from '@/modules/services/data/categories'
-/* import { categories as mockCategories } from '@/modules/services/data/categories' */
-
 /* ============================================================
  * 🔹 Вариант 1: ЛОКАЛЬНЫЙ режим (mock, офлайн)
  * ============================================================ */
-/* const localBaseQuery: BaseQueryFn = async () => {
+
+/* import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
+import type { Category } from '@/modules/services/data/categories'
+import { categories as mockCategories } from '@/modules/services/data/categories'
+
+const localBaseQuery: BaseQueryFn = async () => {
   await new Promise((res) => setTimeout(res, 150))
   return { data: mockCategories }
 }
@@ -21,6 +22,10 @@ const activeBaseQuery = baseQuery
 /* ============================================================
  * 🔹 API
  * ============================================================ */
+
+import { createApi } from '@reduxjs/toolkit/query/react'
+import type { Category } from '@/modules/services/data/categories'
+
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
   baseQuery: activeBaseQuery,

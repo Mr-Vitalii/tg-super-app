@@ -9,6 +9,22 @@
   transition: transform 0.15s ease;
 }
 
+.card.statusPending {
+  border-left: 4px solid #d18f01;
+}
+
+.card.statusConfirmed {
+  border-left: 4px solid #0a84ff;
+}
+
+.card.statusCompleted {
+  border-left: 4px solid #22c55e;
+}
+
+.card.statusCancelled {
+  border-left: 4px solid #ef4444;
+}
+
 .card:hover {
   transform: translateY(-2px);
 }
@@ -24,17 +40,10 @@
   align-items: center;
 }
 
-.checkIcon {
-  color: #22c55e; // зеленая галочка
-}
-
-.crossIcon {
-  color: #ef4444; // красный крестик
-}
-
 .title {
   font-weight: 600;
   font-size: 16px;
+  color: #111;
 }
 
 .details {
@@ -55,20 +64,34 @@
   color: #888;
 }
 
+.statusPending {
+  color: #d18f01;
+}
+
 .statusConfirmed {
-  color: #22c55e;
-  font-weight: 500;
+  color: #0a84ff;
+}
+
+.statusCompleted {
+  color: #28a745;
 }
 
 .statusCancelled {
-  color: #ef4444;
-  font-weight: 500;
+  color: #ff3b30;
 }
 
-.confirmed {
-  border-left: 4px solid #22c55e;
+.pendingIcon {
+  color: #d18f01;
 }
 
-.cancelled {
-  border-left: 4px solid #ef4444;
+.confirmedIcon {
+  color: #0a84ff;
+}
+
+.doneIcon {
+  color: #28a745;
+}
+
+.cancelledIcon {
+  color: #ff3b30;
 }

@@ -1,8 +1,10 @@
 .wrapper {
   width: 100%;
-  max-width: 980px;
+  max-width: 100%;
+  margin: 0 auto;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
 }
 
 .image {
@@ -12,11 +14,11 @@
   border-radius: 12px;
   cursor: zoom-in;
   user-select: none;
-  transition: opacity 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
 .image:hover {
-  opacity: 0.9;
+  transform: scale(1.03);
 }
 
 .loading {
@@ -27,3 +29,129 @@
   font-size: 14px;
   color: #666;
 }
+
+
+:global(.swiper-wrapper) {
+  overflow: visible !important;
+}
+
+:global(.swiper) {
+  width: 100%;
+  height: 300px;
+}
+
+// --- СТИЛИ ДЛЯ СТРЕЛОК --- 
+:global(.swiper-button-next),
+:global(.swiper-button-prev) {
+  color: #333;
+  top: 45%;
+  width: 50px !important;
+  height: 50px !important;
+  padding: 10px !important;
+  background: rgba(255, 255, 255, 0.662);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+  z-index: 999 !important;
+}
+
+:global(.swiper-button-next:hover),
+:global(.swiper-button-prev:hover) {
+  background: white;
+  transform: scale(1.1);
+}
+
+:global(.swiper-button-next svg),
+:global(.swiper-button-prev svg) {
+  stroke: var(--color-secondary);
+  transform: scale(1.1);
+}
+
+// --- СТИЛИ ДЛЯ ПАГИНАЦИИ 
+:global(.swiper-pagination) {
+  bottom: -3px !important;
+}
+
+:global(.swiper-pagination-bullet) {
+  background: var(--color-secondary) !important;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+//XXXXXXXXXX
+:global(.yarl__button.yarl__navigation_prev),
+:global(.yarl__button.yarl__navigation_next) {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: rgba(167, 167, 167, 0.606) !important;
+  border-radius: 50% !important;
+  width: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s ease !important;
+  z-index: 20 !important;
+  padding: 0 !important;
+}
+
+:global(.yarl__button.yarl__navigation_prev svg),
+:global(.yarl__button.yarl__navigation_next svg) {
+  width: 44px !important;
+  height: 44px !important;
+}
+
+
+/* .wrapper {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.loading {
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+}
+
+// --- Fix for Lightbox navigation arrows --- 
+:global(.yarl__button.yarl__navigation_prev),
+:global(.yarl__button.yarl__navigation_next) {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: rgba(167, 167, 167, 0.606) !important;
+  border-radius: 50% !important;
+  width: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s ease !important;
+  z-index: 20 !important;
+}
+
+:global(.yarl__button_prev:hover),
+:global(.yarl__button_next:hover) {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+:global(.yarl__button_prev) {
+  left: -60px !important;
+  // выносим левую стрелку наружу 
+}
+
+:global(.yarl__button_next) {
+  right: -60px !important;
+  // выносим правую стрелку наружу 
+}
+
+// --- Pagination dots position fix --- 
+:global(.yarl__thumbnails_container),
+:global(.yarl__dots_container) {
+  bottom: -40px !important;
+  // опускаем пагинацию ниже галереи 
+} */

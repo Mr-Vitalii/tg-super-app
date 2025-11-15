@@ -9,25 +9,29 @@
  * не зависели от режима.
  */
 
-/* 
-
-import { createApi } from '@reduxjs/toolkit/query/react'
+/* import { createApi } from '@reduxjs/toolkit/query/react'
 import { mockOrders } from '@/modules/ordersHistory/data/mockOrders'
+import type { OrderHistoryEntry } from '@/common/types/order'
 
+// Параметры запроса для пагинации
+export interface OrdersHistoryParams {
+  limit: number
+  offset: number
+}
 
 export const ordersHistoryApi = createApi({
   reducerPath: 'ordersHistoryApi',
-  // локально не используем baseQuery
   baseQuery: async () => ({ data: null }),
   endpoints: (build) => ({
-    // Получить историю заказов — без аргументов (сервер идентифицирует пользователя)
-    getOrdersHistory: build.query<OrderHistoryEntry[], void>({
-      queryFn: async () => {
+    getOrdersHistory: build.query<OrderHistoryEntry[], OrdersHistoryParams>({
+      queryFn: async ({ limit, offset }) => {
         try {
-          // имитация latency
+          // имитация задержки
           await new Promise((r) => setTimeout(r, 120))
-          // Возвращаем mock-данные
-          return { data: mockOrders }
+
+          const slice = mockOrders.slice(offset, offset + limit)
+
+          return { data: slice }
         } catch (e) {
           return { error: { status: 'CUSTOM_ERROR', data: e } as any }
         }
@@ -36,7 +40,6 @@ export const ordersHistoryApi = createApi({
   }),
 })
 
-// Экспорт хуков (одинаково для mock и server)
 export const { useGetOrdersHistoryQuery, useLazyGetOrdersHistoryQuery } =
   ordersHistoryApi
 
@@ -50,17 +53,21 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery } from '@/services/baseQuery'
 import type { OrderHistoryEntry } from '@/common/types/order'
 
+export interface OrdersHistoryParams {
+  limit: number
+  offset: number
+}
+
 export const ordersHistoryApi = createApi({
   reducerPath: 'ordersHistoryApi',
-  baseQuery, // общий baseQuery: добавляет X-Session-Id и X-Telegram-InitData
+  baseQuery,
   endpoints: (build) => ({
-    getOrdersHistory: build.query<OrderHistoryEntry[], void>({
-      query: () => ({
-        url: '/api/orders/history',
+    getOrdersHistory: build.query<OrderHistoryEntry[], OrdersHistoryParams>({
+      query: ({ limit, offset }) => ({
+        url: `/api/orders/history?limit=${limit}&offset=${offset}`,
         method: 'GET',
       }),
       transformResponse: (response: any) => {
-        // При необходимости можно нормализовать/фильтровать ответ
         return Array.isArray(response) ? response : []
       },
     }),

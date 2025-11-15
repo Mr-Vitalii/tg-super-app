@@ -10,7 +10,7 @@ export type Order = {
 
 export type Orders = Order[]
 
-export type OrderStatus = 'confirmed' | 'cancelled'
+export type OrderStatus = 'confirmed' | 'cancelled' | 'pending' | 'completed'
 
 export interface OrderHistoryEntry {
   id: string

@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useGetCompanyQuery } from '@/services/companiesApi'
 import styles from './CompanyContactsPage.module.scss'
+import GallerySlider from '@/modules/services/components/GallerySlider/GallerySlider'
+import CompanyBanner from '@/modules/services/components/CompanyBanner/CompanyBanner'
+import CompanyInfo from '@/modules/services/components/CompanyInfo/CompanyInfo'
 
 const CompanyContactsPage: React.FC = () => {
   const { companyId } = useParams<{ companyId?: string }>()
+
   const {
     data: company,
     isLoading,
@@ -34,45 +38,26 @@ const CompanyContactsPage: React.FC = () => {
   return (
     <div className={styles.root}>
       {/* ---------- Banner ---------- */}
-      <div
-        className={styles.banner}
-        style={
-          company.image
-            ? { backgroundImage: `url(${company.image})` }
-            : undefined
-        }
-        role='img'
-        aria-label={company.title}
-      >
-        <div className={styles.bannerOverlay}>
-          <h1 className={styles.title}>{company.title}</h1>
-          {company.address && (
-            <div className={styles.address}>{company.address}</div>
-          )}
-        </div>
-      </div>
+      <CompanyBanner
+        title={company.title}
+        description={company.info ?? company.description}
+        image={company.image}
+        phone={company.phone?.[0]}
+        address={company.address}
+      />
 
-      {/* ---------- Gallery (placeholder) ---------- */}
+      {/* ---------- Gallery  ---------- */}
       <div className={styles.gallerySection}>
-        {/* Здесь позже подключим GallerySlider */}
-        <div className={styles.galleryPlaceholder}>
-          {images.length > 0 ? (
-            <img src={images[0]} alt={`${company.title} — фото`} />
-          ) : (
-            <div className={styles.noImage}>Нет изображений</div>
-          )}
-          <div className={styles.galleryHint}>
-            Галерея — будет реализована отдельным компонентом (Swiper +
-            Lightbox)
-          </div>
-        </div>
+        <Suspense fallback={<div>Загрузка галереи...</div>}>
+          <GallerySlider images={images} />
+        </Suspense>
       </div>
 
       {/* ---------- Two-column content ---------- */}
       <div className={styles.content}>
         <div className={styles.left}>
           {/* CompanyInfo — можно вынести позже в отдельный компонент */}
-          <section className={styles.infoCard}>
+          {/*           <section className={styles.infoCard}>
             <h2>О компании</h2>
             {company.description && (
               <p className={styles.description}>{company.description}</p>
@@ -163,7 +148,8 @@ const CompanyContactsPage: React.FC = () => {
                 </div>
               )}
             </div>
-          </section>
+          </section> */}
+          <CompanyInfo company={company} />
         </div>
 
         <div className={styles.right}>
