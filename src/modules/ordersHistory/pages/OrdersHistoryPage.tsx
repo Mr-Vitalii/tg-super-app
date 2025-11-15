@@ -11,7 +11,7 @@ const LIMIT = 5
 const OrdersHistoryPage: React.FC = () => {
   // Все загруженные заказы
   const [orders, setOrders] = useState<OrderHistoryEntry[]>([])
-
+  const [initialLoaded, setInitialLoaded] = useState(false)
   // Пагинация
   const [offset, setOffset] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
@@ -35,11 +35,16 @@ const OrdersHistoryPage: React.FC = () => {
   useEffect(() => {
     if (!data) return
 
+    if (!initialLoaded) {
+      setInitialLoaded(true)
+    }
+
     if (data.length < LIMIT) {
       setHasMore(false)
     }
 
     setOrders((prev) => [...prev, ...data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   // Загружает следующую страницу
@@ -57,6 +62,7 @@ const OrdersHistoryPage: React.FC = () => {
 
   // === Infinite Scroll Logic ===
   useEffect(() => {
+    if (!initialLoaded) return
     if (!loaderRef.current) return
 
     const observer = new IntersectionObserver(
@@ -77,7 +83,7 @@ const OrdersHistoryPage: React.FC = () => {
     return () => {
       observer.disconnect()
     }
-  }, [loadMore])
+  }, [initialLoaded, loadMore])
 
   return (
     <div className={styles.page}>
@@ -93,7 +99,7 @@ const OrdersHistoryPage: React.FC = () => {
         <p className={styles.loadingMore}>Загрузка...</p>
       )}
 
-      {!hasMore && <p className={styles.end}>Все записи загружены</p>}
+      {/*  {!hasMore && <p className={styles.end}>Все записи загружены</p>} */}
 
       {/* триггер для infinite scroll */}
       <div ref={loaderRef} className={styles.infiniteLoader} />

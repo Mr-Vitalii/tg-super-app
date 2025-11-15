@@ -25,4 +25,6 @@ export interface OrderHistoryEntry {
   categoryId: string
   companyId: string
   serviceId: string
+  masterId: string
+  masterName: string
 }

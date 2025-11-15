@@ -134,6 +134,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
         </div>
 
         <div className={styles.row}>
+          <span className={styles.label}>Мастер:</span>
+          <span>{order.masterName}</span>
+        </div>
+
+        <div className={styles.row}>
           <span className={styles.label}>Дата:</span>
           <span>{formatDate(order.date, 'dd MMMM yyyy г.')}</span>
         </div>
@@ -154,9 +159,6 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           size='small'
         >
           Перейти к услуге
-        </LinkButton>
-        <LinkButton to={`/services`} variant='more-info' size='small'>
-          Все услуги
         </LinkButton>
       </div>
     </div>
