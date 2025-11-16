@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useLazyGetOrdersHistoryQuery } from '@/services/ordersHistoryApi'
+import {
+  OrdersHistoryParams,
+  useLazyGetOrdersHistoryQuery,
+} from '@/services/ordersHistoryApi'
 import OrdersHistoryList from '@/modules/ordersHistory/components/OrdersHistoryList/OrdersHistoryList'
 import styles from './OrdersHistoryPage.module.scss'
 import { OrderHistoryEntry } from '@/common/types/order'
@@ -15,6 +18,7 @@ const OrdersHistoryPage: React.FC = () => {
   const [hasMore, setHasMore] = useState<boolean>(true)
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
+  const observerRef = useRef<IntersectionObserver | null>(null)
   const isFetchingRef = useRef(false)
 
   // useLazyGetOrdersHistoryQuery всегда отдаёт tuple
@@ -61,19 +65,69 @@ const OrdersHistoryPage: React.FC = () => {
 
     isFetchingRef.current = true // фиксируем, что началась загрузка
 
-    fetchOrders({ limit: LIMIT, offset })
+    const params: OrdersHistoryParams = {
+      limit: LIMIT,
+      offset,
+    }
+
+    fetchOrders(params)
     setOffset((prev) => prev + LIMIT)
   }, [hasMore, offset, isError, fetchOrders])
+
+  // === Обработка загрузки новой порции (data) ===
+  useEffect(() => {
+    if (!data) return
+
+    // помечаем, что первичный пакет пришёл
+    if (!initialLoaded) {
+      setInitialLoaded(true)
+    }
+
+    if (data.length < LIMIT) {
+      setHasMore(false)
+    }
+
+    // добавляем данные
+    setOrders((prev) => [...prev, ...data])
+
+    // после того как мы получили данные — разрешаем новые триггеры
+    isFetchingRef.current = false
+
+    // пере-подключаем observer (если он был)
+    const el = loaderRef.current
+    if (el && observerRef.current) {
+      // небольшой таймаут даёт браузеру прогнать рендер карточек — уменьшает шанс мгновенного повторного срабатывания
+      window.requestAnimationFrame(() => {
+        try {
+          observerRef.current?.observe(el)
+        } catch (e) {
+          // noop
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
 
   // === Infinite Scroll Logic ===
   useEffect(() => {
     if (!initialLoaded) return
-    if (!loaderRef.current) return
+    const el = loaderRef.current
+    if (!el) return
 
-    const observer = new IntersectionObserver(
+    const obs = new IntersectionObserver(
       (entries) => {
-        const target = entries[0]
-        if (target.isIntersecting) {
+        const entry = entries[0]
+        if (!entry) return
+
+        if (entry.isIntersecting) {
+          // сразу unobserve, чтобы предотвратить повторный триггер
+          try {
+            obs.unobserve(entry.target)
+          } catch (e) {
+            /* noop */
+          }
+
+          // вызываем загрузку
           loadMore()
         }
       },
@@ -83,10 +137,19 @@ const OrdersHistoryPage: React.FC = () => {
       }
     )
 
-    observer.observe(loaderRef.current)
+    // начальное наблюдение
+    observerRef.current = obs
+
+    obs.observe(el)
 
     return () => {
-      observer.disconnect()
+      try {
+        obs.disconnect()
+      } catch (e) {
+        /* noop */
+      } finally {
+        observerRef.current = null
+      }
     }
   }, [initialLoaded, loadMore])
 
