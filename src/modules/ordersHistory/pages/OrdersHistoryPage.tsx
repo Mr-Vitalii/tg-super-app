@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {
-  OrdersHistoryParams,
-  useLazyGetOrdersHistoryQuery,
-} from '@/services/ordersHistoryApi'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useLazyGetOrdersHistoryQuery } from '@/services/ordersHistoryApi'
 import OrdersHistoryList from '@/modules/ordersHistory/components/OrdersHistoryList/OrdersHistoryList'
 import styles from './OrdersHistoryPage.module.scss'
 import { OrderHistoryEntry } from '@/common/types/order'
 
 const LIMIT = 5
+
 const OrdersHistoryPage: React.FC = () => {
   // Все загруженные заказы
   const [orders, setOrders] = useState<OrderHistoryEntry[]>([])
@@ -17,6 +15,7 @@ const OrdersHistoryPage: React.FC = () => {
   const [hasMore, setHasMore] = useState<boolean>(true)
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
+  const isFetchingRef = useRef(false)
 
   // useLazyGetOrdersHistoryQuery всегда отдаёт tuple
   const [
@@ -24,6 +23,11 @@ const OrdersHistoryPage: React.FC = () => {
     // типизация результата
     { data, isFetching, isError },
   ] = useLazyGetOrdersHistoryQuery()
+
+  // Синхронизируем ref с RTK Query флагом
+  useEffect(() => {
+    isFetchingRef.current = isFetching
+  }, [isFetching])
 
   // Первичный запрос
   useEffect(() => {
@@ -47,18 +51,19 @@ const OrdersHistoryPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
-  // Загружает следующую страницу
-  const loadMore = React.useCallback((): void => {
-    if (isFetching || !hasMore || isError) return
+  // === Загружает следующую страницу ===
+  const loadMore = useCallback(() => {
+    // -------------------------------------
+    // 🔥 Главная защита — используем ref
+    // -------------------------------------
+    if (isFetchingRef.current) return
+    if (!hasMore || isError) return
 
-    const params: OrdersHistoryParams = {
-      limit: LIMIT,
-      offset,
-    }
+    isFetchingRef.current = true // фиксируем, что началась загрузка
 
-    fetchOrders(params)
+    fetchOrders({ limit: LIMIT, offset })
     setOffset((prev) => prev + LIMIT)
-  }, [isFetching, hasMore, offset, isError, fetchOrders])
+  }, [hasMore, offset, isError, fetchOrders])
 
   // === Infinite Scroll Logic ===
   useEffect(() => {
