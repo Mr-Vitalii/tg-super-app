@@ -40,7 +40,7 @@ const OrdersHistoryPage: React.FC = () => {
   }, [])
 
   // Обработка загрузки новой порции
-  useEffect(() => {
+  /*   useEffect(() => {
     if (!data) return
 
     if (!initialLoaded) {
@@ -53,7 +53,7 @@ const OrdersHistoryPage: React.FC = () => {
 
     setOrders((prev) => [...prev, ...data])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data]) */
 
   // === Загружает следующую страницу ===
   const loadMore = useCallback(() => {
@@ -76,7 +76,10 @@ const OrdersHistoryPage: React.FC = () => {
 
   // === Обработка загрузки новой порции (data) ===
   useEffect(() => {
-    if (!data) return
+    if (!data || data.length === 0) {
+      console.log('Нет data или пустой массив → эффект не выполняется')
+      return
+    }
 
     // помечаем, что первичный пакет пришёл
     if (!initialLoaded) {
@@ -94,7 +97,7 @@ const OrdersHistoryPage: React.FC = () => {
     isFetchingRef.current = false
 
     // пере-подключаем observer (если он был)
-    const el = loaderRef.current
+    /*     const el = loaderRef.current
     if (el && observerRef.current) {
       // небольшой таймаут даёт браузеру прогнать рендер карточек — уменьшает шанс мгновенного повторного срабатывания
       window.requestAnimationFrame(() => {
@@ -104,7 +107,7 @@ const OrdersHistoryPage: React.FC = () => {
           // noop
         }
       })
-    }
+    } */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
