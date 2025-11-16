@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useLazyGetOrdersHistoryQuery } from '@/services/ordersHistoryApi'
+import {
+  OrdersHistoryParams,
+  useLazyGetOrdersHistoryQuery,
+} from '@/services/ordersHistoryApi'
 import OrdersHistoryList from '@/modules/ordersHistory/components/OrdersHistoryList/OrdersHistoryList'
 import styles from './OrdersHistoryPage.module.scss'
 import { OrderHistoryEntry } from '@/common/types/order'
@@ -7,79 +10,151 @@ import { OrderHistoryEntry } from '@/common/types/order'
 const LIMIT = 5
 
 const OrdersHistoryPage: React.FC = () => {
+  // Все загруженные заказы
   const [orders, setOrders] = useState<OrderHistoryEntry[]>([])
-  const [hasMore, setHasMore] = useState(true)
-  const [offset, setOffset] = useState(0)
+  const [initialLoaded, setInitialLoaded] = useState(false)
+  // Пагинация
+  const [offset, setOffset] = useState<number>(0)
+  const [hasMore, setHasMore] = useState<boolean>(true)
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
-  const isFetchingRef = useRef(false) // 🔹 Используем ref чтобы избежать лишних триггеров
+  const isFetchingRef = useRef(false)
 
-  // RTK Query lazy hook
-  const [fetchOrders, { isFetching, isError }] = useLazyGetOrdersHistoryQuery()
+  // useLazyGetOrdersHistoryQuery всегда отдаёт tuple
+  const [
+    fetchOrders,
+    // типизация результата
+    { data, isFetching, isError },
+  ] = useLazyGetOrdersHistoryQuery()
 
-  // 🔹 Синхронизируем ref с состоянием isFetching
+  // Синхронизируем ref с RTK Query флагом
   useEffect(() => {
     isFetchingRef.current = isFetching
   }, [isFetching])
 
-  // === Загрузка данных ===
+  // Первичный запрос
+  useEffect(() => {
+    loadMore()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Обработка загрузки новой порции
+  /*   useEffect(() => {
+    if (!data) return
+
+    if (!initialLoaded) {
+      setInitialLoaded(true)
+    }
+
+    if (data.length < LIMIT) {
+      setHasMore(false)
+    }
+
+    setOrders((prev) => [...prev, ...data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]) */
+
+  // === Загружает следующую страницу ===
   const loadMore = useCallback(() => {
+    // -------------------------------------
+    // 🔥 Главная защита — используем ref
+    // -------------------------------------
     if (isFetchingRef.current) return
     if (!hasMore || isError) return
 
-    isFetchingRef.current = true
+    isFetchingRef.current = true // фиксируем, что началась загрузка
 
-    fetchOrders({ limit: LIMIT, offset })
-      .unwrap() // 🔹 unwrap() возвращает промис, можно безопасно ждать результат
-      .then((newData) => {
-        if (!newData || newData.length === 0) {
-          setHasMore(false)
-          return
-        }
+    const params: OrdersHistoryParams = {
+      limit: LIMIT,
+      offset,
+    }
 
-        setOrders((prev) => [...prev, ...newData])
-        setOffset((prev) => prev + newData.length) // 🔹 offset увеличиваем после успешной загрузки
-        if (newData.length < LIMIT) setHasMore(false)
-      })
-      .finally(() => {
-        isFetchingRef.current = false
-      })
-  }, [fetchOrders, offset, hasMore, isError])
+    fetchOrders(params)
+    setOffset((prev) => prev + LIMIT)
+  }, [hasMore, offset, isError, fetchOrders])
 
-  // === Infinite scroll observer ===
+  // === Обработка загрузки новой порции (data) ===
   useEffect(() => {
+    if (!data || data.length === 0) {
+      console.log('Нет data или пустой массив → эффект не выполняется')
+      return
+    }
+
+    // помечаем, что первичный пакет пришёл
+    if (!initialLoaded) {
+      setInitialLoaded(true)
+    }
+
+    if (data.length < LIMIT) {
+      setHasMore(false)
+    }
+
+    // добавляем данные
+    setOrders((prev) => [...prev, ...data])
+
+    // после того как мы получили данные — разрешаем новые триггеры
+    isFetchingRef.current = false
+
+    // пере-подключаем observer (если он был)
+    const el = loaderRef.current
+    if (el && observerRef.current) {
+      // небольшой таймаут даёт браузеру прогнать рендер карточек — уменьшает шанс мгновенного повторного срабатывания
+      window.requestAnimationFrame(() => {
+        try {
+          observerRef.current?.observe(el)
+        } catch (e) {
+          // noop
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
+  // === Infinite Scroll Logic ===
+  useEffect(() => {
+    if (!initialLoaded) return
     const el = loaderRef.current
     if (!el) return
 
-    // Создаём observer один раз
-    if (!observerRef.current) {
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          const entry = entries[0]
-          if (entry.isIntersecting) {
-            loadMore()
-          }
-        },
-        {
-          rootMargin: '200px',
-          threshold: 0.1,
-        }
-      )
-    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        if (!entry) return
 
-    observerRef.current.observe(el)
+        if (entry.isIntersecting) {
+          // сразу unobserve, чтобы предотвратить повторный триггер
+          try {
+            obs.unobserve(entry.target)
+          } catch (e) {
+            /* noop */
+          }
+
+          // вызываем загрузку
+          loadMore()
+        }
+      },
+      {
+        rootMargin: '200px',
+        threshold: 0.1,
+      }
+    )
+
+    // начальное наблюдение
+    observerRef.current = obs
+
+    obs.observe(el)
 
     return () => {
-      observerRef.current?.disconnect()
-      observerRef.current = null
+      try {
+        obs.disconnect()
+      } catch (e) {
+        /* noop */
+      } finally {
+        observerRef.current = null
+      }
     }
-  }, [loadMore])
-
-  // === Первичная загрузка ===
-  useEffect(() => {
-    loadMore()
-  }, [loadMore])
+  }, [initialLoaded, loadMore])
 
   return (
     <div className={styles.page}>
@@ -95,9 +170,9 @@ const OrdersHistoryPage: React.FC = () => {
         <p className={styles.loadingMore}>Загрузка...</p>
       )}
 
-      {!hasMore && <p className={styles.end}>Все записи загружены</p>}
+      {/*  {!hasMore && <p className={styles.end}>Все записи загружены</p>} */}
 
-      {/* Триггер для infinite scroll */}
+      {/* триггер для infinite scroll */}
       <div ref={loaderRef} className={styles.infiniteLoader} />
     </div>
   )
