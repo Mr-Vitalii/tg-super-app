@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   OrdersHistoryParams,
   useLazyGetOrdersHistoryQuery,
@@ -8,7 +8,6 @@ import styles from './OrdersHistoryPage.module.scss'
 import { OrderHistoryEntry } from '@/common/types/order'
 
 const LIMIT = 5
-
 const OrdersHistoryPage: React.FC = () => {
   // Все загруженные заказы
   const [orders, setOrders] = useState<OrderHistoryEntry[]>([])
@@ -18,8 +17,6 @@ const OrdersHistoryPage: React.FC = () => {
   const [hasMore, setHasMore] = useState<boolean>(true)
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const isFetchingRef = useRef(false)
 
   // useLazyGetOrdersHistoryQuery всегда отдаёт tuple
   const [
@@ -28,11 +25,6 @@ const OrdersHistoryPage: React.FC = () => {
     { data, isFetching, isError },
   ] = useLazyGetOrdersHistoryQuery()
 
-  // Синхронизируем ref с RTK Query флагом
-  useEffect(() => {
-    isFetchingRef.current = isFetching
-  }, [isFetching])
-
   // Первичный запрос
   useEffect(() => {
     loadMore()
@@ -40,7 +32,7 @@ const OrdersHistoryPage: React.FC = () => {
   }, [])
 
   // Обработка загрузки новой порции
-  /*   useEffect(() => {
+  useEffect(() => {
     if (!data) return
 
     if (!initialLoaded) {
@@ -53,17 +45,11 @@ const OrdersHistoryPage: React.FC = () => {
 
     setOrders((prev) => [...prev, ...data])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]) */
+  }, [data])
 
-  // === Загружает следующую страницу ===
-  const loadMore = useCallback(() => {
-    // -------------------------------------
-    // 🔥 Главная защита — используем ref
-    // -------------------------------------
-    if (isFetchingRef.current) return
-    if (!hasMore || isError) return
-
-    isFetchingRef.current = true // фиксируем, что началась загрузка
+  // Загружает следующую страницу
+  const loadMore = React.useCallback((): void => {
+    if (isFetching || !hasMore || isError) return
 
     const params: OrdersHistoryParams = {
       limit: LIMIT,
@@ -72,65 +58,17 @@ const OrdersHistoryPage: React.FC = () => {
 
     fetchOrders(params)
     setOffset((prev) => prev + LIMIT)
-  }, [hasMore, offset, isError, fetchOrders])
-
-  // === Обработка загрузки новой порции (data) ===
-  useEffect(() => {
-    if (!data || data.length === 0) {
-      console.log('Нет data или пустой массив → эффект не выполняется')
-      return
-    }
-
-    // помечаем, что первичный пакет пришёл
-    if (!initialLoaded) {
-      setInitialLoaded(true)
-    }
-
-    if (data.length < LIMIT) {
-      setHasMore(false)
-    }
-
-    // добавляем данные
-    setOrders((prev) => [...prev, ...data])
-
-    // после того как мы получили данные — разрешаем новые триггеры
-    isFetchingRef.current = false
-
-    // пере-подключаем observer (если он был)
-    const el = loaderRef.current
-    if (el && observerRef.current) {
-      // небольшой таймаут даёт браузеру прогнать рендер карточек — уменьшает шанс мгновенного повторного срабатывания
-      window.requestAnimationFrame(() => {
-        try {
-          observerRef.current?.observe(el)
-        } catch (e) {
-          // noop
-        }
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [isFetching, hasMore, offset, isError, fetchOrders])
 
   // === Infinite Scroll Logic ===
   useEffect(() => {
     if (!initialLoaded) return
-    const el = loaderRef.current
-    if (!el) return
+    if (!loaderRef.current) return
 
-    const obs = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
-        const entry = entries[0]
-        if (!entry) return
-
-        if (entry.isIntersecting) {
-          // сразу unobserve, чтобы предотвратить повторный триггер
-          try {
-            obs.unobserve(entry.target)
-          } catch (e) {
-            /* noop */
-          }
-
-          // вызываем загрузку
+        const target = entries[0]
+        if (target.isIntersecting) {
           loadMore()
         }
       },
@@ -140,19 +78,10 @@ const OrdersHistoryPage: React.FC = () => {
       }
     )
 
-    // начальное наблюдение
-    observerRef.current = obs
-
-    obs.observe(el)
+    observer.observe(loaderRef.current)
 
     return () => {
-      try {
-        obs.disconnect()
-      } catch (e) {
-        /* noop */
-      } finally {
-        observerRef.current = null
-      }
+      observer.disconnect()
     }
   }, [initialLoaded, loadMore])
 
