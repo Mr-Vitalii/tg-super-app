@@ -9,7 +9,9 @@
  * не зависели от режима.
  */
 
-/* import { createApi } from '@reduxjs/toolkit/query/react'
+/* 
+
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { mockOrders } from '@/modules/ordersHistory/data/mockOrders'
 import type { OrderHistoryEntry } from '@/common/types/order'
 
@@ -19,21 +21,42 @@ export interface OrdersHistoryParams {
   offset: number
 }
 
+// Общий тип ответа, одинаковый для сервера и моков
+export interface OrdersHistoryResponse {
+  items: OrderHistoryEntry[]
+  total: number
+}
+
 export const ordersHistoryApi = createApi({
   reducerPath: 'ordersHistoryApi',
-  baseQuery: async () => ({ data: null }),
+
+  // корректный baseQuery для ручного (mock) режима
+  baseQuery: async () => ({ data: {} }),
+
   endpoints: (build) => ({
-    getOrdersHistory: build.query<OrderHistoryEntry[], OrdersHistoryParams>({
-      queryFn: async ({ limit, offset }) => {
+    getOrdersHistory: build.query<OrdersHistoryResponse, OrdersHistoryParams>({
+      async queryFn({ limit, offset }) {
         try {
-          // имитация задержки
           await new Promise((r) => setTimeout(r, 120))
 
-          const slice = mockOrders.slice(offset, offset + limit)
+          const total = mockOrders.length
+          const items = mockOrders.slice(offset, offset + limit)
 
-          return { data: slice }
-        } catch (e) {
-          return { error: { status: 'CUSTOM_ERROR', data: e } as any }
+          console.log('getOrdersHistory', { total, items })
+
+          return {
+            data: {
+              items,
+              total,
+            },
+          }
+        } catch (error: any) {
+          return {
+            error: {
+              status: 'CUSTOM_ERROR',
+              data: error.message || 'Unknown error',
+            },
+          }
         }
       },
     }),
@@ -49,26 +72,42 @@ export default ordersHistoryApi */
  * СЕРВЕРНЫЙ ВАРИАНТ (раскомментируйте для подключения к реальному API)
  * =========================================================================== */
 
-import { createApi } from '@reduxjs/toolkit/query/react'
-import { baseQuery } from '@/services/baseQuery'
-import type { OrderHistoryEntry } from '@/common/types/order'
-
 export interface OrdersHistoryParams {
   limit: number
   offset: number
 }
 
+// Общий тип ответа, одинаковый для сервера и моков
+export interface OrdersHistoryResponse {
+  items: OrderHistoryEntry[]
+  total: number
+}
+
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQuery } from '@/services/baseQuery'
+import type { OrderHistoryEntry } from '@/common/types/order'
+
 export const ordersHistoryApi = createApi({
   reducerPath: 'ordersHistoryApi',
   baseQuery,
+
   endpoints: (build) => ({
-    getOrdersHistory: build.query<OrderHistoryEntry[], OrdersHistoryParams>({
+    getOrdersHistory: build.query<OrdersHistoryResponse, OrdersHistoryParams>({
       query: ({ limit, offset }) => ({
         url: `/api/orders/history?limit=${limit}&offset=${offset}`,
         method: 'GET',
       }),
+
+      // backend должен вернуть: { items: [], total: number }
       transformResponse: (response: any) => {
-        return Array.isArray(response) ? response : []
+        if (!response || typeof response !== 'object') {
+          return { items: [], total: 0 }
+        }
+
+        return {
+          items: Array.isArray(response.items) ? response.items : [],
+          total: Number(response.total) || 0,
+        }
       },
     }),
   }),

@@ -1,54 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import {
   OrdersHistoryParams,
   useLazyGetOrdersHistoryQuery,
+  OrdersHistoryResponse,
 } from '@/services/ordersHistoryApi'
 import OrdersHistoryList from '@/modules/ordersHistory/components/OrdersHistoryList/OrdersHistoryList'
 import styles from './OrdersHistoryPage.module.scss'
 import { OrderHistoryEntry } from '@/common/types/order'
 
 const LIMIT = 5
+
 const OrdersHistoryPage: React.FC = () => {
-  // Все загруженные заказы
   const [orders, setOrders] = useState<OrderHistoryEntry[]>([])
+  const [offset, setOffset] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
   const [initialLoaded, setInitialLoaded] = useState(false)
-  // Пагинация
-  const [offset, setOffset] = useState<number>(0)
-  const [hasMore, setHasMore] = useState<boolean>(true)
 
   const loaderRef = useRef<HTMLDivElement | null>(null)
 
-  // useLazyGetOrdersHistoryQuery всегда отдаёт tuple
-  const [
-    fetchOrders,
-    // типизация результата
-    { data, isFetching, isError },
-  ] = useLazyGetOrdersHistoryQuery()
+  const [fetchOrders, { isFetching, isError }] = useLazyGetOrdersHistoryQuery()
 
-  // Первичный запрос
-  useEffect(() => {
-    loadMore()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // Обработка загрузки новой порции
-  useEffect(() => {
-    if (!data) return
-
-    if (!initialLoaded) {
-      setInitialLoaded(true)
-    }
-
-    if (data.length < LIMIT) {
-      setHasMore(false)
-    }
-
-    setOrders((prev) => [...prev, ...data])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
-
-  // Загружает следующую страницу
-  const loadMore = React.useCallback((): void => {
+  // === ЗАГРУЗИТЬ ПОРЦИЮ ДАННЫХ ===
+  const loadMore = useCallback(async () => {
     if (isFetching || !hasMore || isError) return
 
     const params: OrdersHistoryParams = {
@@ -56,19 +29,59 @@ const OrdersHistoryPage: React.FC = () => {
       offset,
     }
 
-    fetchOrders(params)
-    setOffset((prev) => prev + LIMIT)
-  }, [isFetching, hasMore, offset, isError, fetchOrders])
+    try {
+      const res: OrdersHistoryResponse = await fetchOrders(params).unwrap()
 
-  // === Infinite Scroll Logic ===
+      const { items, total } = res
+
+      if (!initialLoaded) {
+        setInitialLoaded(true)
+      }
+
+      // Если получили 0 — конец данных
+      if (items.length === 0) {
+        setHasMore(false)
+        return
+      }
+
+      // Добавляем новые элементы (с защитой от дублей)
+      setOrders((prev) => {
+        const ids = new Set(prev.map((p) => p.id))
+        const filtered = items.filter((it) => !ids.has(it.id))
+        const merged = [...prev, ...filtered]
+        merged.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
+        return merged
+      })
+
+      // Проверяем конец
+      if (offset + items.length >= total) {
+        setHasMore(false)
+      }
+
+      // ВАЖНО: ONLY AFTER SUCCESS
+      setOffset((prev) => prev + LIMIT)
+    } catch (err) {
+      console.error('loadMore error', err)
+    }
+  }, [isFetching, hasMore, isError, offset, fetchOrders, initialLoaded])
+
+  // === Первичная загрузка ===
+  useEffect(() => {
+    loadMore()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // === Intersection Observer ===
   useEffect(() => {
     if (!initialLoaded) return
     if (!loaderRef.current) return
+    if (!hasMore) return
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const target = entries[0]
-        if (target.isIntersecting) {
+        if (entries[0].isIntersecting) {
           loadMore()
         }
       },
@@ -80,10 +93,8 @@ const OrdersHistoryPage: React.FC = () => {
 
     observer.observe(loaderRef.current)
 
-    return () => {
-      observer.disconnect()
-    }
-  }, [initialLoaded, loadMore])
+    return () => observer.disconnect()
+  }, [initialLoaded, loadMore, hasMore])
 
   return (
     <div className={styles.page}>
@@ -99,9 +110,10 @@ const OrdersHistoryPage: React.FC = () => {
         <p className={styles.loadingMore}>Загрузка...</p>
       )}
 
-      {/*  {!hasMore && <p className={styles.end}>Все записи загружены</p>} */}
+      {!hasMore && orders.length > 0 && (
+        <p className={styles.end}>Все записи загружены</p>
+      )}
 
-      {/* триггер для infinite scroll */}
       <div ref={loaderRef} className={styles.infiniteLoader} />
     </div>
   )

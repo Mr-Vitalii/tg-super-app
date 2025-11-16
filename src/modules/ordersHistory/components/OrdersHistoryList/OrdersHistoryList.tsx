@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { groupByMonth } from '@/utils/groupByMonth'
 import OrderCard from '@/modules/ordersHistory/components/OrderCard/OrderCard/OrderCard'
 import styles from './OrdersHistoryList.module.scss'
@@ -15,11 +15,11 @@ const OrdersHistoryList: React.FC<OrdersHistoryListProps> = ({
   isLoading = false,
   error = null,
 }) => {
+  const grouped = useMemo(() => groupByMonth(orders), [orders])
+
   if (isLoading) return <p>Загрузка истории заказов...</p>
   if (error) return <p className={styles.error}>Ошибка: {error}</p>
   if (!orders.length) return <p>Нет заказанных услуг.</p>
-
-  const grouped = groupByMonth(orders)
 
   return (
     <div className={styles.wrapper}>

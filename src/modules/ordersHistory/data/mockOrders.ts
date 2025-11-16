@@ -16,7 +16,7 @@
 
 import { OrderHistoryEntry } from '@/common/types/order'
 
-export const mockOrders: OrderHistoryEntry[] = [
+export const rawOrders: OrderHistoryEntry[] = [
   {
     id: 'ord-001',
     serviceId: '1',
@@ -76,7 +76,7 @@ export const mockOrders: OrderHistoryEntry[] = [
     createdAt: '2025-09-28T10:00:00+03:00',
   },
   {
-    id: 'ord-006',
+    id: 'ord-005',
     serviceId: '35',
     categoryId: 'cat-beauty',
     companyId: 'comp-3',
@@ -91,7 +91,7 @@ export const mockOrders: OrderHistoryEntry[] = [
     createdAt: '2025-09-01T11:11:00+03:00',
   },
   {
-    id: 'ord-007',
+    id: 'ord-006',
     serviceId: '2',
     categoryId: 'cat-hair',
     companyId: 'comp-2',
@@ -105,7 +105,7 @@ export const mockOrders: OrderHistoryEntry[] = [
     createdAt: '2025-10-30T09:10:00+03:00',
   },
   {
-    id: 'ord-008',
+    id: 'ord-007',
     serviceId: '33',
     categoryId: 'cat-beauty',
     companyId: 'comp-3',
@@ -119,7 +119,7 @@ export const mockOrders: OrderHistoryEntry[] = [
     createdAt: '2025-09-20T14:00:00+03:00',
   },
   {
-    id: 'ord-009',
+    id: 'ord-008',
     serviceId: '36',
     categoryId: 'cat-beauty',
     companyId: 'comp-4',
@@ -133,7 +133,7 @@ export const mockOrders: OrderHistoryEntry[] = [
     createdAt: '2025-09-12T10:00:00+03:00',
   },
   {
-    id: 'ord-010',
+    id: 'ord-009',
     serviceId: '5',
     categoryId: 'cat-hair',
     companyId: 'comp-1',
@@ -147,7 +147,7 @@ export const mockOrders: OrderHistoryEntry[] = [
     createdAt: '2025-11-01T09:00:00+03:00',
   },
   {
-    id: 'ord-011',
+    id: 'ord-010',
     serviceId: '5',
     categoryId: 'cat-hair',
     companyId: 'comp-1',
@@ -161,7 +161,7 @@ export const mockOrders: OrderHistoryEntry[] = [
     createdAt: '2025-10-10T12:00:00+03:00',
   },
   {
-    id: 'ord-012',
+    id: 'ord-011',
     serviceId: '33',
     categoryId: 'cat-beauty',
     companyId: 'comp-3',
@@ -176,4 +176,6 @@ export const mockOrders: OrderHistoryEntry[] = [
   },
 ]
 
-export default mockOrders
+export const mockOrders: OrderHistoryEntry[] = rawOrders
+  .slice()
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
