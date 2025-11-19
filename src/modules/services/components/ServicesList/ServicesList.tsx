@@ -27,7 +27,8 @@ export const ServicesList = ({
         <ul className={styles.service__list}>
           {services.map((service) => (
             <li
-              key={`${service.id}-${service.title}`}
+              //key={`${service.id}-${service.title}`}
+              key={service.id}
               className={styles.service__item}
             >
               <Card

@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 24px;
   width: 100%;
-  padding: 20px 0;
 }
 
 /* ---------- Header ---------- */
@@ -146,7 +145,7 @@
 .btn {
   background: var(--color-btn-primary);
   color: white;
-  border: none;
+  border: 2px solid var(--color-btn-primary);
   text-decoration: none;
 
   &:hover {
@@ -180,7 +179,7 @@
 .btnPrimary {
   background: var(--color-btn-primary);
   color: white;
-  border: none;
+  border: 2px solid var(--color-btn-primary);
 
   &:hover {
     filter: brightness(1.4);

@@ -5,6 +5,7 @@ import styles from './CompanyContactsPage.module.scss'
 import GallerySlider from '@/modules/services/components/GallerySlider/GallerySlider'
 import CompanyBanner from '@/modules/services/components/CompanyBanner/CompanyBanner'
 import CompanyInfo from '@/modules/services/components/CompanyInfo/CompanyInfo'
+import CompanyMap from '@/modules/services/components/CompanyMap/CompanyMap'
 
 const CompanyContactsPage: React.FC = () => {
   const { companyId } = useParams<{ companyId?: string }>()
@@ -56,109 +57,18 @@ const CompanyContactsPage: React.FC = () => {
       {/* ---------- Two-column content ---------- */}
       <div className={styles.content}>
         <div className={styles.left}>
-          {/* CompanyInfo — можно вынести позже в отдельный компонент */}
-          {/*           <section className={styles.infoCard}>
-            <h2>О компании</h2>
-            {company.description && (
-              <p className={styles.description}>{company.description}</p>
-            )}
-            {company.info && <p className={styles.info}>{company.info}</p>}
-
-            <div className={styles.contactBlock}>
-              {company.phone && company.phone.length > 0 && (
-                <div className={styles.contactRow}>
-                  <div className={styles.contactLabel}>Телефон</div>
-                  <div className={styles.contactValue}>
-                    {company.phone.map((p) => (
-                      <a
-                        key={p}
-                        href={`tel:${p}`}
-                        className={styles.contactLink}
-                      >
-                        {p}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {company.email && (
-                <div className={styles.contactRow}>
-                  <div className={styles.contactLabel}>E-mail</div>
-                  <div className={styles.contactValue}>
-                    <a
-                      href={`mailto:${company.email}`}
-                      className={styles.contactLink}
-                    >
-                      {company.email}
-                    </a>
-                  </div>
-                </div>
-              )}
-
-              {company.website && (
-                <div className={styles.contactRow}>
-                  <div className={styles.contactLabel}>Сайт</div>
-                  <div className={styles.contactValue}>
-                    <a
-                      href={company.website}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className={styles.contactLink}
-                    >
-                      {company.website}
-                    </a>
-                  </div>
-                </div>
-              )}
-
-              {company.workHours && company.workHours.length > 0 && (
-                <div className={styles.contactRow}>
-                  <div className={styles.contactLabel}>Часы работы</div>
-                  <div className={styles.contactValue}>
-                    <ul className={styles.workHoursList}>
-                      {company.workHours.map((w) => (
-                        <li key={`${w.day}-${w.from}`}>
-                          <strong>{w.day}:</strong> {w.from} — {w.to}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-
-              {company.socials && company.socials.length > 0 && (
-                <div className={styles.contactRow}>
-                  <div className={styles.contactLabel}>Соцсети</div>
-                  <div className={styles.contactValue}>
-                    <div className={styles.socials}>
-                      {company.socials.map((s) => (
-                        <a
-                          key={s.url}
-                          href={s.url}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={styles.socialLink}
-                        >
-                          {s.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </section> */}
           <CompanyInfo company={company} />
         </div>
 
         <div className={styles.right}>
-          {/* CompanyMap placeholder — позже заменим на полноценный CompanyMap (react-leaflet) */}
+          <CompanyMap company={company} />
+          {/*           //* CompanyMap placeholder — позже заменим на полноценный CompanyMap(react-leaflet)
           <section className={styles.mapCard}>
             <h2>Где мы</h2>
             {company.coords ? (
               <div className={styles.mapPlaceholder}>
-                {/* Вставляем ссылку на внешнюю карту по координатам в качестве временного решения */}
+                //* Вставляем ссылку на внешнюю карту по координатам в качестве
+                временного решения
                 <a
                   href={`https://www.openstreetmap.org/?mlat=${company.coords.lat}&mlon=${company.coords.lng}#map=18/${company.coords.lat}/${company.coords.lng}`}
                   target='_blank'
@@ -176,7 +86,7 @@ const CompanyContactsPage: React.FC = () => {
             ) : (
               <div>Координаты не указаны</div>
             )}
-          </section>
+          </section> */}
         </div>
       </div>
     </div>

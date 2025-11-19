@@ -3,7 +3,7 @@
    (СОХРАНЯЕМ: чтобы переключать режимы одной строкой)
    ============================================================ */
 
-/* import { companies as mockCompanies } from '@/modules/services/data/companies'
+import { companies as mockCompanies } from '@/modules/services/data/companies'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { Company } from '@/common/types/services'
@@ -43,15 +43,15 @@ const localBaseQuery: BaseQueryFn<
   } catch (err: any) {
     return { error: { status: 500, error: err?.message ?? 'Mock error' } }
   }
-} */
+}
 
 /* ============================================================
    2) РЕАЛЬНЫЙ API ЗАПРОС (готов к использованию)
    — просто раскомментировать baseQuery и закомментировать mock
    ============================================================ */
-import { createApi } from '@reduxjs/toolkit/query/react'
+/* import { createApi } from '@reduxjs/toolkit/query/react'
 import type { Company } from '@/common/types/services'
-import { baseQuery } from '@/services/baseQuery'
+ import { baseQuery } from '@/services/baseQuery'  */
 
 /* ============================================================
    3) Объявление API (общие хуки для обоих режимов)
@@ -62,9 +62,9 @@ export const companiesApi = createApi({
 
   // ❗ переключаем только ЭТУ строку
   //Локальный вариант
-  /* baseQuery: localBaseQuery, */
+  baseQuery: localBaseQuery,
   //Серверный вариант
-  baseQuery: baseQuery,
+  /*  baseQuery: baseQuery, */
 
   endpoints: (build) => ({
     // ✅ GET /api/companies
