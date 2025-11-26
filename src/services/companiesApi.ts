@@ -6,7 +6,7 @@
 /* import { companies as mockCompanies } from '@/modules/services/data/companies'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { Company } from '@/common/types/services'
+import type { Company } from '@/common/types/сompany'
 
 const localBaseQuery: BaseQueryFn<
   { url?: string; params?: Record<string, unknown> } | string,
@@ -50,7 +50,7 @@ const localBaseQuery: BaseQueryFn<
    — просто раскомментировать baseQuery и закомментировать mock
    ============================================================ */
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { Company } from '@/common/types/services'
+import type { Company } from '@/common/types/сompany'
 import { baseQuery } from '@/services/baseQuery'
 
 /* ============================================================
@@ -62,7 +62,7 @@ export const companiesApi = createApi({
 
   // ❗ переключаем только ЭТУ строку
   //Локальный вариант
-  /* baseQuery: localBaseQuery, */
+  /*  baseQuery: localBaseQuery, */
   //Серверный вариант
   baseQuery: baseQuery,
 

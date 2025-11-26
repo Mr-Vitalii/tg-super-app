@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './CompanyBanner.module.scss'
-/* import { Phone, MapPin } from 'lucide-react' */
 import { MdPhoneAndroid } from 'react-icons/md'
 import { FaMapMarkerAlt } from 'react-icons/fa'
+import { openExternalMaps } from '@/utils/openExternalMaps'
 
 interface CompanyBannerProps {
   title: string
@@ -10,6 +10,8 @@ interface CompanyBannerProps {
   image?: string
   phone?: string
   address?: string
+  lat?: number
+  lng?: number
   onOpenGallery?: () => void
 }
 
@@ -19,17 +21,10 @@ const CompanyBanner: React.FC<CompanyBannerProps> = ({
   image,
   phone,
   address,
+  lat,
+  lng,
   onOpenGallery,
 }) => {
-  const handleMapClick = () => {
-    if (!address) return
-    const encoded = encodeURIComponent(address)
-    window.open(
-      `https://www.google.com/maps/search/?api=1&query=${encoded}`,
-      '_blank'
-    )
-  }
-
   return (
     <div
       className={styles.banner}
@@ -50,7 +45,7 @@ const CompanyBanner: React.FC<CompanyBannerProps> = ({
             )}
             {address && (
               <button
-                onClick={handleMapClick}
+                onClick={() => openExternalMaps({ lat, lng })}
                 className={styles.btn}
                 type='button'
               >

@@ -23,14 +23,14 @@ const CompanyServicesPage = lazy(
   () =>
     import('@/modules/services/pages/CompanyServicesPage/CompanyServicesPage')
 )
-/* const CompanyContactsPage = lazy(
+const CompanyContactsPage = lazy(
   () =>
     import('@/modules/services/pages/CompanyContactsPage/CompanyContactsPage')
-) */
-const CompanyContactsPage2 = lazy(
+)
+/* const CompanyContactsPage2 = lazy(
   () =>
     import('@/modules/services/pages/CompanyContactsPage/CompanyContactsPage2')
-)
+) */
 const CompanyMastersPage = lazy(
   () => import('@/modules/services/pages/CompanyMastersPage/CompanyMastersPage')
 )
@@ -120,7 +120,7 @@ function App() {
                 path='contacts'
                 element={
                   <PrivateRoute>
-                    <CompanyContactsPage2 />
+                    <CompanyContactsPage />
                   </PrivateRoute>
                 }
               />

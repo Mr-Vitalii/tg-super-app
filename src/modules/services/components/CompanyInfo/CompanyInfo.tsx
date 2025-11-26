@@ -1,12 +1,13 @@
 // src/entities/company/ui/CompanyInfo/CompanyInfo.tsx
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { Company } from '@/common/types/services' // адаптируй путь под проект
+import type { Company } from '@/common/types/сompany'
 import styles from './CompanyInfo.module.scss'
 import Socials from '@/components/common/Socials/Socials'
 import { MdPhoneAndroid } from 'react-icons/md'
 import { FaMapMarkerAlt } from 'react-icons/fa'
 import { ImSearch } from 'react-icons/im'
+import { openExternalMaps } from '@/utils/openExternalMaps'
 
 interface CompanyInfoProps {
   company: Company
@@ -39,7 +40,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({ company, onBook }) => {
     // ev.preventDefault() не нужно — ссылка tel сама откроется
   }
 
-  const openExternalMaps = () => {
+  /*   const openExternalMaps = () => {
     if (!company.coords) return
     const { lat, lng } = company.coords
     // Попробуем открыть Google Maps, иначе OpenStreetMap
@@ -53,7 +54,7 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({ company, onBook }) => {
     if (!win) {
       window.open(osm, '_blank', 'noopener,noreferrer')
     }
-  }
+  } */
 
   const handleBook = () => {
     if (onBook) {
@@ -166,7 +167,12 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({ company, onBook }) => {
           <button
             type='button'
             className={styles.btnOutline}
-            onClick={openExternalMaps}
+            onClick={() =>
+              openExternalMaps({
+                lat: company.coords?.lat,
+                lng: company.coords?.lng,
+              })
+            }
             disabled={!company.coords}
             aria-disabled={!company.coords}
           >

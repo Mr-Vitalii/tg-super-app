@@ -160,7 +160,7 @@
   border: 2px solid var(--color-btn-primary);
 
   &:hover {
-    background: color-mix(in srgb, var(--color-btn-primary) 15%, transparent);
+    background: var(--color-btn-primary-super-light);
   }
 
   &:disabled,

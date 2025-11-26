@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import type { Company } from '@/common/types/services'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { Company, NearbyCompany } from '@/common/types/сompany'
 import styles from './CompanyMap.module.scss'
 import 'leaflet/dist/leaflet.css' // обязательно (если сборка настроена на css импорты)
+import { prepareNearby } from '@/utils/mapNearby'
 
 // react-leaflet
 import {
@@ -17,6 +18,7 @@ import L from 'leaflet'
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
 import markerIcon from 'leaflet/dist/images/marker-icon.png'
 import markerShadow from 'leaflet/dist/images/marker-shadow.png'
+import NearbyCompanies from '@/modules/services/components/NearbyCompanies/NearbyCompanies'
 
 // NOTE: У Leaflet есть проблема с дефолтными иконками в Webpack/CRA/Vite —
 // если у тебя маркеры отображаются пустыми, добавь корректный icon url.
@@ -41,7 +43,7 @@ L.Icon.Default.mergeOptions({
 interface CompanyMapProps {
   company: Company
   /** Дополнительные (ближайшие) компании, которые можно показать на карте как маркеры */
-  nearby?: Company[]
+  nearby?: NearbyCompany[]
   /** начальный уровень масштаба */
   initialZoom?: number
   /** ширина/высота контейнера можно задавать через CSS-модуль */
@@ -66,6 +68,7 @@ const CompanyMap: React.FC<CompanyMapProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<LeafletMap | null>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [activeNearbyId, setActiveNearbyId] = useState<string | null>(null)
 
   const coords = company.coords ?? null
 
@@ -73,6 +76,8 @@ const CompanyMap: React.FC<CompanyMapProps> = ({
   /*   const handleMapCreated = useCallback((mapInstance: LeafletMap) => {
     mapRef.current = mapInstance
   }, []) */
+
+  const preparedNearby = useMemo(() => prepareNearby(nearby), [nearby])
 
   useEffect(() => {
     // слушаем события Fullscreen для синхронизации класса/состояния
@@ -145,6 +150,19 @@ const CompanyMap: React.FC<CompanyMapProps> = ({
     if (!win) window.open(urls.osm, '_blank', 'noopener,noreferrer')
   }, [coords])
 
+  const flyToCompany = useCallback(
+    (c: { id: string; coords?: { lat: number; lng: number } }) => {
+      if (!c.coords || !mapRef.current) return
+
+      setActiveNearbyId(c.id)
+
+      mapRef.current.flyTo([c.coords.lat, c.coords.lng], 17, {
+        duration: 0.8,
+      })
+    },
+    []
+  )
+
   // center/viewport update when company coords change
   useEffect(() => {
     if (!coords || !mapRef.current) return
@@ -162,6 +180,11 @@ const CompanyMap: React.FC<CompanyMapProps> = ({
         </div>
       </div>
     )
+  }
+
+  const handleNearbyClick = (c: NearbyCompany) => {
+    setActiveNearbyId(c.id)
+    flyToCompany(c)
   }
 
   return (
@@ -204,17 +227,24 @@ const CompanyMap: React.FC<CompanyMapProps> = ({
           </Marker>
 
           {/* nearby companies */}
-          {nearby.map((c) =>
+          {preparedNearby.map((c) =>
             c.coords ? (
               <Marker
                 key={c.id}
                 position={[c.coords.lat, c.coords.lng]}
-                // можно настроить иконку отдельно, если хотим отличать nearby
+                opacity={activeNearbyId === c.id ? 1 : 0.6}
+                eventHandlers={{
+                  click: () => {
+                    setActiveNearbyId(c.id)
+                    flyToCompany(c)
+                  },
+                }}
               >
                 <Popup>
                   <div>
-                    <strong>{c.title}</strong>
+                    <strong>{c.name}</strong>
                     {c.address && <div>{c.address}</div>}
+                    {c.phone?.[0] && <div>☎ {c.phone[0]}</div>}
                   </div>
                 </Popup>
               </Marker>
@@ -226,6 +256,14 @@ const CompanyMap: React.FC<CompanyMapProps> = ({
           <ScaleControl position='bottomleft' />
         </MapContainer>
       </div>
+
+      {preparedNearby.length > 0 && (
+        <NearbyCompanies
+          nearby={preparedNearby}
+          selectedId={activeNearbyId}
+          onSelect={handleNearbyClick}
+        />
+      )}
     </div>
   )
 }

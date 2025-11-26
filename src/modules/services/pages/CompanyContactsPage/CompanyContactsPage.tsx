@@ -31,8 +31,9 @@ const CompanyContactsPage: React.FC = () => {
 
   // Собираем список изображений для галереи (banner + gallery)
   const images = [
+    //banner
     ...(company.image ? [company.image] : []),
-    // gallery поле может появиться позже — если нет, оставим только баннер
+    // gallery
     ...(company.gallery ?? []),
   ]
 
@@ -45,6 +46,8 @@ const CompanyContactsPage: React.FC = () => {
         image={company.image}
         phone={company.phone?.[0]}
         address={company.address}
+        lat={company.coords?.lat}
+        lng={company.coords?.lng}
       />
 
       {/* ---------- Gallery  ---------- */}
@@ -61,32 +64,7 @@ const CompanyContactsPage: React.FC = () => {
         </div>
 
         <div className={styles.right}>
-          <CompanyMap company={company} />
-          {/*           //* CompanyMap placeholder — позже заменим на полноценный CompanyMap(react-leaflet)
-          <section className={styles.mapCard}>
-            <h2>Где мы</h2>
-            {company.coords ? (
-              <div className={styles.mapPlaceholder}>
-                //* Вставляем ссылку на внешнюю карту по координатам в качестве
-                временного решения
-                <a
-                  href={`https://www.openstreetmap.org/?mlat=${company.coords.lat}&mlon=${company.coords.lng}#map=18/${company.coords.lat}/${company.coords.lng}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className={styles.mapLink}
-                >
-                  Открыть карту — {company.coords.lat.toFixed(5)},{' '}
-                  {company.coords.lng.toFixed(5)}
-                </a>
-                <div className={styles.mapHint}>
-                  Здесь будет интерактивная карта (Leaflet). Позже добавим zoom,
-                  fullscreen и nearby-данные.
-                </div>
-              </div>
-            ) : (
-              <div>Координаты не указаны</div>
-            )}
-          </section> */}
+          <CompanyMap company={company} nearby={company.nearby} />
         </div>
       </div>
     </div>
