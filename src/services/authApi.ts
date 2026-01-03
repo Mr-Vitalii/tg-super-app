@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { User } from '@/common/types/user'
 import { setUser, clearUser } from '@/features/auth/authSlice'
 
-const BASE_URL = 'https://tg5-evst.amvera.io'
+const BASE_URL = 'https://tg6-evst.amvera.io'
 
 export const authApi = createApi({
   reducerPath: 'authApi',

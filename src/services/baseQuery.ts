@@ -2,7 +2,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 // Универсальный baseQuery, который добавляет sid и Telegram InitData
 export const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://tg5-evst.amvera.io', // ← основной URL API
+  baseUrl: 'https://tg6-evst.amvera.io', // ← основной URL API
   prepareHeaders: (headers) => {
     if (typeof window !== 'undefined') {
       const sid = localStorage.getItem('sid')

@@ -62,7 +62,7 @@ export const companiesApi = createApi({
 
   // ❗ переключаем только ЭТУ строку
   //Локальный вариант
-  /*  baseQuery: localBaseQuery, */
+  /* baseQuery: localBaseQuery, */
   //Серверный вариант
   baseQuery: baseQuery,
 

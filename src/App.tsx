@@ -27,10 +27,9 @@ const CompanyContactsPage = lazy(
   () =>
     import('@/modules/services/pages/CompanyContactsPage/CompanyContactsPage')
 )
-/* const CompanyContactsPage2 = lazy(
-  () =>
-    import('@/modules/services/pages/CompanyContactsPage/CompanyContactsPage2')
-) */
+const CompanyReviewsPage = lazy(
+  () => import('@/modules/services/pages/CompanyReviewsPage/CompanyReviewsPage')
+)
 const CompanyMastersPage = lazy(
   () => import('@/modules/services/pages/CompanyMastersPage/CompanyMastersPage')
 )
@@ -121,6 +120,15 @@ function App() {
                 element={
                   <PrivateRoute>
                     <CompanyContactsPage />
+                  </PrivateRoute>
+                }
+              />
+              {/* /reviews -> отзывы по комапнии */}
+              <Route
+                path='reviews'
+                element={
+                  <PrivateRoute>
+                    <CompanyReviewsPage />
                   </PrivateRoute>
                 }
               />

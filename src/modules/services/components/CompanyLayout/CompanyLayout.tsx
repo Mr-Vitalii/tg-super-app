@@ -33,6 +33,14 @@ const CompanyLayout = () => {
         >
           Контакты
         </NavLink>
+        <NavLink
+          to={`/services/${categoryId}/${companyId}/reviews`}
+          className={({ isActive }) =>
+            isActive ? styles.activeLink : styles.link
+          }
+        >
+          Отзывы
+        </NavLink>
       </div>
 
       {/* Здесь будет подставляться нужная страница */}
