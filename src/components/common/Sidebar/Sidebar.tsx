@@ -76,7 +76,7 @@ export const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           </li>
           <li className={styles.sidebar__item}>
             <LinkButton to='/about' onClick={handleClose}>
-              О нвс
+              О нас
             </LinkButton>
           </li>
           <li className={styles.sidebar__item}>
